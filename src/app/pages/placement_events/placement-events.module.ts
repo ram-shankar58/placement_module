@@ -28,7 +28,7 @@ export const routes: any = [
       },
       {
         path: '',
-        redirectTo: 'historical-events',
+        redirectTo: 'upcoming-events',
         pathMatch: 'full'
       },
     ]
