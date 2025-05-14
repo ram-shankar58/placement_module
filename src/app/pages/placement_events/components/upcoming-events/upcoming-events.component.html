@@ -1,1 +1,23 @@
-<p>upcoming-events works!</p>
+<div class="overall_div">
+  <div class="row add_n_sort_event">
+    <button class="col-md-2 add-btn" (click)="addevent()"> 
+      <i class="fa fa-plus-circle"></i> Add a New Event
+    </button>
+
+    <div class="col-md-5"></div>
+
+    <input 
+      type="text" 
+      class="col-md-3 search-box" 
+      placeholder="Search" 
+      (ngModelChange)="eventsearch($event)"/>
+
+    <div class="col-md-1 icon-button" (click)="filter()">
+      <i class="fa fa-filter"></i> Filter
+    </div>
+
+    <div class="col-md-1 icon-button" (click)="sort()">
+      <i class="fa fa-sort"></i> Sort
+    </div>
+  </div>
+</div>

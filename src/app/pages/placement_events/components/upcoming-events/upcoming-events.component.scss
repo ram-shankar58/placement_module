@@ -1,0 +1,41 @@
+.add_n_sort_event {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0px 10px 10px 10px;
+  flex-wrap: wrap;
+}
+
+.add-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.search-box {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+
+.icon-button {
+  position: relative;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+

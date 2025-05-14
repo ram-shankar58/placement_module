@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-upcoming-events',
@@ -6,6 +6,29 @@ import { Component } from '@angular/core';
   templateUrl: './upcoming-events.component.html',
   styleUrl: './upcoming-events.component.scss'
 })
-export class UpcomingEventsComponent {
+export class UpcomingEventsComponent implements OnInit{
 
+  constructor(){
+
+  }
+
+  ngOnInit() {
+    
+  }
+
+  addevent(){
+
+  }
+
+  eventsearch(event:any){
+
+  }
+
+  filter(){
+
+  }
+
+  sort(){
+    
+  }
 }
