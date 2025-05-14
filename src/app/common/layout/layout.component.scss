@@ -1,0 +1,54 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    min-height: 0;
+
+    .side-bar {
+      width: 17%;
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      position: relative;
+    }
+
+    .page-wrapper {
+      width: 83%;
+      overflow-y: auto;
+    }
+  }
+
+  /* -------- Media Queries -------- */
+
+  // For tablets and below
+  @media (max-width: 1024px) {
+    .main-content {
+      flex-direction: row;
+      .page-wrapper {
+        width: 83%;;
+      }
+      .side-bar{
+        width: 17%;
+      }
+    }
+  }
+
+  // For mobile devices
+  @media (max-width: 600px) {
+
+    .main-content {
+      .page-wrapper {
+        padding: 10px;
+      }
+
+      .side-bar {
+        padding: 10px;
+      }
+    }
+  }
+}

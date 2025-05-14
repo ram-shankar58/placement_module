@@ -1,0 +1,30 @@
+<div class="common-header">
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <img src="assets/images/graditlogo.png" alt="Gradit Logo" />
+    </div>
+
+    <!-- Navigation Items -->
+    <div class="nav-items" [class.open]="isMenuOpen || screenWidth > 600">
+        <div class="nav-item" *ngFor="let item of navItems; let i = index" [class.active]="activeIndex === i"
+            (click)="toggleNavItem(i)">
+            <img [src]="item.icon" alt="{{ item.label }}" class="nav-icon">
+            <span class="nav-text">{{ item.label }}</span>
+        </div>
+    </div>
+
+    <!-- User Profile Section -->
+    <div class="user-profile">
+        <img src="assets/images/placement_officer.png" alt="Profile" />
+        <div class="user-info">
+            <div class="name">Anand Ramakrishnan</div>
+            <div class="role">Placement Officer</div>
+        </div>
+    </div>
+
+    <!-- Hamburger Toggle Button (only visible on small screens) -->
+    <div class="nav-toggle" (click)="isMenuOpen = !isMenuOpen">
+        <i class="fas fa-bars"></i>
+    </div>
+    
+</div>
