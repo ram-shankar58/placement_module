@@ -3,18 +3,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { CONTAINERS } from './common/layout/layout.module'
 
 const routes: Routes = [
-  {
-    path: '',
-    component: CONTAINERS.LayoutComponent,
-    children: [
+    {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+    },
+    {
+      path: '',
+      redirectTo: 'auth',
+      pathMatch: 'full'
+    },
+
+    {
+      path: '',
+      component: CONTAINERS.LayoutComponent,
+      children: [
       {
-        path: 'dashboard',
-        loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
-      },
-      {
-        path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full'
+      path: 'dashboard',
+      loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
       },
       {
         path: 'placementEvents',
@@ -31,14 +36,25 @@ const routes: Routes = [
       {
         path: 'reports',
         loadChildren: () => import('./pages/reports/reports.module').then(m => m.ReportsModule)
+      },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
       }
     ]
   },
+   //Catch-all route
   {
-    path: 'dashboard',
-    loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule)
-  },
+    path: '**',
+    redirectTo: 'auth',
+    pathMatch: 'full'
+  }
+
+  
 ];
+
+
 
 
 @NgModule({

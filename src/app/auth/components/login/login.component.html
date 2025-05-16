@@ -1,0 +1,31 @@
+<div class="container">
+  <div class="login-section">
+    <div class="logo">
+      <img src="assets/images/graditlogo.png" alt="GRADit!">
+    </div>
+    <h1>Empower Students, Manage Opportunities</h1>
+    <p>Login for placement coordination</p>
+    <form (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" placeholder="helloworld@gmail.com" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required>
+      </div>
+      <div class="form-group">
+        <a href="#" class="forgot-password">Forgot password?</a>
+      </div>
+      <div class="form-group">
+        <button type="submit" class="login-button">Log in</button>
+      </div>
+    </form>
+    <div class="new-user">
+      <p>New here? Reach out to your institution for your login details.</p>
+    </div>
+  </div>
+  <div class="image-section">
+      <img  class="hero-image " src="assets/images/heroimage.png" alt="Documents and charts">
+  </div>
+</div>
