@@ -1,0 +1,149 @@
+.container {
+    display: flex;
+  }
+  
+  .login-section {
+    width: 28%;
+    padding: 10px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+  }
+  
+  .logo img {
+    width: 30%;
+  }
+  
+  h1 {
+    color: #4a4a4a;
+    margin: 5px 5px 5px;
+    
+  }
+  
+  p {
+    color: #7a7a7a;
+    text-align: center;
+    margin-top: 2px;
+    margin-left: 5px;
+  }
+  
+  .form-group {
+    width: 100%;
+    margin: 10px 5px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: #4a4a4a;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .forgot-password {
+    display: block;
+    text-align: right;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .new-user {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .image-section {
+    width:70%;
+    
+  }
+
+  .image-section .hero-image {
+    width: 100%;
+    height: 100%;
+  }
+  
+  
+   /* For screens smaller than 1024px (tablets and small laptops) */
+@media screen and (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .login-section {
+    width: 80%;
+    padding: 40px;
+  }
+
+  .image-section {
+    width: 100%;
+    height: 300px;
+    background-size: contain;
+    background-position: center;
+  }
+}
+
+/* For screens smaller than 768px (mobile devices) */
+@media screen and (max-width: 768px) {
+  .login-section {
+    width: 90%;
+    padding: 20px;
+  }
+
+  .form-group input {
+    padding: 8px;
+    font-size: 16px;
+  }
+
+  .login-button {
+    padding: 12px;
+    font-size: 18px;
+  }
+
+  .image-section {
+    height: 250px;
+  }
+}
+
+/* For screens smaller than 480px (small mobile screens) */
+@media screen and (max-width: 480px) {
+  h2 {
+    font-size: 20px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .login-section {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .image-section {
+    height: 200px;
+    display: none; /* Hide the image section for small screens */
+  }
+
+  .login-button {
+    padding: 10px;
+    font-size: 16px;
+  }
+}
