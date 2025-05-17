@@ -4,6 +4,10 @@ import { UpcomingEventsComponent } from './components/upcoming-events/upcoming-e
 import { HistoricalEventsComponent } from './components/historical-events/historical-events.component';
 import { LayoutComponent } from './layout/layout.component';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../../shared/shared.module';
+import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatSidenavModule } from '@angular/material/sidenav';
+
 
 export const routes: any = [
   {
@@ -43,7 +47,11 @@ export const routes: any = [
   ],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    SharedModule,
+    RouterModule.forChild(routes),
+    NgbModalModule,
+    MatSidenavModule
+
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

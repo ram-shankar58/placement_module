@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { AddPlacementEventComponent} from '../../../../shared/popup/add-placement-event/add-placement-event.component'
 
 @Component({
   selector: 'app-upcoming-events',
@@ -8,7 +10,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UpcomingEventsComponent implements OnInit{
 
-  constructor(){
+  isPanelOpen = false;
+  constructor(private modalservice: NgbModal){
 
   }
 
@@ -17,7 +20,14 @@ export class UpcomingEventsComponent implements OnInit{
   }
 
   addevent(){
-
+    this.modalservice.open(AddPlacementEventComponent,{
+      backdrop: true,
+      keyboard: true,
+      scrollable: true,
+      centered: false,
+      backdropClass: 'custom-backdrop',
+      windowClass: 'slide-right-modal'
+    });
   }
 
   eventsearch(event:any){
@@ -29,6 +39,6 @@ export class UpcomingEventsComponent implements OnInit{
   }
 
   sort(){
-    
+
   }
 }

@@ -5,13 +5,14 @@ import { CommonheaderComponent } from './components/commonheader/commonheader.co
 import { FooterbarComponent } from './components/footerbar/footerbar.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { RouterModule } from '@angular/router';
+import { AddPlacementEventComponent } from './popup/add-placement-event/add-placement-event.component';
 
 
 
 @NgModule({
   imports: [
     CommonModule
-  ],
+    ],
   exports: [
     SidebarComponent,
     CommonheaderComponent,
@@ -23,7 +24,8 @@ import { RouterModule } from '@angular/router';
      SidebarComponent,
      CommonheaderComponent,
      FooterbarComponent,
-     BreadcrumbsComponent
+     BreadcrumbsComponent,
+     AddPlacementEventComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

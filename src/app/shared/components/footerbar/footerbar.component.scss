@@ -3,6 +3,7 @@
     width: 100%;
     padding-top: 4px;
     font-weight: 500;
+    display: flex;
     justify-content: space-between;
     align-items: center;
     background-color: #e8e8e8;
@@ -12,15 +13,14 @@
     
   }
 
-  .card{
-    color: black;
-    width: 48%;
-  }
+    .footcard{
+      width: 48%;
+    }
 
   a{
-    color: #8f8989;
+    color: #8f8989 !important;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: underline !important;
     margin-right: 2%;
   }
 
