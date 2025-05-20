@@ -43,13 +43,13 @@
 
 @media (max-width: 768px){
   .breadcrumbs{
-    font-size: 12px;
+    font-size: 12px !important;
   }
 }
 
 @media (max-width: 430px){
   .breadcrumbs{
-    font-size: 10px;
-    padding: 5px 20px;
+    font-size: 10px !important;
+    padding: 5px 20px !important;
   }
 }

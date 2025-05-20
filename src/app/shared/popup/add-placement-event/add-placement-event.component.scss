@@ -10,6 +10,12 @@
   transform: none !important;
 }
 
+::ng-deep .modal.fade .modal-dialog {
+    transition-duration: 0s;
+    position: fixed;
+}
+
+
  @keyframes slideInFromRight {
   from {
     right: -400px;
