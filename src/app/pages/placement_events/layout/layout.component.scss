@@ -19,7 +19,7 @@
     }
 
     &.active {
-      color: #eb4b0c;
+      color: #e53935;
 
       &::after {
         content: '';
@@ -49,3 +49,19 @@
   }
 }
 
+@media(max-width: 768px){
+  .menu-list{
+    a{
+      font-size: 12px;
+    }
+  }
+}
+
+@media(max-width: 430px){
+  .menu-list{
+    padding: 0px 8px;
+    a{
+      padding: 10px 12px;
+    }
+  }
+}

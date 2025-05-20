@@ -1,0 +1,33 @@
+ .slide-right-modal {
+  position: fixed;
+  right: 0;
+  top: 0;
+  margin: 0;
+  height: 100vh;
+  max-width: 650px;
+  width: 100%;
+  animation: slideInFromRight 0.3s ease-out;
+  transform: none !important;
+}
+
+::ng-deep .modal.fade .modal-dialog {
+    transition-duration: 0s;
+    position: fixed;
+}
+
+
+ @keyframes slideInFromRight {
+  from {
+    right: -400px;
+    opacity: 0;
+  }
+  to {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+.modal-content {
+  height: 100%;
+  border-radius: 0;
+}
