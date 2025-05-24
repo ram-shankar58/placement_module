@@ -27,6 +27,10 @@ export class CommonheaderComponent {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
+  isProfiletoggle(){
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
   toggleNavItem(index: number) {
     this.activeIndex = this.activeIndex === index ? null : index;
     const selectedRoute = this.navItems[index].route;
@@ -37,8 +41,11 @@ export class CommonheaderComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
-    const clickedInsideNav = target.closest('.nav-items') || target.closest('.nav-toggle');
-    if (!clickedInsideNav && this.screenWidth <= 600) {
+    const clickedInsideNav = 
+    target.closest('.nav-items') || 
+    target.closest('.nav-toggle') || 
+    target.closest('.profile-wrapper');
+    if (!clickedInsideNav || this.screenWidth <= 600) {
       this.isMenuOpen = false;
     }
   }

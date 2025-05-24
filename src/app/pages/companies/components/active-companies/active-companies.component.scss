@@ -1,0 +1,51 @@
+.overall_div {
+  padding: 20px;
+}
+
+.add-cmp {
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+} 
+
+// sample
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 530px;
+  height: 100%;
+  background-color: #f4f4f4;
+  box-shadow: -2px 0 5px rgba(0,0,0,0.3);
+  transform: translateX(100%); 
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.sidebar.active {
+  transform: translateX(0); 
+}
+
+.sidebar-header, .sidebar-footer {
+  padding: 15px;
+  background-color: #ddd;
+}
+
+.sidebar-content {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+}
+
+.close-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  float: right;
+}

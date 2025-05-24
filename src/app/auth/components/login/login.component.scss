@@ -1,102 +1,155 @@
 .container {
-    display: flex;
-  }
-  
-  .login-section {
-    width: 28%;
-    padding: 10px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-  }
-  
-  .logo img {
-    width: 30%;
-  }
-  
-  h1 {
-    color: #4a4a4a;
+  display: flex;
+  max-width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+}
+
+.login-section {
+  width: 30%;
+  padding: 20px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.logo img {
+  width: 30%;
+}
+
+form {
+  width: 100%;
+}
+
+.form-group {
+  width: 90%;
+  margin: 10px 5px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #4a4a4a;
+}
+
+input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.forgot-password {
+  display: block;
+  text-align: right;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-button {
+  width: 100%;
+  padding: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.new-user {
+  margin-top: 20px;
+}
+
+strong,
+.footer-line {
+  margin-left: 5px;
+}
+
+.image-section {
+  width: 70%;
+
+}
+
+.image-section .hero-image {
+  width: 100%;
+  height: 100%;
+}
+
+.title-section {
+
+  margin: 20px 0px 0px;
+
+  h2 {
+    color: #4e4cf0;
+    font-size: 1.8rem;
     margin: 5px 5px 5px;
-    
-  }
-  
-  p {
-    color: #7a7a7a;
-    text-align: center;
-    margin-top: 2px;
-    margin-left: 5px;
-  }
-  
-  .form-group {
-    width: 100%;
-    margin: 10px 5px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    color: #4a4a4a;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .forgot-password {
-    display: block;
-    text-align: right;
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .new-user {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .image-section {
-    width:70%;
-    
   }
 
-  .image-section .hero-image {
-    width: 100%;
-    height: 100%;
+  p {
+    color: #666;
+    text-align: left;
+    margin-top: 10px;
+    margin-left: 5px;
   }
-  
-  
-   /* For screens smaller than 1024px (tablets and small laptops) */
+}
+
+/* For screens smaller than 1024px (tablets and small laptops) */
 @media screen and (max-width: 1024px) {
   .container {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     height: auto;
   }
 
   .login-section {
-    width: 80%;
-    padding: 40px;
+    width: 40%;
+    padding: 20px;
+  }
+
+  .title-section {
+    margin: 15px 0px 0px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      margin-top: 10px;
+    }
+  }
+
+  .form-group {
+    margin: 5px 5px;
+  }
+
+  label {
+    font-size: 12px;
+  }
+
+  input {
+    font-size: 10px;
   }
 
   .image-section {
     width: 100%;
-    height: 300px;
+    height: 100vh;
     background-size: contain;
     background-position: center;
+  }
+
+  .forgot-password {
+    font-size: 12px;
+  }
+
+  .login-button {
+    font-size: 12px;
+  }
+
+  .new-user {
+    margin-top: 10px;
+    font-size: 12px;
   }
 }
 
@@ -139,7 +192,8 @@
 
   .image-section {
     height: 200px;
-    display: none; /* Hide the image section for small screens */
+    display: none;
+    /* Hide the image section for small screens */
   }
 
   .login-button {

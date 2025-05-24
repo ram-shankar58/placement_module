@@ -10,8 +10,8 @@ import { AddPlacementEventComponent} from '../../../../shared/popup/add-placemen
 })
 export class UpcomingEventsComponent implements OnInit{
 
-  isPanelOpen = false;
-  constructor(private modalservice: NgbModal){
+  issidebarvisible = false;
+  constructor(){
 
   }
 
@@ -19,15 +19,13 @@ export class UpcomingEventsComponent implements OnInit{
     
   }
 
+  toggleSidebar(){
+    this.issidebarvisible = !this.issidebarvisible;
+  }
+
   addevent(){
-    this.modalservice.open(AddPlacementEventComponent,{
-      backdrop: true,
-      keyboard: true,
-      scrollable: true,
-      centered: false,
-      backdropClass: 'custom-backdrop',
-      windowClass: 'slide-right-modal'
-    });
+    console.log('active company')
+    this.issidebarvisible = !this.issidebarvisible;
   }
 
   eventsearch(event:any){
