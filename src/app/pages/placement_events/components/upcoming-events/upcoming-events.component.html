@@ -4,6 +4,19 @@
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
 
+        <div class="sidebar" [class.active]="issidebarvisible">
+        <div class="sidebar-header">
+            <button class="close-btn" (click)="toggleSidebar()">X</button>
+            <h3>Sidebar</h3>
+        </div>
+        <div class="sidebar-content">
+            <p>This is the sidebar content.</p>
+        </div>
+        <div class="sidebar-footer">
+            <p>Footer area</p>
+        </div>
+    </div>
+
     <input 
       type="text" 
       class="search-box" 

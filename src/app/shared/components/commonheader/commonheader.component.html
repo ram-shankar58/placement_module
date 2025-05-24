@@ -14,11 +14,20 @@
     </div>
 
     <!-- User Profile Section -->
-    <div class="user-profile">
-        <img src="assets/images/placement_officer.png" alt="Profile" />
-        <div class="user-info">
-            <div class="name">Anand Ramakrishnan</div>
-            <div class="role">Placement Officer</div>
+    <div class="profile-wrapper" style="position: relative;">
+        <div class="user-profile" (click)="isProfiletoggle()">
+            <img src="assets/images/placement_officer.png" alt="Profile" />
+            <div class="user-info">
+                <div class="name">Anand Ramakrishnan</div>
+                <div class="role">Placement Officer</div>
+            </div>
+            <img class="arrow" style="height: 20px; width: 20px; cursor: pointer;" src="assets/icons/down-arrow.svg">
+        </div>
+
+        <div class="profile-toggle" [ngClass]="{ 'show': isMenuOpen, 'hide': !isMenuOpen }">
+            <a>View profile</a>
+            <a>Preferences</a>
+            <a>Log out</a>
         </div>
     </div>
 
@@ -26,5 +35,5 @@
     <div class="nav-toggle" (click)="isMenuOpen = !isMenuOpen">
         <i class="fas fa-bars"></i>
     </div>
-    
+
 </div>
