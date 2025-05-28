@@ -1,27 +1,25 @@
 <div class="overall_div">
   <div class="add_n_sort_event">
-    <button class="add-btn" (click)="addevent()"> 
+    <button class="add-btn" (click)="addevent()">
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
 
-        <div class="sidebar" [class.active]="issidebarvisible">
-        <div class="sidebar-header">
-            <button class="close-btn" (click)="toggleSidebar()">X</button>
-            <h3>Sidebar</h3>
-        </div>
-        <div class="sidebar-content">
-            <p>This is the sidebar content.</p>
-        </div>
-        <div class="sidebar-footer">
-            <p>Footer area</p>
-        </div>
+    <div class="sidebar" [class.active]="issidebarvisible">
+      <div class="sidebar-header">
+        <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
+        <h6 style="font-size: 17px;">Add a New Event</h6>
+        <p style="font-size: 12px;">detail out the new event information with required fields</p>
+      </div>
+      <div class="sidebar-content">
+        <p>This is the sidebar content.</p>
+      </div>
+      <div class="sidebar-footer">
+        <input class="cancel_btn" type="button" value="Cancel">
+        <input class="submit_btn" type="button" value="Save Company Details">
+      </div>
     </div>
 
-    <input 
-      type="text" 
-      class="search-box" 
-      placeholder="Search" 
-      (ngModelChange)="eventsearch($event)"/>
+    <input type="text" class="search-box" placeholder="Search" (ngModelChange)="eventsearch($event)" />
 
     <div class="icon-button" (click)="filter()">
       <i class="fa fa-filter"></i> Filter

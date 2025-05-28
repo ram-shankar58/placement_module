@@ -1,18 +1,152 @@
 <div class="overall_div">
 
-    <input type="button" value="add" class="add-cmp" (click)="addCompany()">
+    <input type="button" value="add" class="add-cmp" (click)="toggleSidebar()">
 
     <div class="sidebar" [class.active]="issidebarvisible">
-        <div class="sidebar-header">
-            <button class="close-btn" (click)="toggleSidebar()">X</button>
-            <h3>Sidebar</h3>
-        </div>
-        <div class="sidebar-content">
-            <p>This is the sidebar content.</p>
-        </div>
-        <div class="sidebar-footer">
-            <p>Footer area</p>
-        </div>
+        <form [formGroup]="addCompanyForm" (ngSubmit)="addCompany()">
+            <div class="sidebar-header">
+                <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
+                <h6 style="font-size: 17px;">Add a New Company</h6>
+                <p style="font-size: 12px;">detail out the new company information with required fields</p>
+            </div>
+            <div class="sidebar-content">
+                <div class="container">
+
+                    <div class="step-header">
+                        <div class="step-icon">1</div>
+                        <h6>Company Basics</h6>
+                    </div>
+
+                    <div class="sidebar-sub-section">
+                        <label for="company_name">Comnpany name</label>
+                        <input
+                            [class.invalid]="addCompanyForm.get('company_name')?.invalid && addCompanyForm.get('company_name')?.touched"
+                            type="search" id="company_name" formControlName="company_name">
+
+                        <div class="error-text"
+                            *ngIf="addCompanyForm.get('company_name')?.invalid && addCompanyForm.get('company_name')?.touched">
+                            Company name is required.
+                        </div>
+
+                        <label for="description">Company description</label>
+                        <textarea id="company_description" formControlName="company_description"></textarea>
+
+                        <label for="location">Location</label>
+                        <input type="text" id="location" formControlName="location">
+
+                        <div class="dropdown-label-flex">
+                            <label for="industry_type">Industry type</label>
+                            <label for="employee_count">No of employees</label>
+                        </div>
+                        <div class="dropdown-flex">
+                            <ng-select [items]="industryOptions" bindValue="name" placeholder="Select Industry"
+                                bindLabel="name" [searchable]="true" [clearable]="true" formControlName="industry_type"
+                                [class.invalid]="addCompanyForm.get('industry_type')?.invalid && addCompanyForm.get('industry_type')?.touched">
+                            </ng-select>
+                            <div class="error-text"
+                                *ngIf="addCompanyForm.get('industry_type')?.invalid && addCompanyForm.get('industry_type')?.touched">
+                                Industry type is required.
+                            </div>
+                            <ng-select [items]="employeeOptions" bindValue="name" [searchable]="true" [clearable]="true"
+                                bindLabel="name" formControlName="employee_count">
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="step-header">
+                        <div class="step-icon">2</div>
+                        <h6>Contact Details</h6>
+                    </div>
+                    <div class="sidebar-sub-section">
+                        <label for="contact_name">Contact person name</label>
+                        <input type="text" id="contact_name" placeholder="Name" formControlName="contact_name"
+                            [class.invalid]="addCompanyForm.get('contact_name')?.invalid && addCompanyForm.get('contact_name')?.touched">
+
+                        <div class="error-text"
+                            *ngIf="addCompanyForm.get('contact_name')?.invalid && addCompanyForm.get('contact_name')?.touched">
+                            Contact person name is required.
+                        </div>
+
+                        <div class="dropdown-label-flex">
+                            <label for="contact_email">Contact Email</label>
+                            <label for="contact_number">Phone number</label>
+                        </div>
+
+                        <div class="dropdown-flex">
+                            <input type="text" id="contact_email" placeholder="Email" formControlName="contact_email">
+                            <input type="text" id="contact_number" placeholder="Contact number"
+                                formControlName="contact_number"
+                                [class.invalid]="addCompanyForm.get('contact_number')?.invalid && addCompanyForm.get('contact_number')?.touched">
+                        </div>
+
+                        <div class="error-text" style="margin-left: 52%;"
+                            *ngIf="addCompanyForm.get('contact_number')?.touched && addCompanyForm.get('contact_number')?.errors">
+                            <span
+                                *ngIf="addCompanyForm.get('contact_number')?.errors?.['required'] && addCompanyForm.get('contact_number')?.touched">
+                                Contact number is required.
+                            </span><br>
+                            <span *ngIf="addCompanyForm.get('contact_number')?.errors?.['minlength']">
+                                Contact number must be at least 10 digits.
+                            </span><br>
+                            <span *ngIf="addCompanyForm.get('contact_number')?.errors?.['pattern']">
+                                Contact number must be digits only.
+                            </span>
+                        </div>
+
+                        <label for="company_website">Company Website</label>
+                        <input type="text" id="company_website" placeholder="Enter the URL"
+                            formControlName="company_website">
+                    </div>
+
+
+                    <div class="step-header">
+                        <div class="step-icon">3</div>
+                        <h6>Placement Details</h6>
+                    </div>
+
+                    <div class="sidebar-sub-section">
+                        <label for="placement_events">Participated placement events</label>
+                        <ng-select [items]="placementEventOptions" [multiple]="true" bindValue="name"
+                            [searchable]="true" bindLabel="name" [closeOnSelect]="false"
+                            formControlName="placement_events"
+                            [class.invalid]="addCompanyForm.get('placement_events')?.invalid && addCompanyForm.get('placement_events')?.touched">
+                        </ng-select>
+
+                        <div class="error-text"
+                            *ngIf="addCompanyForm.get('placement_events')?.invalid && addCompanyForm.get('placement_events')?.touched">
+                            Placement event is required.
+                        </div>
+
+                        <div class="toggle-container">
+                            <label class="switch">
+                                <input type="checkbox" id="mou_signed" formControlName="mou_signed" />
+                                <span class="slider round"></span>
+                            </label>
+                            <div class="toggle-label">
+                                <label for="mou_signed">MoU Signed with college</label>
+                                <p>Mark if the institution and the company have agreed to collaborate for placements,
+                                    internships or training, and that understanding has been formalized in writing.</p>
+                            </div>
+                        </div>
+
+                        <div class="dropdown-label-flex">
+                            <label for="students_placed">Students placed so far</label>
+                            <label for="average_ctc">Average CTC(in ₹ lakhs)</label>
+                        </div>
+
+                        <div class="dropdown-flex">
+                            <input type="text" formControlName="students_placed" placeholder="Students Placed" />
+                            <input type="text" formControlName="average_ctc" placeholder="Average CTC" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-footer">
+                <input class="cancel_btn" (click)="toggleSidebar()" type="button" value="Cancel">
+                <input class="submit_btn" [disabled]="addCompanyForm.invalid" type="submit"
+                    value="Save Company Details">
+            </div>
+        </form>
     </div>
 
 </div>

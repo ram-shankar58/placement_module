@@ -4,6 +4,14 @@ import { RouterModule } from '@angular/router';
 import { CompaniesLayoutComponent } from './layout/companies-layout/companies-layout.component';
 import { ActiveCompaniesComponent } from './components/active-companies/active-companies.component';
 import { ArchivedCompaniesComponent } from './components/archived-companies/archived-companies.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { EffectsModule } from '@ngrx/effects';
+import { CompaniesEffect } from './effects/companies.effect';
+import { CompaniesService } from './companies.service';
+import { CompaniesSanbox } from './companies.sandbox';
+
+
 
 const routes:any = [
   {
@@ -42,9 +50,17 @@ const routes:any = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-  ],
+    ReactiveFormsModule,
+    FormsModule,
+    NgSelectModule,
+    EffectsModule.forFeature([CompaniesEffect])
+    ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
+  ],
+  providers:[
+    CompaniesService,
+    CompaniesSanbox
   ]
 })
 export class CompaniesModule { }
