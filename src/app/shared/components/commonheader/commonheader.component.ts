@@ -42,8 +42,6 @@ export class CommonheaderComponent {
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
     const clickedInsideNav = 
-    target.closest('.nav-items') || 
-    target.closest('.nav-toggle') || 
     target.closest('.profile-wrapper');
     if (!clickedInsideNav || this.screenWidth <= 600) {
       this.isMenuOpen = false;

@@ -36,19 +36,6 @@
   }
 }
 
-.content-wrapper {
-  padding: 24px;
-  background-color: #f5f7fa;
-  min-height: calc(100vh - 120px);
-
-  &.main-wrapper {
-    padding: 10px;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    border-radius: 8px;
-  }
-}
-
 @media(max-width: 768px){
   .menu-list{
     a{
