@@ -22,7 +22,6 @@ export class CompaniesSanbox {
 
     //add companies
     addCompanies(params:any){
-        console.log('sandbox',params);
         this.appState.dispatch(new CompaniesAction.addCompanies(params));
     }
 }

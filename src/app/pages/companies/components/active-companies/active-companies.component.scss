@@ -1,5 +1,5 @@
 .overall_div {
-  padding: 10px 20px 20px 20px;
+  padding: 10px;
 }
 
 .add-cmp {
@@ -192,6 +192,7 @@
   padding-top: 6px;
   color: var(--color-secondary);
   border-top: 1px solid #eee;
+  overflow-y: auto;
 }
 
 .card-footer {
