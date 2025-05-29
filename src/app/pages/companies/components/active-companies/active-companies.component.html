@@ -52,6 +52,40 @@
 
 
 
+    <div class="company-card-grid">
+        <div class="company-card" *ngFor="let company of CompaniesList">
+            <div class="card-header">
+                <img [src]="company.logoUrl" class="company-logo" />
+                <div class="company-details">
+                    <h3 class="company-name">{{company.name}}</h3>
+                    <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
+                </div>
+                <div class="card-menu">
+                    <i class="fas fa-ellipsis-v menu-icon"></i>
+                </div>
+            </div>
+            <div class="card-sub-details">
+                <p class="industry"><i class="fas fa-briefcase"></i>{{company.industry}}</p>
+                <p class="size"><i class="fas fa-users"></i>{{company.size}}</p>
+            </div>
+
+            <p class="description">
+                {{company.description}}
+            </p>
+
+            <div class="card-footer">
+                <div>
+                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.placementEvents}} Placement events</div>
+                </div>
+                <div class="footer-item">
+                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlaced}} Students<span
+                            style="color: #757575;"> Placed</span></p>
+                    <p> ₹ Avg. CTC: {{company.avgCtc}} LPA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="sidebar" [class.active]="issidebarvisible">
         <form [formGroup]="addCompanyForm" (ngSubmit)="addCompany()">
             <div class="sidebar-header">
@@ -70,16 +104,16 @@
                     <div class="sidebar-sub-section">
                         <label for="company_name">Comnpany name</label>
                         <input
-                            [class.invalid]="addCompanyForm.get('company_name')?.invalid && addCompanyForm.get('company_name')?.touched"
-                            type="search" id="company_name" formControlName="company_name">
+                            [class.invalid]="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched"
+                            type="search" id="company_name" formControlName="companyName">
 
                         <div class="error-text"
-                            *ngIf="addCompanyForm.get('company_name')?.invalid && addCompanyForm.get('company_name')?.touched">
+                            *ngIf="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched">
                             Company name is required.
                         </div>
 
                         <label for="description">Company description</label>
-                        <textarea id="company_description" formControlName="company_description"></textarea>
+                        <textarea id="company_description" formControlName="companyDescription"></textarea>
 
                         <label for="location">Location</label>
                         <input type="text" id="location" formControlName="location">
@@ -90,15 +124,15 @@
                         </div>
                         <div class="dropdown-flex">
                             <ng-select [items]="industryOptions" bindValue="name" placeholder="Select Industry"
-                                bindLabel="name" [searchable]="true" [clearable]="true" formControlName="industry_type"
-                                [class.invalid]="addCompanyForm.get('industry_type')?.invalid && addCompanyForm.get('industry_type')?.touched">
+                                bindLabel="name" [searchable]="true" [clearable]="true" formControlName="industryType"
+                                [class.invalid]="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
                             </ng-select>
                             <div class="error-text"
-                                *ngIf="addCompanyForm.get('industry_type')?.invalid && addCompanyForm.get('industry_type')?.touched">
+                                *ngIf="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
                                 Industry type is required.
                             </div>
                             <ng-select [items]="employeeOptions" bindValue="name" [searchable]="true" [clearable]="true"
-                                bindLabel="name" formControlName="employee_count">
+                                bindLabel="name" formControlName="numberOfEmployees">
                             </ng-select>
                         </div>
                     </div>
@@ -109,11 +143,11 @@
                     </div>
                     <div class="sidebar-sub-section">
                         <label for="contact_name">Contact person name</label>
-                        <input type="text" id="contact_name" placeholder="Name" formControlName="contact_name"
-                            [class.invalid]="addCompanyForm.get('contact_name')?.invalid && addCompanyForm.get('contact_name')?.touched">
+                        <input type="text" id="contact_name" placeholder="Name" formControlName="contactPersonName"
+                            [class.invalid]="addCompanyForm.get('contactPersonName')?.invalid && addCompanyForm.get('contactPersonName')?.touched">
 
                         <div class="error-text"
-                            *ngIf="addCompanyForm.get('contact_name')?.invalid && addCompanyForm.get('contact_name')?.touched">
+                            *ngIf="addCompanyForm.get('contactPersonName')?.invalid && addCompanyForm.get('contactPersonName')?.touched">
                             Contact person name is required.
                         </div>
 
@@ -123,29 +157,38 @@
                         </div>
 
                         <div class="dropdown-flex">
-                            <input type="text" id="contact_email" placeholder="Email" formControlName="contact_email">
+                            <input type="text" id="contact_email" placeholder="Email" formControlName="contactEmail">
                             <input type="text" id="contact_number" placeholder="Contact number"
-                                formControlName="contact_number"
-                                [class.invalid]="addCompanyForm.get('contact_number')?.invalid && addCompanyForm.get('contact_number')?.touched">
+                                formControlName="phoneNumber"
+                                [class.invalid]="addCompanyForm.get('phoneNumber')?.invalid && addCompanyForm.get('phoneNumber')?.touched">
                         </div>
 
                         <div class="error-text" style="margin-left: 52%;"
-                            *ngIf="addCompanyForm.get('contact_number')?.touched && addCompanyForm.get('contact_number')?.errors">
-                            <span
-                                *ngIf="addCompanyForm.get('contact_number')?.errors?.['required'] && addCompanyForm.get('contact_number')?.touched">
+                            *ngIf="addCompanyForm.get('phoneNumber')?.touched && addCompanyForm.get('phoneNumber')?.errors">
+                            <span *ngIf="addCompanyForm.get('phoneNumber')?.errors?.['required']">
                                 Contact number is required.
-                            </span><br>
-                            <span *ngIf="addCompanyForm.get('contact_number')?.errors?.['minlength']">
+                            </span>
+                            <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required'] 
+                                  && addCompanyForm.get('phoneNumber')?.errors?.['minlength']">
                                 Contact number must be at least 10 digits.
-                            </span><br>
-                            <span *ngIf="addCompanyForm.get('contact_number')?.errors?.['pattern']">
+                            </span>
+                            <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required']
+                                   && !addCompanyForm.get('phoneNumber')?.errors?.['minlength']
+                                   && addCompanyForm.get('phoneNumber')?.errors?.['maxlength']">
+                                Contact number must not exceed 10 digits.
+                            </span>
+                            <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required']
+                                   && !addCompanyForm.get('phoneNumber')?.errors?.['minlength']
+                                   && !addCompanyForm.get('phoneNumber')?.errors?.['maxlength']
+                                   && addCompanyForm.get('phoneNumber')?.errors?.['pattern']">
                                 Contact number must be digits only.
                             </span>
                         </div>
 
+
                         <label for="company_website">Company Website</label>
                         <input type="text" id="company_website" placeholder="Enter the URL"
-                            formControlName="company_website">
+                            formControlName="companyWebsite">
                     </div>
 
 
@@ -158,18 +201,18 @@
                         <label for="placement_events">Participated placement events</label>
                         <ng-select [items]="placementEventOptions" [multiple]="true" bindValue="name"
                             [searchable]="true" bindLabel="name" [closeOnSelect]="false"
-                            formControlName="placement_events"
-                            [class.invalid]="addCompanyForm.get('placement_events')?.invalid && addCompanyForm.get('placement_events')?.touched">
+                            formControlName="participatedPlacementEvents"
+                            [class.invalid]="addCompanyForm.get('participatedPlacementEvents')?.invalid && addCompanyForm.get('participatedPlacementEvents')?.touched">
                         </ng-select>
 
                         <div class="error-text"
-                            *ngIf="addCompanyForm.get('placement_events')?.invalid && addCompanyForm.get('placement_events')?.touched">
+                            *ngIf="addCompanyForm.get('participatedPlacementEvents')?.invalid && addCompanyForm.get('participatedPlacementEvents')?.touched">
                             Placement event is required.
                         </div>
 
                         <div class="toggle-container">
                             <label class="switch">
-                                <input type="checkbox" id="mou_signed" formControlName="mou_signed" />
+                                <input type="checkbox" id="mou_signed" formControlName="mouSigned" />
                                 <span class="slider round"></span>
                             </label>
                             <div class="toggle-label">
@@ -185,8 +228,13 @@
                         </div>
 
                         <div class="dropdown-flex">
-                            <input type="text" formControlName="students_placed" placeholder="Students Placed" />
-                            <input type="text" formControlName="average_ctc" placeholder="Average CTC" />
+                            <input type="text" formControlName="studentsPlacedSoFar" placeholder="Students Placed" />
+                            <input type="text" formControlName="averageCtc" placeholder="Average CTC"
+                                [class.invalid]="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched" />
+                        </div>
+                        <div class="error-text" style="margin-left: 52%;"
+                            *ngIf="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched">
+                            Please enter a valid number (integer or decimal).
                         </div>
                     </div>
                 </div>

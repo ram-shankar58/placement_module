@@ -9,7 +9,6 @@ export class CompaniesService extends Api{
 
   //add companies
   addCompanies(payload: any):Observable<any>{
-    console.log('service',payload);
-    return this.http.post<any>(this.URL + 'companies/add-company',payload)
+    return this.http.post<any>(this.URL + '/company/add-new-company',payload)
   }
 }
