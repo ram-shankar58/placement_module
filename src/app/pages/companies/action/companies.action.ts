@@ -12,7 +12,6 @@ export const ActionTypes = {
 export class addCompanies implements Action{
     type = ActionTypes.ADD_COMPANIES;
     constructor(public payload:any){
-        console.log('action',payload);
     }
 }
 

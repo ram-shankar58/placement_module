@@ -2,6 +2,7 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr'
 import { CompaniesSanbox } from '../../companies.sandbox';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-active-companies',
@@ -14,27 +15,28 @@ export class ActiveCompaniesComponent implements OnInit {
   issidebarvisible = false;
   submitted = false;
   addCompanyForm: any = FormGroup;
+  private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
-    public CompaniesSanbox: CompaniesSanbox
+    public CompaniesSanbox: CompaniesSanbox,
   ) { }
 
   initaddcompanyform() {
     this.addCompanyForm = this.fb.group({
-      company_name: new FormControl('', [Validators.required]),
-      company_description: new FormControl(''),
+      companyName: new FormControl('', [Validators.required]),
+      companyDescription: new FormControl(''),
       location: new FormControl(''),
-      industry_type: new FormControl('', [Validators.required]),
-      employee_count: new FormControl(''),
-      contact_name: new FormControl('', [Validators.required]),
-      contact_email: new FormControl(''),
-      contact_number: new FormControl('', [Validators.required,Validators.minLength(10),Validators.pattern('^[0-9]*$')]),
-      company_website: new FormControl(''),
-      placement_events: new FormControl([], [Validators.required]),
-      mou_signed: new FormControl(false),
-      students_placed: new FormControl(''),
-      average_ctc: new FormControl(''),
+      industryType: new FormControl('', [Validators.required]),
+      numberOfEmployees: new FormControl(''),
+      contactPersonName: new FormControl('', [Validators.required]),
+      contactEmail: new FormControl(''),
+      phoneNumber: new FormControl('', [Validators.required,Validators.minLength(10),Validators.maxLength(10),Validators.pattern('^[0-9]*$')]),
+      companyWebsite: new FormControl(''),
+      participatedPlacementEvents: new FormControl([], [Validators.required]),
+      mouSigned: new FormControl(false),
+      studentsPlacedSoFar: new FormControl(''),
+      averageCtc: new FormControl('', [Validators.required,Validators.pattern(/^\d+(\.\d+)?$/)]),
     });
   }
 
@@ -80,24 +82,18 @@ export class ActiveCompaniesComponent implements OnInit {
     this.submitted = true
     let param: any = {}
 
-    if (!this.addCompanyForm.value.company_name) {
-      this.toastr.error('Company name is required')
-      return;
-    }
-    if (!this.addCompanyForm.value.industry_type) {
-      this.toastr.error('Industry type is required')
-      return;
-    }
-    if (!this.addCompanyForm.value.contact_name) {
-      this.toastr.error('Contact name is required')
-      return;
-    }
-
     param = this.addCompanyForm.value;
-    this.CompaniesSanbox.addCompanies(param)
+    this.CompaniesSanbox.addCompanies(param);
+    this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
+      console.log('data',data.status)
 
-    console.log('param',param);
-    
+      if (data.status == "true") {
+      console.log('true')
+      this.toastr.success('Company Added Successfully')
+      return;
+    }
+    }))
+    this.addCompanyForm.reset();    
   }
 
 }
