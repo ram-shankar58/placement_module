@@ -99,5 +99,16 @@ export class ActiveCompaniesComponent implements OnInit {
     console.log('param',param);
     
   }
+  eventsearch(event:any){
+
+  }
+
+  filter(){
+
+  }
+
+  sort(){
+
+  }
 
 }
