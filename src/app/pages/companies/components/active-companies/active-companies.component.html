@@ -1,9 +1,22 @@
 <div class="overall_div">
+    <div class="header_company row mx-0">
+        <button class="add-cmp col-md-3" (click)="toggleSidebar()">
+            <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
+            Add a New Company
+        </button>
+        <div class="col-md-4"></div>
+        <div class="search-sort col-md-4 p-0">
+            <input type="text" class="search-box col-md-4" placeholder="Search" (ngModelChange)="eventsearch($event)" />
 
-    <button class="add-cmp" (click)="toggleSidebar()">
-        <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
-        Add a New Company
-    </button>
+            <div class="icon-button col-md-3" (click)="filter()">
+                <i class="fa fa-filter"></i> Filter
+            </div>
+
+            <div class="icon-button col-md-3" (click)="sort()">
+                <i class="fa fa-sort"></i> Sort
+            </div>
+        </div>
+    </div>
 
     <div class="company-card-grid">
         <div class="company-card" *ngFor="let company of CompaniesList">

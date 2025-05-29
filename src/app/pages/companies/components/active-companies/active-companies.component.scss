@@ -6,9 +6,9 @@
   display: flex;
   align-items: center;
   width: 207px;
-  height: 36px;
+  height: 35px;
   padding: 8px 14px 8px 14px;
-  margin-bottom: 18px;
+  
   background-color: #4f46e5;
   border-radius: 8px;
   color: white;
@@ -16,6 +16,34 @@
   font-size: var(--font-size-medium);
   border: none;
   cursor: pointer;
+}
+
+.search-sort{
+  display: flex;
+  padding: 8px 14px 8px 14px;
+  flex-direction: row;
+  gap: 30px;
+  height: 35px;
+
+}
+.search-box {
+  padding: 8px 8px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  width: 200px;
+  font-size: 15px;
+}
+
+.icon-button {
+  position: relative;
+  padding: 8px 12px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .toggle-container {

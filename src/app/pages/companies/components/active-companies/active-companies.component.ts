@@ -169,5 +169,16 @@ export class ActiveCompaniesComponent implements OnInit {
     }))
     this.addCompanyForm.reset();
   }
+  eventsearch(event:any){
+
+  }
+
+  filter(){
+
+  }
+
+  sort(){
+
+  }
 
 }
