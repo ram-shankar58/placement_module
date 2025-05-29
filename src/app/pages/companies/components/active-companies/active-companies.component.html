@@ -5,6 +5,40 @@
         Add a New Company
     </button>
 
+    <div class="company-card-grid">
+        <div class="company-card" *ngFor="let company of CompaniesList">
+            <div class="card-header">
+                <img [src]="company.logoUrl" class="company-logo" />
+                <div class="company-details">
+                    <h3 class="company-name">{{company.name}}</h3>
+                    <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
+                </div>
+                <div class="card-menu">
+                    <i class="fas fa-ellipsis-v menu-icon"></i>
+                </div>
+            </div>
+            <div class="card-sub-details">
+                <p class="industry"><i class="fas fa-briefcase"></i>{{company.industry}}</p>
+                <p class="size"><i class="fas fa-users"></i>{{company.size}}</p>
+            </div>
+
+            <p class="description">
+                {{company.description}}
+            </p>
+
+            <div class="card-footer">
+                <div>
+                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.placementEvents}} Placement events</div>
+                </div>
+                <div class="footer-item">
+                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlaced}} Students<span
+                            style="color: #757575;"> Placed</span></p>
+                    <p> ₹ Avg. CTC: {{company.avgCtc}} LPA</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="sidebar" [class.active]="issidebarvisible">
         <form [formGroup]="addCompanyForm" (ngSubmit)="addCompany()">
             <div class="sidebar-header">
@@ -146,10 +180,10 @@
                             <label for="average_ctc">Average CTC(in ₹ lakhs)</label>
                         </div>
 
-                        <div class="dropdown-flex"> 
+                        <div class="dropdown-flex">
                             <input type="text" formControlName="studentsPlacedSoFar" placeholder="Students Placed" />
-                            <input type="text" formControlName="averageCtc" placeholder="Average CTC" 
-                            [class.invalid]="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched"/>
+                            <input type="text" formControlName="averageCtc" placeholder="Average CTC"
+                                [class.invalid]="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched" />
                         </div>
                         <div class="error-text" style="margin-left: 52%;"
                             *ngIf="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched">
@@ -164,46 +198,6 @@
                     value="Save Company Details">
             </div>
         </form>
-    </div>
-    <div class="company-card">
-        <div class="card-header">
-            <img src="assets/images/image 6.png" class="company-logo" />
-            <div class="company-details">
-                <h3 class="company-name">Johnson & Johnson</h3>
-                <p class="company-location"><i class="fas fa-map-marker-alt"></i> Great Falls, Maryland</p>
-            </div>
-            <div class="card-menu">
-                <i class="fas fa-ellipsis-v menu-icon"></i>
-            </div>
-        </div>
-        <div class="card-sub-details">
-            <p class="industry"><i class="fas fa-briefcase"></i> Children products</p>
-            <p class="size"><i class="fas fa-users"></i> 200 - 500 employees</p>
-        </div>
-
-        <p class="description">
-            Convallis a cras semper auctor neque. Fringilla est ullamcorper eget nulla facilisi etiam
-            dignissim.Convallis a cras semper auctor neque. Fringilla est ullamcorper eget nulla f
-        </p>
-        <!-- <div class="card-footer">
-            <div class ="placement-events">
-                 <div class="footer-item blue"><i class="fas fa-calendar-alt"></i> 12 placement events</div>
-            </div>
-            <div class="footer-item blue"><i class="fas fa-user-graduate"></i> 23 Students Placed</div>
-            <div class="footer-item"><i class="fas fa-rupee-sign"></i> Avg. CTC: 4.5 LPA</div>
-
-        </div> -->
-
-        <div class="card-footer">
-            <div>
-                <div class="placement-events"><i class="fas fa-calendar-alt"></i> 12 placement events</div>
-            </div>
-            <div class="footer-item">
-                <p class="students-placed"> <i class="fas fa-user-graduate"></i> 23 Students <span
-                        style="color: #757575;"> Placed</span></p>
-                <p> ₹ Avg. CTC: 4.5 LPA </p>
-            </div>
-        </div>
     </div>
 
 </div>
