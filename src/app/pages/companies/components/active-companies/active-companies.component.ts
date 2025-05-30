@@ -92,75 +92,13 @@ export class ActiveCompaniesComponent implements OnInit {
     this.openMenuId = this.openMenuId === id ? null : id;
   }
   companiesList() {
-    this.CompaniesList = [
-      {
-        name: "Johnson & Johnson",
-        logoUrl: "assets/images/johnson-logo.png",
-        location: "Great Falls, Maryland",
-        industry: "Children products",
-        size: "200 - 500 employees",
-        description: "A global leader in health and wellness products, committed to improving lives worldwide.",
-        placementEvents: 12,
-        studentsPlaced: 23,
-        avgCtc: 4.5
-      },
-      {
-        name: "Google",
-        logoUrl: "assets/images/google-logo.png",
-        location: "Mountain View, California",
-        industry: "Technology",
-        size: "10000+ employees",
-        description: "Shaping the future with AI-driven solutions and innovation at scale.",
-        placementEvents: 20,
-        studentsPlaced: 80,
-        avgCtc: 15
-      },
-      {
-        name: "Tata Consultancy Services",
-        logoUrl: "assets/images/tcs-logo.png",
-        location: "Mumbai, India",
-        industry: "IT Services",
-        size: "50000+ employees",
-        description: "A global IT consulting company delivering business solutions and digital transformation.",
-        placementEvents: 35,
-        studentsPlaced: 120,
-        avgCtc: 3.8
-      },
-      {
-        name: "Amazon",
-        logoUrl: "assets/images/amazon-logo.png",
-        location: "Seattle, Washington",
-        industry: "E-Commerce & Cloud",
-        size: "750000+ employees",
-        description: "Customer-obsessed tech company revolutionizing e-commerce and cloud computing.",
-        placementEvents: 15,
-        studentsPlaced: 65,
-        avgCtc: 13.2
-      },
-      {
-        name: "Zoho Corporation",
-        logoUrl: "assets/images/zoho-logo.png",
-        location: "Chennai, India",
-        industry: "SaaS",
-        size: "9000+ employees",
-        description: "An Indian software company offering a suite of online productivity tools and SaaS applications.",
-        placementEvents: 10,
-        studentsPlaced: 40,
-        avgCtc: 6.5
-      },
-      {
-        name: "Infosys",
-        logoUrl: "assets/images/infosys-logo.png",
-        location: "Bangalore, India",
-        industry: "Consulting & IT",
-        size: "25000+ employees",
-        description: "Helping enterprises transform through digital technology and consulting services.",
-        placementEvents: 25,
-        studentsPlaced: 98,
-        avgCtc: 4.2
+    this.CompaniesSanbox.companiesList();
+    this.subscriptions.push(this.CompaniesSanbox.companiesList$.subscribe((data) => {
+      if (data && data.status == true) {
+        console.log('data', data.data)
+        this.CompaniesList = data.data;
       }
-    ];
-
+    }))
   }
 
   addCompany() {
@@ -172,7 +110,7 @@ export class ActiveCompaniesComponent implements OnInit {
     this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
       console.log('data', data.status)
 
-      if (data.status == "true") {
+      if (data && data.status == true) {
         console.log('true')
         this.toastr.success('Company Added Successfully')
         return;

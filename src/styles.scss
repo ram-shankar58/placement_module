@@ -7,7 +7,6 @@
   body {
     font-family: poppins, sans-serif;
     position: static;
-    overflow: visible;
   }
 
   .company-card-grid {
@@ -32,7 +31,6 @@
   .content-wrapper {
     padding: 24px;
     background-color: #f5f7fa;
-    min-height: calc(100vh - 130px);
 
     &.main-wrapper {
       padding: 10px;
