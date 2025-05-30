@@ -26,8 +26,14 @@
                     <h3 class="company-name">{{company.name}}</h3>
                     <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
                 </div>
+
                 <div class="card-menu">
-                    <i class="fas fa-ellipsis-v menu-icon"></i>
+                    <i class="fas fa-ellipsis-v menu-icon" (click)="toggleMenu(company.id)"></i>
+                    <div class="menu-options" [ngClass]="{ 'show': isMenuOpen, 'hide': !isMenuOpen }" *ngIf="openMenuId === company.id">
+                        <div class="option" (click)="onUpdate()">Update company details</div>
+                        <div class="option" (click)="onCopy()">Copy as new company</div>
+                        <div class="option danger" (click)="onArchive()">Move to archive</div>
+                    </div>
                 </div>
             </div>
             <div class="card-sub-details">

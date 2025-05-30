@@ -26,6 +26,7 @@
   height: 35px;
 
 }
+
 .search-box {
   padding: 8px 8px;
   border-radius: 20px;
@@ -191,7 +192,68 @@
   color: var(--color-primary);
   padding: 0px 8px;
   cursor: pointer;
+  position: relative;
+  display: inline-block;
 }
+
+.menu-icon {
+    font-size: 1rem;
+    cursor: pointer;
+    color: var(--color-primary);
+    user-select: none;
+    padding: 0px 4px;
+  }
+.menu-options {
+  position: absolute;
+  right: 0;
+  top: 15px;
+  margin-top: 10px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-primary);
+  font-family: "Poppins", sans-serif;
+  min-width: 160px;
+  padding: 4px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+
+  .option {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--color-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+
+    &.danger {
+      color: #ff3b30;
+    }
+
+  }
+}
+
+.menu-options.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.menu-options.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
 
 .card-sub-details {
   display: flex;

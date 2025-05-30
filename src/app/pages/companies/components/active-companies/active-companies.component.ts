@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr'
 import { CompaniesSanbox } from '../../companies.sandbox';
@@ -14,8 +14,9 @@ export class ActiveCompaniesComponent implements OnInit {
 
   issidebarvisible = false;
   submitted = false;
+  isMenuOpen = false;
   addCompanyForm: any = FormGroup;
-  CompaniesList:any = [];
+  CompaniesList: any = [];
   private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
@@ -71,8 +72,13 @@ export class ActiveCompaniesComponent implements OnInit {
     const target = event.target as HTMLElement;
     const clickedInsideNav = target.closest('.sidebar');
     const clickedInsideBtn = target.closest('.add-cmp');
+    const clickedInsideCardMenu = target.closest('.menu-icon');
+    //  const clickedInsideCardMenuOptions = target.closest('.menu-options');
     if (!clickedInsideNav && !clickedInsideBtn) {
       this.issidebarvisible = false;
+    }
+    if(!clickedInsideCardMenu){
+      this.isMenuOpen = false;
     }
   }
 
@@ -80,6 +86,11 @@ export class ActiveCompaniesComponent implements OnInit {
     this.issidebarvisible = !this.issidebarvisible;
   }
 
+  openMenuId: string | null = null;
+  toggleMenu(id: string) {
+    this.isMenuOpen = !this.isMenuOpen;
+    this.openMenuId = this.openMenuId === id ? null : id;
+  }
   companiesList() {
     this.CompaniesList = [
       {
@@ -169,16 +180,27 @@ export class ActiveCompaniesComponent implements OnInit {
     }))
     this.addCompanyForm.reset();
   }
-  eventsearch(event:any){
+  eventsearch(event: any) {
 
   }
 
-  filter(){
+  filter() {
 
   }
 
-  sort(){
+  sort() {
 
+  }
+  onUpdate() {
+    // Handle update logic
+  }
+
+  onCopy() {
+    // Handle copy logic
+  }
+
+  onArchive() {
+    // Handle archive logic
   }
 
 }
