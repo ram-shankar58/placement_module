@@ -23,7 +23,7 @@
             <div class="card-header">
                 <img [src]="company.logoUrl" class="company-logo" />
                 <div class="company-details">
-                    <h3 class="company-name">{{company.name}}</h3>
+                    <h3 class="company-name">{{company.companyName}}</h3>
                     <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
                 </div>
                 <div class="card-menu">
@@ -31,12 +31,12 @@
                 </div>
             </div>
             <div class="card-sub-details">
-                <p class="industry"><i class="fas fa-briefcase"></i>{{company.industry}}</p>
-                <p class="size"><i class="fas fa-users"></i>{{company.size}}</p>
+                <p class="industry"><i class="fas fa-briefcase"></i>{{company.industryType}}</p>
+                <p class="size"><i class="fas fa-users"></i>{{company.numberOfEmployees}}</p>
             </div>
 
             <p class="description">
-                {{company.description}}
+                {{company.companyDescription}}
             </p>
 
             <div class="card-footer">
@@ -44,9 +44,9 @@
                     <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.placementEvents}} Placement events</div>
                 </div>
                 <div class="footer-item">
-                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlaced}} Students<span
+                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlacedSoFar}} Students<span
                             style="color: #757575;"> Placed</span></p>
-                    <p> ₹ Avg. CTC: {{company.avgCtc}} LPA</p>
+                    <p> ₹ Avg. CTC: {{company.averageCtc}} LPA</p>
                 </div>
             </div>
         </div>

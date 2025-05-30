@@ -39,6 +39,22 @@ export class CompaniesEffect implements OnDestroy{
                 this.store.dispatch(action)
             })
         );
+
+        //companiesList
+        this.subscriptions.add(
+            this.action$.pipe(
+                ofType(actions.ActionTypes.COMPANIES_LIST),
+                map((action: actions.companiesList) => action),
+                switchMap(() => 
+                this.companiesservice.companiesList().pipe(
+                    map((result:any) => new actions.companiesListSuccess(result)),
+                    catchError(error => of(new actions.companiesListFail(error.error)))
+                )
+            )
+            ).subscribe((action:any) => {
+                this.store.dispatch(action)
+            })
+        )
     }
     ngOnDestroy() {
         this.subscriptions.unsubscribe();
