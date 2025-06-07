@@ -8,6 +8,9 @@ import {
 
     companiesList,
     companiesListLoading,
+
+    updateCompany,
+    updateCompanyLoading,
 } from '../companies/reducer/companies.selector'
 
 @Injectable()
@@ -17,6 +20,10 @@ export class CompaniesSanbox {
     public addCompaniesLoading$
 
     public companiesList$
+    public companiesListLoading$
+
+    public updateCompany$
+    public updateCompanyLoading$
 
     constructor(
         protected appState: Store<store.AppState>
@@ -25,7 +32,10 @@ export class CompaniesSanbox {
         this.addCompaniesLoading$ = this.appState.select(addCompaniesLoading);
 
         this.companiesList$ = this.appState.select(companiesList);
-        this.addCompaniesLoading$ = this.appState.select(companiesListLoading);
+        this.companiesListLoading$ = this.appState.select(companiesListLoading);
+
+        this.updateCompany$ = this.appState.select(updateCompany)
+        this.updateCompanyLoading$ = this.appState.select(updateCompanyLoading)
     }
 
     //add companies
@@ -36,5 +46,10 @@ export class CompaniesSanbox {
     //companies list
     public companiesList(){
         this.appState.dispatch(new CompaniesAction.companiesList());
+    }
+
+    //update company
+    public updatecompany(params:any){
+        this.appState.dispatch(new CompaniesAction.updateCompany(params));
     }
 }

@@ -1,6 +1,6 @@
 <div class="overall_div">
     <div class="header_company row mx-0">
-        <button class="add-cmp col-md-3" (click)="toggleSidebar()">
+        <button class="add-cmp col-md-3" (click)="addCompanyOpen()">
             <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
             Add a New Company
         </button>
@@ -8,7 +8,7 @@
         <div class="search-sort col-md-4 p-0">
             <input type="text" class="search-box col-md-4" placeholder="Search" (ngModelChange)="eventsearch($event)" />
 
-            <div class="icon-button col-md-3" (click)="filter()">
+            <div class="icon-button col-md-3 filter" (click)="filter()">
                 <i class="fa fa-filter"></i> Filter
             </div>
 
@@ -21,7 +21,7 @@
     <div class="company-card-grid">
         <div class="company-card" *ngFor="let company of CompaniesList">
             <div class="card-header">
-                <img [src]="company.logoUrl" class="company-logo" />
+                <img src="assets/images/youtube.svg" class="company-logo" /> <!--logo to be added-->
                 <div class="company-details">
                     <h3 class="company-name">{{company.companyName}}</h3>
                     <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
@@ -29,10 +29,11 @@
 
                 <div class="card-menu">
                     <i class="fas fa-ellipsis-v menu-icon" (click)="toggleMenu(company.id)"></i>
-                    <div class="menu-options" [ngClass]="{ 'show': isMenuOpen, 'hide': !isMenuOpen }" *ngIf="openMenuId === company.id">
-                        <div class="option" (click)="onUpdate()">Update company details</div>
-                        <div class="option" (click)="onCopy()">Copy as new company</div>
-                        <div class="option danger" (click)="onArchive()">Move to archive</div>
+                    <div class="menu-options" [ngClass]="{ 'show': isMenuOpen, 'hide': !isMenuOpen }"
+                        *ngIf="openMenuId === company.id">
+                        <div class="option update" (click)="updateCompanyOpen(company.id)">Update company details</div>
+                        <div class="option copycmp" (click)="onCopy(company.id)">Copy as new company</div>
+                        <div class="option archive" (click)="onArchive()">Move to archive</div>
                     </div>
                 </div>
             </div>
@@ -47,11 +48,12 @@
 
             <div class="card-footer">
                 <div>
-                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.placementEvents}} Placement events</div>
+                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.eventCount}}
+                        Placement events</div>
                 </div>
                 <div class="footer-item">
-                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlacedSoFar}} Students<span
-                            style="color: #757575;"> Placed</span></p>
+                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlacedSoFar}}
+                        Students<span style="color: #757575;"> Placed</span></p>
                     <p> ₹ Avg. CTC: {{company.averageCtc}} LPA</p>
                 </div>
             </div>
@@ -75,13 +77,31 @@
 
                     <div class="sidebar-sub-section">
                         <label for="company_name">Comnpany name</label>
-                        <input
-                            [class.invalid]="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched"
-                            type="search" id="company_name" formControlName="companyName">
+                        <div class="nameandlogo">
+                            <input
+                                [class.invalid]="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched"
+                                type="search" id="company_name" formControlName="companyName">
+
+                            <div class="attach-logo-container">
+                                <label class="attach-logo-label" for="logoUpload">
+                                    <img src="assets/icons/attach_file.svg" alt="Attach Icon" class="attach-icon" />
+                                    <span class="attach-text">Attach a logo</span>
+                                </label>
+                                <input type="file" id="logoUpload" accept="image/*" hidden
+                                    (change)="onFileUpload($event)">
+                                <div class="upload-note">Min. Size: 150x150 px</div>
+                            </div>
+                        </div>
 
                         <div class="error-text"
-                            *ngIf="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched">
-                            Company name is required.
+                            *ngIf="addCompanyForm.get('companyName')?.touched && addCompanyForm.get('companyName')?.errors">
+                            <span *ngIf="addCompanyForm.get('companyName')?.errors?.['required']">
+                                Company name is required.
+                            </span>
+                            <span
+                                *ngIf="addCompanyForm.get('companyName')?.errors?.['pattern'] || addCompanyForm.get('companyName')?.errors?.['whitespace']">
+                                Company name cannot be empty.
+                            </span>
                         </div>
 
                         <label for="description">Company description</label>
@@ -99,13 +119,13 @@
                                 bindLabel="name" [searchable]="true" [clearable]="true" formControlName="industryType"
                                 [class.invalid]="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
                             </ng-select>
-                            <div class="error-text"
-                                *ngIf="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
-                                Industry type is required.
-                            </div>
                             <ng-select [items]="employeeOptions" bindValue="name" [searchable]="true" [clearable]="true"
                                 bindLabel="name" formControlName="numberOfEmployees">
                             </ng-select>
+                        </div>
+                        <div class="error-text"
+                            *ngIf="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
+                            Industry type is required.
                         </div>
                     </div>
 
@@ -213,10 +233,24 @@
             </div>
             <div class="sidebar-footer">
                 <input class="cancel_btn" (click)="toggleSidebar()" type="button" value="Cancel">
-                <input class="submit_btn" [disabled]="addCompanyForm.invalid" type="submit"
-                    value="Save Company Details">
+                <input *ngIf="submit === 'add'" class="submit_btn" [disabled]="addCompanyForm.invalid" type="button"
+                    (click)="addCompany()" value="Save Company Details">
+                <input *ngIf="submit === 'update'" class="submit_btn" [disabled]="addCompanyForm.invalid" type="button"
+                    (click)="updateCompany()" value="Update Company Details">
             </div>
         </form>
+    </div>
+
+    <div class="filterbar" [ngClass]="{'show': isfilterbarvisible, 'hide': !isfilterbarvisible}">
+        <div class="filterheader">
+
+        </div>
+        <div class="filtercontent">
+
+        </div>
+        <div class="filterfooter">
+
+        </div>
     </div>
 
 </div>

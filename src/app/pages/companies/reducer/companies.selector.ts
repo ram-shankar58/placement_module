@@ -15,3 +15,6 @@ export const addCompaniesLoading = createSelector(getCompaniesState, companiesre
 
 export const companiesList = createSelector(getCompaniesState, companiesreducer.companiesList);
 export const companiesListLoading = createSelector(getCompaniesState, companiesreducer.companiesListLoading);
+
+export const updateCompany = createSelector(getCompaniesState, companiesreducer.updateCompany);
+export const updateCompanyLoading = createSelector(getCompaniesState, companiesreducer.updateCompanyLoading);

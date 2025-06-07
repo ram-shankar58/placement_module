@@ -16,4 +16,9 @@ export class CompaniesService extends Api{
   companiesList(): Observable<any>{
     return this.http.get<any>(this.URL + "/company/get-companies")
   }
+
+  //updateCompany
+  updateCompany(payload:any):Observable<any>{
+    return this.http.put<any>(this.URL + "/company/update-company",payload)
+  }
 }

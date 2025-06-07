@@ -10,6 +10,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CompaniesEffect } from './effects/companies.effect';
 import { CompaniesService } from './companies.service';
 import { CompaniesSanbox } from './companies.sandbox';
+import { BrowserModule } from '@angular/platform-browser';
 
 
 

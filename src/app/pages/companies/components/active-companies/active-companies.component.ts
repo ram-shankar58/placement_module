@@ -13,10 +13,12 @@ import { Subscription } from 'rxjs';
 export class ActiveCompaniesComponent implements OnInit {
 
   issidebarvisible = false;
-  submitted = false;
   isMenuOpen = false;
+  isfilterbarvisible = false;
+  openMenuId: string | null = null;
   addCompanyForm: any = FormGroup;
   CompaniesList: any = [];
+  submit: string = '';
   private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
@@ -26,7 +28,9 @@ export class ActiveCompaniesComponent implements OnInit {
 
   initaddcompanyform() {
     this.addCompanyForm = this.fb.group({
-      companyName: new FormControl('', [Validators.required]),
+      id: new FormControl(''),
+      companyName: new FormControl('', [Validators.required, Validators.pattern(/\S+/)]),
+      // logo: new FormControl(null),
       companyDescription: new FormControl(''),
       location: new FormControl(''),
       industryType: new FormControl('', [Validators.required]),
@@ -73,23 +77,31 @@ export class ActiveCompaniesComponent implements OnInit {
     const clickedInsideNav = target.closest('.sidebar');
     const clickedInsideBtn = target.closest('.add-cmp');
     const clickedInsideCardMenu = target.closest('.menu-icon');
-    //  const clickedInsideCardMenuOptions = target.closest('.menu-options');
-    if (!clickedInsideNav && !clickedInsideBtn) {
+    const clickedInsidefilterbartab = target.closest('.filterbar') || target.closest('.filter');
+    const clickedInsideUpdateandCopy = target.closest('.update') || target.closest('.copycmp');
+    if (!clickedInsideNav && !clickedInsideBtn && !clickedInsideUpdateandCopy && !clickedInsideCardMenu) {
       this.issidebarvisible = false;
-    }
-    if(!clickedInsideCardMenu){
       this.isMenuOpen = false;
     }
+    if(!clickedInsidefilterbartab){
+      this.isfilterbarvisible = false;
+    }
+  }
+
+  addCompanyOpen() {
+    this.addCompanyForm.reset();
+    this.issidebarvisible = !this.issidebarvisible;
+    this.submit = 'add';
   }
 
   toggleSidebar() {
+    this.addCompanyForm.reset();
     this.issidebarvisible = !this.issidebarvisible;
   }
 
-  openMenuId: string | null = null;
   toggleMenu(id: string) {
-    this.isMenuOpen = !this.isMenuOpen;
     this.openMenuId = this.openMenuId === id ? null : id;
+    this.isMenuOpen = !this.isMenuOpen;
   }
   companiesList() {
     this.CompaniesSanbox.companiesList();
@@ -101,40 +113,138 @@ export class ActiveCompaniesComponent implements OnInit {
     }))
   }
 
+  onFileUpload(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      
+    }
+  }
   addCompany() {
-    this.submitted = true
     let param: any = {}
-
     param = this.addCompanyForm.value;
+    console.log("param,",param);
+    
     this.CompaniesSanbox.addCompanies(param);
     this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
-      console.log('data', data.status)
 
       if (data && data.status == true) {
-        console.log('true')
         this.toastr.success('Company Added Successfully')
+        return;
+      }
+
+      if (data && data.status == false) {
+        console.log('false')
+        this.toastr.error('Company Already Exists')
         return;
       }
     }))
     this.addCompanyForm.reset();
+    this.companiesList();
   }
+
   eventsearch(event: any) {
 
   }
 
   filter() {
-
+    console.log('filter');
+    this.isfilterbarvisible = !this.isfilterbarvisible
   }
 
   sort() {
 
   }
-  onUpdate() {
-    // Handle update logic
+  getCompaniesbyId(id: any) {
+    return this.CompaniesList.find((company: any) => company.id === id);
   }
 
-  onCopy() {
-    // Handle copy logic
+  updateCompanyOpen(id: any) {
+    this.submit = 'update';
+    this.issidebarvisible = true;
+    const company = this.getCompaniesbyId(id);
+
+    if (company) {
+      this.addCompanyForm.setValue({
+        id: company.id,
+        companyName: company.companyName,
+        // logo:company.logo,
+        companyDescription: company.companyDescription,
+        location: company.location,
+        industryType: company.industryType,
+        numberOfEmployees: company.numberOfEmployees,
+        contactPersonName: company.contactPersonName,
+        contactEmail: company.contactEmail,
+        phoneNumber: company.phoneNumber,
+        companyWebsite: company.companyWebsite,
+        participatedPlacementEvents: company.participatedPlacementEvents,
+        mouSigned: company.mouSigned,
+        studentsPlacedSoFar: company.studentsPlacedSoFar,
+        averageCtc: company.averageCtc
+      })
+    }
+  }
+
+  updateCompany() {
+    let param: any = {}
+    param = this.addCompanyForm.value;
+
+    this.CompaniesSanbox.updatecompany(param);
+    this.subscriptions.push(this.CompaniesSanbox.updateCompany$.subscribe((data) => {
+      if (data && data.status == true) {
+        this.toastr.success('Company Updated Successfully')
+        return;
+      }
+      if (data && data.status == false) {
+        this.toastr.error('Company Not Updated')
+        return;
+      }
+    }))
+    this.addCompanyForm.reset();
+    this.companiesList();
+  }
+
+  onCopy(id: any) {
+    this.issidebarvisible = true;
+    const company = this.getCompaniesbyId(id);
+
+    if (company) {
+      this.addCompanyForm.setValue({
+        id: company.id,
+        companyName: company.companyName,
+        // logo:company.logo,
+        companyDescription: company.companyDescription,
+        location: company.location,
+        industryType: company.industryType,
+        numberOfEmployees: company.numberOfEmployees,
+        contactPersonName: company.contactPersonName,
+        contactEmail: company.contactEmail,
+        phoneNumber: company.phoneNumber,
+        companyWebsite: company.companyWebsite,
+        participatedPlacementEvents: company.participatedPlacementEvents,
+        mouSigned: company.mouSigned,
+        studentsPlacedSoFar: company.studentsPlacedSoFar,
+        averageCtc: company.averageCtc
+      })
+    }
+
+    let param: any = {}
+    param = this.addCompanyForm.value;
+    this.CompaniesSanbox.addCompanies(param);
+    this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
+
+      if (data && data.status == true) {
+        this.toastr.success('Company Added Successfully')
+        return;
+      }
+
+      if (data && data.status == false) {
+        console.log('false')
+        this.toastr.error('Company Already Exists')
+        return;
+      }
+    }))
+    this.addCompanyForm.reset();
+    this.companiesList();
   }
 
   onArchive() {

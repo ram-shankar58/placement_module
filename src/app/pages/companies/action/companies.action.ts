@@ -10,6 +10,10 @@ export const ActionTypes = {
     COMPANIES_LIST:  type('[companies] COMPANIES LIST'),
     COMPANIES_LIST_SUCCESS:  type('[companies] COMPANIES LIST SUCCESS'),
     COMPANIES_LIST_FAIL:  type('[companies] COMPANIES LIST FAIL'),
+
+    UPDATE_COMPANY: type('[companies] UPDATE COMPANY'),
+    UPDATE_COMPANY_SUCCESS: type('[companies] UPDATE COMPANY SUCCESS'),
+    UPDATE_COMPANY_FAIL: type('[companies] UPDATE COMPANY FAIL'),
 }
 
 //add companies
@@ -47,5 +51,28 @@ export class companiesListSuccess implements Action{
 export class companiesListFail implements Action{
     type = ActionTypes.COMPANIES_LIST_FAIL;
     constructor(public payload: any){
+    }
+}
+
+//updateCompany
+
+export class updateCompany implements Action{
+    type = ActionTypes.UPDATE_COMPANY;
+    constructor(public payload: any){
+
+    }
+}
+
+export class updateCompanySuccess implements Action{
+    type = ActionTypes.UPDATE_COMPANY_SUCCESS;
+    constructor(public payload: ResponseInterface){
+        
+    }
+}
+
+export class updateCompanyFail implements Action{
+    type = ActionTypes.UPDATE_COMPANY_FAIL;
+    constructor(public payload: any){
+        
     }
 }
