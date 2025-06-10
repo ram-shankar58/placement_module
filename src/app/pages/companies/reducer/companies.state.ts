@@ -1,4 +1,4 @@
-import {Map, Record} from 'immutable';
+import { Map, Record } from 'immutable';
 
 export interface CompaniesState extends Map<string, any> {
 
@@ -10,6 +10,7 @@ export interface CompaniesState extends Map<string, any> {
 
     updateCompany: any;
     updateCompanyLoading: boolean;
+
 
 }
 
@@ -23,5 +24,6 @@ export const companiesSateRecord = Record({
 
     updateCompany: [],
     updateCompanyLoading: false,
+
 
 })

@@ -14,6 +14,7 @@ export const ActionTypes = {
     UPDATE_COMPANY: type('[companies] UPDATE COMPANY'),
     UPDATE_COMPANY_SUCCESS: type('[companies] UPDATE COMPANY SUCCESS'),
     UPDATE_COMPANY_FAIL: type('[companies] UPDATE COMPANY FAIL'),
+
 }
 
 //add companies

@@ -2,27 +2,26 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CompaniesService } from '../companies.service';
-import * as actions  from '../action/companies.action';
-import { of, Subscription} from 'rxjs'
+import * as actions from '../action/companies.action';
+import { of, Subscription } from 'rxjs'
 import { Store } from '@ngrx/store';
 import { catchError, map, mergeMap, switchMap } from 'rxjs/operators';
 
 @Injectable({
-    providedIn:'root'
+    providedIn: 'root'
 })
 
-export class CompaniesEffect implements OnDestroy{
+export class CompaniesEffect implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
-        constructor(
+    constructor(
         private action$: Actions,
         protected companiesservice: CompaniesService,
         public router: Router,
         private store: Store,
         private Router: Router
-    ) 
-    {
+    ) {
 
         //add Companies
         this.subscriptions.add(
@@ -45,13 +44,13 @@ export class CompaniesEffect implements OnDestroy{
             this.action$.pipe(
                 ofType(actions.ActionTypes.COMPANIES_LIST),
                 map((action: actions.companiesList) => action),
-                switchMap(() => 
-                this.companiesservice.companiesList().pipe(
-                    map((result:any) => new actions.companiesListSuccess(result)),
-                    catchError(error => of(new actions.companiesListFail(error.error)))
+                switchMap(() =>
+                    this.companiesservice.companiesList().pipe(
+                        map((result: any) => new actions.companiesListSuccess(result)),
+                        catchError(error => of(new actions.companiesListFail(error.error)))
+                    )
                 )
-            )
-            ).subscribe((action:any) => {
+            ).subscribe((action: any) => {
                 this.store.dispatch(action)
             })
         )
@@ -61,15 +60,16 @@ export class CompaniesEffect implements OnDestroy{
             this.action$.pipe(
                 ofType(actions.ActionTypes.UPDATE_COMPANY),
                 map((action: actions.updateCompany) => action.payload),
-                switchMap((state:any) =>
-                this.companiesservice.updateCompany(state).pipe(
-                    map((result:any) => new actions.updateCompanySuccess(result)),
-                    catchError(console => of(new actions.updateCompanyFail(console.error)))
+                switchMap((state: any) =>
+                    this.companiesservice.updateCompany(state).pipe(
+                        map((result: any) => new actions.updateCompanySuccess(result)),
+                        catchError(console => of(new actions.updateCompanyFail(console.error)))
                     )
-                )).subscribe((action:any) => {
+                )).subscribe((action: any) => {
                     this.store.dispatch(action)
                 })
-            )
+        )
+
     }
     ngOnDestroy() {
         this.subscriptions.unsubscribe();

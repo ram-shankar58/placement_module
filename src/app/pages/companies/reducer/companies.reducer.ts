@@ -66,6 +66,7 @@ export function reducer(state = initialState, { type, payload }: any): Companies
                 updateCompany: [],
                 updateCompanyLoading: false
             })
+
         default: {
             return state;
         }

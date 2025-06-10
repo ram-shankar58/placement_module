@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr'
 import { CompaniesSanbox } from '../../companies.sandbox';
 import { Subscription } from 'rxjs';
+import moment from 'moment';
+import { AwsuploadService } from '../../../../providers/services/awsupload.service';
 
 @Component({
   selector: 'app-active-companies',
@@ -19,32 +21,14 @@ export class ActiveCompaniesComponent implements OnInit {
   addCompanyForm: any = FormGroup;
   CompaniesList: any = [];
   submit: string = '';
+  imgurl: any;
   private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
     public CompaniesSanbox: CompaniesSanbox,
+    private awsupload: AwsuploadService
   ) { }
-
-  initaddcompanyform() {
-    this.addCompanyForm = this.fb.group({
-      id: new FormControl(''),
-      companyName: new FormControl('', [Validators.required, Validators.pattern(/\S+/)]),
-      // logo: new FormControl(null),
-      companyDescription: new FormControl(''),
-      location: new FormControl(''),
-      industryType: new FormControl('', [Validators.required]),
-      numberOfEmployees: new FormControl(''),
-      contactPersonName: new FormControl('', [Validators.required]),
-      contactEmail: new FormControl(''),
-      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('^[0-9]*$')]),
-      companyWebsite: new FormControl(''),
-      participatedPlacementEvents: new FormControl([], [Validators.required]),
-      mouSigned: new FormControl(false),
-      studentsPlacedSoFar: new FormControl(''),
-      averageCtc: new FormControl('', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]),
-    });
-  }
 
   industryOptions = [
     { id: 1, name: 'IT' },
@@ -71,11 +55,31 @@ export class ActiveCompaniesComponent implements OnInit {
     this.companiesList();
   }
 
+  initaddcompanyform() {
+    this.addCompanyForm = this.fb.group({
+      id: new FormControl(''),
+      companyName: new FormControl('', [Validators.required, Validators.pattern(/\S+/)]),
+      logo: new FormControl(''),
+      companyDescription: new FormControl(''),
+      location: new FormControl(''),
+      industryType: new FormControl('', [Validators.required]),
+      numberOfEmployees: new FormControl(''),
+      contactPersonName: new FormControl('', [Validators.required]),
+      contactEmail: new FormControl(''),
+      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('^[0-9]*$')]),
+      companyWebsite: new FormControl(''),
+      participatedPlacementEvents: new FormControl([], [Validators.required]),
+      mouSigned: new FormControl(false),
+      studentsPlacedSoFar: new FormControl(''),
+      averageCtc: new FormControl('', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]),
+    });
+  }
+
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const clickedInsideNav = target.closest('.sidebar');
-    const clickedInsideBtn = target.closest('.add-cmp');
+    const clickedInsideBtn = target.closest('.add-cmp') || target.closest('.btn-primary');
     const clickedInsideCardMenu = target.closest('.menu-icon');
     const clickedInsidefilterbartab = target.closest('.filterbar') || target.closest('.filter');
     const clickedInsideUpdateandCopy = target.closest('.update') || target.closest('.copycmp');
@@ -83,15 +87,17 @@ export class ActiveCompaniesComponent implements OnInit {
       this.issidebarvisible = false;
       this.isMenuOpen = false;
     }
-    if(!clickedInsidefilterbartab){
+    if (!clickedInsidefilterbartab) {
       this.isfilterbarvisible = false;
     }
   }
 
   addCompanyOpen() {
-    this.addCompanyForm.reset();
+    console.log('opennn');
     this.issidebarvisible = !this.issidebarvisible;
+    this.addCompanyForm.reset();
     this.submit = 'add';
+    console.log('issidebarvisible',this.issidebarvisible);
   }
 
   toggleSidebar() {
@@ -107,23 +113,51 @@ export class ActiveCompaniesComponent implements OnInit {
     this.CompaniesSanbox.companiesList();
     this.subscriptions.push(this.CompaniesSanbox.companiesList$.subscribe((data) => {
       if (data && data.status == true) {
-        console.log('data', data.data)
         this.CompaniesList = data.data;
+        console.log('CompaniesList', data.data.length)
       }
     }))
   }
 
   onFileUpload(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      
+    const file: File = event.target.files[0];
+    if (!file || !file.type.match(/image\/*/)) {
+      console.error('Invalid file or unsupported type');
+      return;
     }
+
+    const bucket = 'gradit-communication';
+    const bucketPath = moment().format('YYYY-MM-DD');
+    const fileType = file.type;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('bucket', bucket);
+    formData.append('bucketPath', bucketPath);
+    formData.append('fileType', fileType);
+
+    this.awsupload.ImgUpload(formData).subscribe({
+      next: (res: any) => {
+        console.log('Upload success:', res);
+        const uploadedUrl = res?.data?.[0]?.data?.[0];
+        if (uploadedUrl) {
+          this.imgurl = uploadedUrl;
+          this.addCompanyForm.get('logo')?.setValue(this.imgurl);
+        }
+      },
+      error: (err) => {
+        console.error('Upload failed:', err);
+      }
+    });
   }
+
+
   addCompany() {
     let param: any = {}
     param = this.addCompanyForm.value;
-    console.log("param,",param);
-    
+    param.mouSigned = !!param.mouSigned;
+    console.log("param,", param);
+
     this.CompaniesSanbox.addCompanies(param);
     this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
 
@@ -146,7 +180,7 @@ export class ActiveCompaniesComponent implements OnInit {
 
   }
 
-  filter() {
+  filtertoggle() {
     console.log('filter');
     this.isfilterbarvisible = !this.isfilterbarvisible
   }
@@ -164,10 +198,11 @@ export class ActiveCompaniesComponent implements OnInit {
     const company = this.getCompaniesbyId(id);
 
     if (company) {
+      this.imgurl = company.logo;
       this.addCompanyForm.setValue({
         id: company.id,
         companyName: company.companyName,
-        // logo:company.logo,
+        logo:company.logo,
         companyDescription: company.companyDescription,
         location: company.location,
         industryType: company.industryType,
@@ -206,12 +241,13 @@ export class ActiveCompaniesComponent implements OnInit {
   onCopy(id: any) {
     this.issidebarvisible = true;
     const company = this.getCompaniesbyId(id);
-
+    this.submit = 'add';
     if (company) {
+      this.imgurl = company.logo;
       this.addCompanyForm.setValue({
         id: company.id,
         companyName: company.companyName,
-        // logo:company.logo,
+        logo:company.logo,
         companyDescription: company.companyDescription,
         location: company.location,
         industryType: company.industryType,
@@ -226,25 +262,6 @@ export class ActiveCompaniesComponent implements OnInit {
         averageCtc: company.averageCtc
       })
     }
-
-    let param: any = {}
-    param = this.addCompanyForm.value;
-    this.CompaniesSanbox.addCompanies(param);
-    this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
-
-      if (data && data.status == true) {
-        this.toastr.success('Company Added Successfully')
-        return;
-      }
-
-      if (data && data.status == false) {
-        console.log('false')
-        this.toastr.error('Company Already Exists')
-        return;
-      }
-    }))
-    this.addCompanyForm.reset();
-    this.companiesList();
   }
 
   onArchive() {
