@@ -2,9 +2,11 @@ import { ActionReducerMap,ActionReducer,MetaReducer } from "@ngrx/store";
 import { AppState as State } from "./app.state";
 import { environment } from "../environments/environment.prod";
 import * as companiesReducer from "./pages/companies/reducer/companies.reducer"
+import * as placementEventsReducer from "./pages/placement_events/reducer/placement_events.reducer";
 
 export const reducers: ActionReducerMap<State> = {
-    companies: companiesReducer.reducer
+    companies: companiesReducer.reducer,
+    placementEvents: placementEventsReducer.reducer
 }
 
 export function logger(reducer: ActionReducer<State>): ActionReducer<any, any> {
