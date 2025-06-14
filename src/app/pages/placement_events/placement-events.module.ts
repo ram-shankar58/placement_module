@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ReactiveFormsModule } from '@angular/forms';
 
 
 export const routes: any = [
@@ -51,9 +50,7 @@ export const routes: any = [
     SharedModule,
     RouterModule.forChild(routes),
     NgbModalModule,
-    MatSidenavModule,
-    ReactiveFormsModule,
-    UpcomingEventsComponent
+    MatSidenavModule
 
   ],
   schemas: [
