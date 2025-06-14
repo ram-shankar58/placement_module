@@ -1,31 +1,152 @@
 <div class="overall_div">
   <div class="add_n_sort_event">
-    <button class="add-btn" (click)="addevent()">
+    <button class="add-btn">
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
 
-    <div class="sidebar" [class.active]="issidebarvisible">
-      <div class="sidebar-header">
-        <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
-        <h6 style="font-size: 17px;">Add a New Event</h6>
-        <p style="font-size: 12px;">detail out the new event information with required fields</p>
-      </div>
-      <div class="sidebar-content">
-        <p>This is the sidebar content.</p>
-      </div>
-      <div class="sidebar-footer">
-        <input class="cancel_btn" type="button" value="Cancel">
-        <input class="submit_btn" type="button" value="Save Company Details">
-      </div>
+    <!-- Sidebar always visible for testing -->
+    <div class="sidebar active">
+      <form>
+        <div class="sidebar-header">
+          <button class="close-btn" type="button">&#10005;</button>
+          <h6 style="font-size: 17px;">Add a New Event</h6>
+          <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
+        </div>
+
+        <!-- Sidebar Content -->
+        <div class="sidebar-content">
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">1</div>
+              <h6>Event Basics</h6>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Event title<span style="color: red;">*</span></label>
+              <input type="text" placeholder="Enter a title" />
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Write about the event</label>
+              <textarea placeholder="Enter a description..."></textarea>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Mode of event</label>
+              <div class="mode-options">
+                <label data-label="On-campus">
+                  <input type="radio" name="mode" value="on-campus" />
+                  <span>At your college</span>
+                </label>
+                <label data-label="Off-campus">
+                  <input type="radio" name="mode" value="off-campus" />
+                  <span>External drive</span>
+                </label>
+                <label data-label="Pool">
+                  <input type="radio" name="mode" value="pool" />
+                  <span>Multi-college drive</span>
+                </label>
+                <label data-label="Virtual">
+                  <input type="radio" name="mode" value="virtual" />
+                  <span>Online process</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schedule -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">2</div>
+              <h6>Schedule</h6>
+            </div>
+
+            <!-- Updated: Date and Time same width as others -->
+            <div class="sidebar-sub-section">
+              <label>Event date as scheduled</label>
+              <div class="input-icon-right">
+                <input type="date" />
+                <i class="fa fa-calendar"></i>
+              </div>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Event start time</label>
+              <div class="input-icon-right">
+                <input type="time" />
+                <i class="fa fa-clock"></i>
+              </div>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Venue or platform</label>
+              <input type="text" placeholder="Type a location" />
+            </div>
+          </div>
+
+          <!-- Associated Companies -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">3</div>
+              <h6>Associated Companies</h6>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Company detail</label>
+              <input type="text" placeholder="Search or type to add" />
+              <small>No companies selected.</small>
+            </div>
+          </div>
+
+          <!--  Eligibility -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">4</div>
+              <h6>Eligibility</h6>
+            </div>
+
+            <div class="sidebar-sub-section dual-field">
+              <div>
+                <label>Eligible courses</label>
+                <input type="text" />
+              </div>
+              <div>
+                <label>Eligible Criteria</label>
+                <input type="text" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Selection process -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">5</div>
+              <h6>Selection process</h6>
+            </div>
+
+            <!-- Plain Checkboxes, No Box -->
+            <div class="sidebar-sub-section checkbox-plain">
+              <label><input type="checkbox" /> Aptitude test</label>
+              <label><input type="checkbox" /> Technical interview</label>
+              <label><input type="checkbox" /> HR interview</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+          <button class="cancel_btn" type="button">Cancel</button>
+          <button class="submit_btn" type="submit">Save Event Details</button>
+        </div>
+      </form>
     </div>
 
-    <input type="text" class="search-box" placeholder="Search" (ngModelChange)="eventsearch($event)" />
-
-    <div class="icon-button" (click)="filter()">
+    <!-- Optional Search/Filter Buttons -->
+    <input type="text" class="search-box" placeholder="Search" />
+    <div class="icon-button">
       <i class="fa fa-filter"></i> Filter
     </div>
-
-    <div class="icon-button" (click)="sort()">
+    <div class="icon-button">
       <i class="fa fa-sort"></i> Sort
     </div>
   </div>
