@@ -1,32 +1,45 @@
 <div class="overall_div">
   <div class="add_n_sort_event">
-    <button class="add-btn" (click)="addevent()">
+    <button class="add-btn" (click)="toggleSidebar()">
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
 
     <div class="sidebar" [class.active]="issidebarvisible">
-      <div class="sidebar-header">
-        <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
-        <h6 style="font-size: 17px;">Add a New Event</h6>
-        <p style="font-size: 12px;">detail out the new event information with required fields</p>
-      </div>
-      <div class="sidebar-content">
-        <p>This is the sidebar content.</p>
-      </div>
-      <div class="sidebar-footer">
-        <input class="cancel_btn" type="button" value="Cancel">
-        <input class="submit_btn" type="button" value="Save Company Details">
-      </div>
-    </div>
+      <form [formGroup]="addPlacementEventForm" (ngSubmit)="addEvent()">
+        <div class="sidebar-header">
+          <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
+          <h6 style="font-size: 17px;">Add a New Event</h6>
+          <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
+        </div>
+        <div class="sidebar-content">
+          <!--Work in progress here!-->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">1</div>
+              <h6>Event Basics</h6>
+            </div>
+            
+            <div class="sidebar-sub-section">
+              <label for="event_title">Event Title</label>
+              <input [class.invalid]="addPlacementEventForm.get('eventTitle')?.invalid && submitted"
+                formControlName="eventTitle" id="event_title" type="text" placeholder="Enter Event Title" />
+            </div>
+          </div>
+          <div class="sidebar-footer">
+            <input class="cancel_btn" type="button" value="Cancel">
+            <input class="submit_btn" type="button" value="Save Company Details">
+          </div>
+        </div>
 
-    <input type="text" class="search-box" placeholder="Search" (ngModelChange)="eventsearch($event)" />
+        <input type="text" class="search-box" placeholder="Search" (ngModelChange)="eventsearch($event)" />
 
-    <div class="icon-button" (click)="filter()">
-      <i class="fa fa-filter"></i> Filter
-    </div>
+        <div class="icon-button" (click)="filter()">
+          <i class="fa fa-filter"></i> Filter
+        </div>
 
-    <div class="icon-button" (click)="sort()">
-      <i class="fa fa-sort"></i> Sort
+        <div class="icon-button" (click)="sort()">
+          <i class="fa fa-sort"></i> Sort
+        </div>
+        </form>
     </div>
   </div>
-</div>
