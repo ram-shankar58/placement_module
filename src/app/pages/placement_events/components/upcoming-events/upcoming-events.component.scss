@@ -433,6 +433,16 @@ select {
     cursor: pointer;
   }
 
+  .cancel_btn {
+    background-color: transparent;
+    border: 1px solid #9ca3af;
+    color: #374151;
+  }
+
+  .submit_btn {
+    background-color: #4F46E5;
+    color: white;
+  }
 
   
 
@@ -459,4 +469,138 @@ select {
   &:disabled {
     opacity: 0.6;
   }
+}
+.event-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+}
+
+.event-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .header {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .date-box {
+      background-color: #e5f0ff;
+      color: #007bff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 4px 8px;
+
+      .date {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .month {
+        font-size: 14px;
+      }
+    }
+
+    .event-details {
+      .event-id {
+        font-size: 12px;
+        color: #888;
+      }
+
+      .title {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .meta {
+        display: flex;
+        gap: 8px;
+        font-size: 14px;
+
+        .badge {
+          padding: 2px 6px;
+          border-radius: 6px;
+          font-size: 12px;
+          &.on-campus {
+            background: #e8fff0;
+            color: #28a745;
+          }
+          &.virtual {
+            background: #fff5e5;
+            color: #ff8c00;
+          }
+        }
+      }
+    }
+  }
+
+  .companies {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    .company-icon {
+      background: #f0f0f0;
+      border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 13px;
+    }
+  }
+
+  .course-eligibility {
+    display: flex;
+    justify-content: space-between;
+
+    label {
+      font-weight: 600;
+      display: block;
+      font-size: 13px;
+      color: #555;
+    }
+
+    div {
+      font-size: 14px;
+    }
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .status {
+      color: #ff8800;
+      font-size: 13px;
+    }
+
+    .shortlist-btn {
+      background: #6c63ff;
+      color: white;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  }
+}
+
+.add_n_sort_event {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); // 2 columns
+  gap: 24px;
+  width: 100%;
+  margin-top: 24px;
 }

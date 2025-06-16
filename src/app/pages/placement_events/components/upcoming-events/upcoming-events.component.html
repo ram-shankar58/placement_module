@@ -1,8 +1,25 @@
 <div class="overall_div">
-  <div class="add_n_sort_event">
-    <button class="add-btn" (click)="toggleSidebar()">
-      <i class="fa fa-plus-circle"></i> Add a New Event
-    </button>
+  <div class="add_n_sort_event row align-items-center mb-3">
+    <div class="col-auto">
+      <button class="add-btn" (click)="toggleSidebar()">
+        <i class="fa fa-plus-circle"></i> Add a New Event
+      </button>
+    </div>
+    <!-- Optional Search/Filter Buttons -->
+     <div class="col">
+      <input type="text" class="search-box" placeholder="Search" />
+    </div>
+    <div class="col-auto">
+      <div class="icon-button">
+        <i class="fa fa-filter"></i> Filter
+      </div>
+    </div>
+    <div class="col-auto">
+      <div class="icon-button">
+        <i class="fa fa-sort"></i> Sort
+      </div>
+    </div>
+  </div>
 
     <div class="sidebar " [class.active]="issidebarvisible">
       <form [formGroup]="addEventForm" >
@@ -199,13 +216,55 @@
       </form>
     </div>
 
-    <!-- Optional Search/Filter Buttons -->
-    <input type="text" class="search-box" placeholder="Search" />
-    <div class="icon-button">
-      <i class="fa fa-filter"></i> Filter
+    <!-- upcoming events table -->
+    <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px;">
+      <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of EventsList">
+        <div class="event-card">
+          <div class="header">
+            <div class="date-box">
+              <div class="date">{{ event.startDate | date: 'dd' }}</div>
+              <div class="month">{{ event.startDate | date: 'MMM' }}</div>
+            </div>
+            <div class="event-details">
+              <div class="event-id">{{ event.id }}</div>
+              <div class="title">{{ event.name }}</div>
+              <div class="meta">
+                <span class="time">{{ event.time }}</span>
+                <span class="badge" [ngClass]="{'on-campus': event.type === 'On-campus', 'virtual': event.type !== 'On-campus'}">{{ event.type }}</span>
+                <span class="venue">{{ event.venue }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="companies">
+            <ng-container *ngFor="let company of event.companies; let i = index">
+              <ng-container *ngIf=" i < 4">
+                <img [src]="company.logo" alt=" {{company.name}} logo" class="company-logo" />
+              </ng-container>
+              <span *ngIf = "i === 4" class="more-companies">+ {{ event.companies.length - i }} more </span>
+            </ng-container>
+          </div>
+
+          <div class="course-eligibility">
+            <div>
+              <label>Eligible Courses</label>
+              <div>{{ event.eligibleCourses.join(', ') }}</div>
+            </div>
+            <div>
+              <label>Eligibility Criteria</label>
+              <div>{{ event.eligibilityCriteria }}</div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="status" *ngIf="event.status === 'not_sent'">
+              <span class="warning">⚠️ Event not sent to students yet</span>
+            </div>
+            <button class="shortlist-btn">Shortlist Students</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="icon-button">
-      <i class="fa fa-sort"></i> Sort
-    </div>
-  </div>
 </div>
+
+

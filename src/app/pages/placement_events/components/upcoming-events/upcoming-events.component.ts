@@ -125,22 +125,46 @@ export class UpcomingEventsComponent implements OnInit {
 }
 
 
-  loadEventsList() {
+  loadEventsList(){
     this.EventsList = [
       {
-        name: 'Infosys Placement Drive',
-        type: 'On-Campus',
+        id: 'EVT001',
+        name: 'Campus Recruitment Drive – Java Architects',
+        type: 'On-campus',
         startDate: '2025-07-10',
-        venue: 'Auditorium',
-        company: 'Infosys'
+        time: '10:00 AM',
+        venue: 'Main Auditorium, ABC Engineering College',
+        companies: [
+          { name: 'Johnson & Johnson', logo: 'assets/logos/jnj.png' },
+          { name: 'Adidas', logo: 'assets/logos/adidas.png' },
+          { name: 'Tata Group', logo: 'assets/logos/tata.png' },
+          { name: 'Apple', logo: 'assets/logos/apple.png' },
+          { name: 'Starbucks', logo: 'assets/logos/starbucks.png' }
+        ],
+        eligibleCourses: ['B.E CSE', 'B.Tech IT'],
+        eligibilityCriteria: 'CGPA > 7, No standing arrears',
+        status: 'not_sent'
       },
+      
       {
-        name: 'TCS NQT',
-        type: 'Virtual',
-        startDate: '2025-07-15',
-        venue: 'Online',
-        company: 'TCS'
-      }
+      id: 'EVT002',
+      name: 'Mega Placement Fair',
+      type: 'Pool',
+      startDate: '2025-08-05',
+      time: '09:00 AM',
+      venue: 'Convention Center, XYZ University',
+      companies: [
+        { name: 'Google', logo: 'assets/logos/google.png' },
+        { name: 'Amazon', logo: 'assets/logos/amazon.png' }
+      ],
+      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+      status: 'not_sent'
+    }
+      
     ];
+
+
+
   }
 }
