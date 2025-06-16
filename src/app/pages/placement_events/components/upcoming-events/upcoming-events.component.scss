@@ -422,3 +422,41 @@ select {
     }
   }
 }
+
+.cancel_btn,
+  .submit_btn {
+    padding: 5px 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+  }
+
+
+  
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+.submit_btn {
+  background-color: #a5b4fc; // Disabled state
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: not-allowed;
+
+  &.active {
+    background-color: #4F46E5;
+    color: white;
+    cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}

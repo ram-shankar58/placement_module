@@ -3,11 +3,6 @@
     <button class="add-btn" (click)="toggleSidebar()">
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
-    <button (click)="toggleSidebar()">Toggle Sidebar ({{ issidebarvisible }})</button>
-    <p>Angular is working ✅</p>
-    <p>Sidebar Visible? {{ issidebarvisible }}</p>
-
-
 
     <div class="sidebar " [class.active]="issidebarvisible">
       <form [formGroup]="addEventForm" >
@@ -27,12 +22,15 @@
 
             <div class="sidebar-sub-section">
               <label>Event title<span style="color: red;">*</span></label>
-              <input type="text" placeholder="Enter a title" />
+              <input type="text" placeholder="Enter a title" formControlName="eventName">
+              <div class="error" *ngIf="submitted && addEventForm.get('eventName')?.invalid">
+                Event title is required.
+              </div>
             </div>
 
             <div class="sidebar-sub-section">
               <label>Write about the event</label>
-              <textarea placeholder="Enter a description..."></textarea>
+              <textarea placeholder="Enter a description..." formControlName="eventDescription"></textarea>
             </div>
 
             <!-- <div class="sidebar-sub-section">
@@ -111,9 +109,9 @@
             <!-- Updated: Date and Time same width as others -->
             <div class="dual-field">
               <div class="sidebar-sub-section">
-                <label>Event date as scheduled</label>
+                <label>Event date as scheduled<span style="color: red;"> *</span></label>
                 <div class="input-icon-right">
-                  <input type="date" placeholder="select a date"/>
+                  <input type="date" placeholder="select a date" formControlName="startDate"/>
                   <i class="fa "></i>
                 </div>
               </div>
@@ -121,15 +119,18 @@
               <div class="sidebar-sub-section ">
                 <label>Event start time</label>
                 <div class="input-icon-right">
-                  <input type="time" />
+                  <input type="time" formControlName="startTime"/>
                   <i class="fa "></i>
+                  <div class="error" *ngIf="submitted && addEventForm.get('startTime')?.hasError('invalidTime')">
+                    Please enter a valid time in HH:MM (e.g., 23:45).
+                  </div>
                 </div>
               </div>
             </div>
-
+            <br>
             <div class="sidebar-sub-section">
               <label>Venue or platform</label>
-              <input type="text" placeholder="Type a location" />
+              <input type="text" placeholder="Type a location" formControlName="venue"/>
             </div>
           </div>
 
@@ -142,7 +143,7 @@
 
             <div class="sidebar-sub-section">
               <label>Company detail</label>
-              <input type="text" placeholder="Search or type to add" />
+              <input type="text" placeholder="Search or type to add" formControlName="companyDetails" />
               <small>No companies selected.</small>
             </div>
           </div>
@@ -157,13 +158,13 @@
             <div class="sidebar-sub-section dual-field elligible">
               <div>
                 <label>Eligible courses</label>
-                <select>
+                <select formControlName="eligibleCourses">
                   <option value="" disabled selected>Select a course</option>
                 </select>
               </div>
               <div>
                 <label>Eligibility criteria</label>
-                <input type="text" placeholder="Enter criteria" />
+                <input type="text" placeholder="Enter criteria" formControlName="eligibilityCriteria" />
               </div>
             </div>
           </div>
@@ -177,15 +178,10 @@
 
             <!-- Plain Checkboxes, No Box -->
             <div class="" style="display: flex; gap: 16px;">
-              <label style="flex: 1; display: flex; align-items: center;">
-                <input type="checkbox" style="margin-right: 8px;" /> Aptitude test
-              </label>
-              <label style="flex: 1; display: flex; align-items: center;">
-                <input type="checkbox" style="margin-right: 8px;" /> Technical interview
-              </label>
-              <label style="flex: 1; display: flex; align-items: center;">
-                <input type="checkbox" style="margin-right: 8px;" /> HR interview
-              </label>
+              <input type="checkbox" style="margin-right: 8px;" formControlName="aptitudeRound" /> Aptitude test
+              <input type="checkbox" style="margin-right: 8px;" formControlName="technicalRound" /> Technical interview
+              <input type="checkbox" style="margin-right: 8px;" formControlName="hrRound" /> HR interview
+
             </div>
           </div>
         </div>
@@ -193,7 +189,12 @@
         <!-- Sidebar Footer -->
         <div class="sidebar-footer">
           <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
-          <button class="submit_btn" type="submit" (click)="addEvent()" >Save Event Details</button>
+          <button class="submit_btn"
+            type="submit"
+            [disabled]="addEventForm.invalid"
+            [ngClass]="{ 'active': addEventForm.valid }"
+            (click)="addEvent()">Save Event Details
+          </button>
         </div>
       </form>
     </div>

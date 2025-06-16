@@ -3,6 +3,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { PlacementEventsSandbox } from '../../placement_events.sandbox'; 
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+
+
+
 @Component({
   
   selector: 'app-upcoming-events',
@@ -13,7 +17,7 @@ import { PlacementEventsSandbox } from '../../placement_events.sandbox';
 export class UpcomingEventsComponent implements OnInit {
   issidebarvisible = false;
   submitted = false;
-  addEventForm:any = FormGroup;
+  addEventForm!: FormGroup;
   EventsList: any[] = [];
   private subscriptions: Subscription[] = [];
 
@@ -30,20 +34,20 @@ export class UpcomingEventsComponent implements OnInit {
 
   initAddEventForm() {
     this.addEventForm = this.fb.group({
-      eventName: new FormControl('', Validators.required),
-      eventType: new FormControl('', Validators.required),
-      companyName: new FormControl('', Validators.required),
-      startDate: new FormControl('', Validators.required),
-      startTime: new FormControl('', Validators.required),
-      venue: new FormControl('', Validators.required),
-      mode: new FormControl('', Validators.required),
-      eligibleCourses: new FormControl('', Validators.required),
-      eligibilityCriteria: new FormControl(''),
-      selectionProcess: new FormControl([]),
-      aptitudeRound: new FormControl(false),
-      technicalRound: new FormControl(false),
-      hrRound: new FormControl(false)
-    });
+    eventName: ['', Validators.required],
+    eventDescription: [''],
+    companyDetails: [[]],
+    startDate: ['', Validators.required],
+    startTime: ['', [this.timeValidation]],  // ✅ Correctly wrapped in array
+    venue: [''],
+    mode: [''],
+    eligibleCourses: [''],
+    eligibilityCriteria: [''],
+    aptitudeRound: [false],
+    technicalRound: [false],
+    hrRound: [false]
+});
+
   }
 
   toggleSidebar() {
@@ -61,21 +65,39 @@ export class UpcomingEventsComponent implements OnInit {
     }
   }
 
-  addEvent() {
-    this.submitted = true;
-    const param = this.addEventForm.value;
-    this.eventsSandbox.addPlacementEvents(param);
 
-    this.subscriptions.push(
-      this.eventsSandbox.addPlacementEvents$.subscribe(data => {
-        if (data?.status === 'true') {
-          this.toastr.success('Event added successfully');
-          this.addEventForm.reset();
-          this.issidebarvisible = false;
-        }
-      })
-    );
+  timeValidation: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+    const time = control.value;
+    const regex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
+    if (!time) return null;
+    return regex.test(time) ? null : { invalidTime: true };
+  };
+
+
+  addEvent() {
+  this.submitted = true;
+
+  if (this.addEventForm.invalid) {
+    this.toastr.error('Please fill in all required fields.');
+    return;
   }
+
+  const param = this.addEventForm.value;
+  this.eventsSandbox.addPlacementEvents(param);
+
+  this.subscriptions.push(
+    this.eventsSandbox.addPlacementEvents$.subscribe(data => {
+      if (data?.status === 'true') {
+        this.toastr.success('Event added successfully');
+        this.addEventForm.reset();
+        this.submitted = false;
+        this.issidebarvisible = false;
+      }
+    })
+  );
+}
+
 
   loadEventsList() {
     this.EventsList = [
