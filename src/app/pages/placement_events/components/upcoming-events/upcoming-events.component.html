@@ -1,14 +1,18 @@
 <div class="overall_div">
   <div class="add_n_sort_event">
-    <button class="add-btn">
+    <button class="add-btn" (click)="toggleSidebar()">
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
+    <button (click)="toggleSidebar()">Toggle Sidebar ({{ issidebarvisible }})</button>
+    <p>Angular is working ✅</p>
+    <p>Sidebar Visible? {{ issidebarvisible }}</p>
 
-    <!-- Sidebar always visible for testing -->
-    <div class="sidebar active">
-      <form>
+
+
+    <div class="sidebar " [class.active]="issidebarvisible">
+      <form [formGroup]="addEventForm" >
         <div class="sidebar-header">
-          <button class="close-btn" type="button">&#10005;</button>
+          <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
           <h6 style="font-size: 17px;">Add a New Event</h6>
           <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
         </div>
@@ -145,8 +149,8 @@
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer">
-          <button class="cancel_btn" type="button">Cancel</button>
-          <button class="submit_btn" type="submit">Save Event Details</button>
+          <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
+          <button class="submit_btn" type="submit" (click)="addEvent()" >Save Event Details</button>
         </div>
       </form>
     </div>
