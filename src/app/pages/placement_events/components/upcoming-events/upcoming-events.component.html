@@ -35,7 +35,7 @@
               <textarea placeholder="Enter a description..."></textarea>
             </div>
 
-            <div class="sidebar-sub-section">
+            <!-- <div class="sidebar-sub-section">
               <label>Mode of event</label>
               <div class="mode-options">
                 <label data-label="On-campus">
@@ -55,7 +55,50 @@
                   <span>Online process</span>
                 </label>
               </div>
+            </div> -->
+            <div class="mode-options">
+              <label 
+                class="mode-box yellow" 
+                [class.selected]="addEventForm.get('mode')?.value === 'on-campus'"
+                (click)="addEventForm.get('mode')?.setValue('on-campus')"
+              >
+                <input type="radio" name="mode" value="on-campus" hidden />
+                <strong>On-campus</strong>
+                <div class="description">At your college</div>
+              </label>
+
+              <label 
+                class="mode-box green" 
+                [class.selected]="addEventForm.get('mode')?.value === 'off-campus'"
+                (click)="addEventForm.get('mode')?.setValue('off-campus')"
+              >
+                <input type="radio" name="mode" value="off-campus" hidden />
+                <strong>Off-campus</strong>
+                <div class="description">External drive</div>
+              </label>
+
+              <label 
+                class="mode-box blue" 
+                [class.selected]="addEventForm.get('mode')?.value === 'pool'"
+                (click)="addEventForm.get('mode')?.setValue('pool')"
+              >
+                <input type="radio" name="mode" value="pool" hidden />
+                <strong>Pool</strong>
+                <div class="description">Multi-college drive</div>
+              </label>
+
+              <label 
+                class="mode-box purple" 
+                [class.selected]="addEventForm.get('mode')?.value === 'virtual'"
+                (click)="addEventForm.get('mode')?.setValue('virtual')"
+              >
+                <input type="radio" name="mode" value="virtual" hidden />
+                <strong>Virtual</strong>
+                <div class="description">Online process</div>
+              </label>
             </div>
+
+
           </div>
 
           <!-- Schedule -->
