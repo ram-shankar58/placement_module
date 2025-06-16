@@ -178,9 +178,9 @@
 
             <!-- Plain Checkboxes, No Box -->
             <div class="" style="display: flex; gap: 16px;">
-              <input type="checkbox" style="margin-right: 8px;" formControlName="aptitudeRound" /> Aptitude test
-              <input type="checkbox" style="margin-right: 8px;" formControlName="technicalRound" /> Technical interview
-              <input type="checkbox" style="margin-right: 8px;" formControlName="hrRound" /> HR interview
+              <input type="checkbox" style="margin-right: 8px;" [checked]="addEventForm.get('rounds')?.value?.includes('1')" (change)="onRoundCheckboxChange($event, '1')" /> Aptitude test
+              <input type="checkbox" style="margin-right: 8px;" [checked]="addEventForm.get('rounds')?.value?.includes('2')" (change)="onRoundCheckboxChange($event, '2')" /> Technical interview
+              <input type="checkbox" style="margin-right: 8px;" [checked]="addEventForm.get('rounds')?.value?.includes('3')" (change)="onRoundCheckboxChange($event, '3')" /> HR interview
 
             </div>
           </div>

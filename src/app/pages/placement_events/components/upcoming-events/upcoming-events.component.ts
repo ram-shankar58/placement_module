@@ -38,17 +38,35 @@ export class UpcomingEventsComponent implements OnInit {
     eventDescription: [''],
     companyDetails: [[]],
     startDate: ['', Validators.required],
-    startTime: ['', [this.timeValidation]],  // ✅ Correctly wrapped in array
+    startTime: ['', [this.timeValidation]], 
     venue: [''],
     mode: [''],
     eligibleCourses: [''],
     eligibilityCriteria: [''],
-    aptitudeRound: [false],
-    technicalRound: [false],
-    hrRound: [false]
+    rounds: [''] //here presence of 1 in the string represnts aptitude, 2 represents technical, 3 represents hr, more than one can be present
+
 });
 
   }
+
+  onRoundCheckboxChange(event: any, round: string): void{
+    const roundsControl= this.addEventForm.get('rounds');
+    if(!roundsControl) return;
+    let rounds: string = roundsControl.value || '';
+    if(event.target.checked){
+      if(!rounds.includes(round)){
+        rounds+=round;
+      }
+    }
+    else{
+      rounds=rounds.replace(round, '');
+    }
+
+    roundsControl.setValue(rounds);
+    console.log('Updated rounds:', rounds);
+
+  }
+  
 
   toggleSidebar() {
      console.log('Toggling sidebar. Was:', this.issidebarvisible);
@@ -96,6 +114,14 @@ export class UpcomingEventsComponent implements OnInit {
       }
     })
   );
+
+  //for datatype and value debugging
+  const formvalue=this.addEventForm.value;
+  Object.keys(formvalue).forEach(key=>{
+    const value=formvalue[key];
+    const type = value === null ? null : value.constructor? value.constructor.name: typeof value;
+    console.log(`key: ${key}, value: ${value}, type: ${type}`);
+  });
 }
 
 
