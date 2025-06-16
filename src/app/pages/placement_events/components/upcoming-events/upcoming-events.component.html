@@ -3,43 +3,165 @@
     <button class="add-btn" (click)="toggleSidebar()">
       <i class="fa fa-plus-circle"></i> Add a New Event
     </button>
+    <button (click)="toggleSidebar()">Toggle Sidebar ({{ issidebarvisible }})</button>
+    <p>Angular is working ✅</p>
+    <p>Sidebar Visible? {{ issidebarvisible }}</p>
 
-    <div class="sidebar" [class.active]="issidebarvisible">
-      <form [formGroup]="addPlacementEventForm" (ngSubmit)="addEvent()">
+
+
+    <div class="sidebar " [class.active]="issidebarvisible">
+      <form [formGroup]="addEventForm" >
         <div class="sidebar-header">
-          <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
+          <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
           <h6 style="font-size: 17px;">Add a New Event</h6>
           <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
         </div>
+
+        <!-- Sidebar Content -->
         <div class="sidebar-content">
-          <!--Work in progress here!-->
           <div class="container">
             <div class="step-header">
               <div class="step-icon">1</div>
               <h6>Event Basics</h6>
             </div>
-            
+
             <div class="sidebar-sub-section">
-              <label for="event_title">Event Title</label>
-              <input [class.invalid]="addPlacementEventForm.get('eventTitle')?.invalid && submitted"
-                formControlName="eventTitle" id="event_title" type="text" placeholder="Enter Event Title" />
+              <label>Event title<span style="color: red;">*</span></label>
+              <input type="text" placeholder="Enter a title" />
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Write about the event</label>
+              <textarea placeholder="Enter a description..."></textarea>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Mode of event</label>
+              <div class="mode-options">
+                <label data-label="On-campus">
+                  <input type="radio" name="mode" value="on-campus" />
+                  <span>At your college</span>
+                </label>
+                <label data-label="Off-campus">
+                  <input type="radio" name="mode" value="off-campus" />
+                  <span>External drive</span>
+                </label>
+                <label data-label="Pool">
+                  <input type="radio" name="mode" value="pool" />
+                  <span>Multi-college drive</span>
+                </label>
+                <label data-label="Virtual">
+                  <input type="radio" name="mode" value="virtual" />
+                  <span>Online process</span>
+                </label>
+              </div>
             </div>
           </div>
-          <div class="sidebar-footer">
-            <input class="cancel_btn" type="button" value="Cancel">
-            <input class="submit_btn" type="button" value="Save Company Details">
+
+          <!-- Schedule -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">2</div>
+              <h6>Schedule</h6>
+            </div>
+
+            <!-- Updated: Date and Time same width as others -->
+            <div class="dual-field">
+              <div class="sidebar-sub-section">
+                <label>Event date as scheduled</label>
+                <div class="input-icon-right">
+                  <input type="date" placeholder="select a date"/>
+                  <i class="fa "></i>
+                </div>
+              </div>
+
+              <div class="sidebar-sub-section ">
+                <label>Event start time</label>
+                <div class="input-icon-right">
+                  <input type="time" />
+                  <i class="fa "></i>
+                </div>
+              </div>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Venue or platform</label>
+              <input type="text" placeholder="Type a location" />
+            </div>
+          </div>
+
+          <!-- Associated Companies -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">3</div>
+              <h6>Associated Companies</h6>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Company detail</label>
+              <input type="text" placeholder="Search or type to add" />
+              <small>No companies selected.</small>
+            </div>
+          </div>
+
+          <!--  Eligibility -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">4</div>
+              <h6>Eligibility</h6>
+            </div>
+
+            <div class="sidebar-sub-section dual-field elligible">
+              <div>
+                <label>Eligible courses</label>
+                <select>
+                  <option value="" disabled selected>Select a course</option>
+                </select>
+              </div>
+              <div>
+                <label>Eligibility criteria</label>
+                <input type="text" placeholder="Enter criteria" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Selection process -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">5</div>
+              <h6>Selection process</h6>
+            </div>
+
+            <!-- Plain Checkboxes, No Box -->
+            <div class="" style="display: flex; gap: 16px;">
+              <label style="flex: 1; display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 8px;" /> Aptitude test
+              </label>
+              <label style="flex: 1; display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 8px;" /> Technical interview
+              </label>
+              <label style="flex: 1; display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 8px;" /> HR interview
+              </label>
+            </div>
           </div>
         </div>
 
-        <input type="text" class="search-box" placeholder="Search" (ngModelChange)="eventsearch($event)" />
-
-        <div class="icon-button" (click)="filter()">
-          <i class="fa fa-filter"></i> Filter
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+          <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
+          <button class="submit_btn" type="submit" (click)="addEvent()" >Save Event Details</button>
         </div>
+      </form>
+    </div>
 
-        <div class="icon-button" (click)="sort()">
-          <i class="fa fa-sort"></i> Sort
-        </div>
-        </form>
+    <!-- Optional Search/Filter Buttons -->
+    <input type="text" class="search-box" placeholder="Search" />
+    <div class="icon-button">
+      <i class="fa fa-filter"></i> Filter
+    </div>
+    <div class="icon-button">
+      <i class="fa fa-sort"></i> Sort
     </div>
   </div>
+</div>
