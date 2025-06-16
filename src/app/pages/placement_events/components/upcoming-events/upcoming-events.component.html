@@ -62,19 +62,21 @@
             </div>
 
             <!-- Updated: Date and Time same width as others -->
-            <div class="sidebar-sub-section">
-              <label>Event date as scheduled</label>
-              <div class="input-icon-right">
-                <input type="date" />
-                <i class="fa fa-calendar"></i>
+            <div class="dual-field">
+              <div class="sidebar-sub-section">
+                <label>Event date as scheduled</label>
+                <div class="input-icon-right">
+                  <input type="date" placeholder="select a date"/>
+                  <i class="fa "></i>
+                </div>
               </div>
-            </div>
 
-            <div class="sidebar-sub-section">
-              <label>Event start time</label>
-              <div class="input-icon-right">
-                <input type="time" />
-                <i class="fa fa-clock"></i>
+              <div class="sidebar-sub-section ">
+                <label>Event start time</label>
+                <div class="input-icon-right">
+                  <input type="time" />
+                  <i class="fa "></i>
+                </div>
               </div>
             </div>
 
@@ -105,14 +107,16 @@
               <h6>Eligibility</h6>
             </div>
 
-            <div class="sidebar-sub-section dual-field">
+            <div class="sidebar-sub-section dual-field elligible">
               <div>
                 <label>Eligible courses</label>
-                <input type="text" />
+                <select>
+                  <option value="" disabled selected>Select a course</option>
+                </select>
               </div>
               <div>
-                <label>Eligible Criteria</label>
-                <input type="text" />
+                <label>Eligibility criteria</label>
+                <input type="text" placeholder="Enter criteria" />
               </div>
             </div>
           </div>
@@ -125,10 +129,16 @@
             </div>
 
             <!-- Plain Checkboxes, No Box -->
-            <div class="sidebar-sub-section checkbox-plain">
-              <label><input type="checkbox" /> Aptitude test</label>
-              <label><input type="checkbox" /> Technical interview</label>
-              <label><input type="checkbox" /> HR interview</label>
+            <div class="" style="display: flex; gap: 16px;">
+              <label style="flex: 1; display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 8px;" /> Aptitude test
+              </label>
+              <label style="flex: 1; display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 8px;" /> Technical interview
+              </label>
+              <label style="flex: 1; display: flex; align-items: center;">
+                <input type="checkbox" style="margin-right: 8px;" /> HR interview
+              </label>
             </div>
           </div>
         </div>
