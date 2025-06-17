@@ -17,9 +17,13 @@ export class ActiveCompaniesComponent implements OnInit {
   issidebarvisible = false;
   isMenuOpen = false;
   isfilterbarvisible = false;
+  skeletonCount = Array(6);
   openMenuId: string | null = null;
   addCompanyForm: any = FormGroup;
+  filterCompanyForm:any = FormGroup;
   CompaniesList: any = [];
+  filteredCompanyList:any = [];
+  filteredCompanies:any = [];
   submit: string = '';
   imgurl: any;
   private subscriptions: Array<Subscription> = [];
@@ -53,6 +57,15 @@ export class ActiveCompaniesComponent implements OnInit {
   ngOnInit() {
     this.initaddcompanyform();
     this.companiesList();
+    this.initfilterCompanyForm();
+  }
+
+  initfilterCompanyForm(){
+    this.filterCompanyForm = this.fb.group({
+      location: new FormControl(''),
+      industryType: new FormControl('', [Validators.required]),
+      participatedPlacementEvents: new FormControl([])
+    });
   }
 
   initaddcompanyform() {
@@ -114,7 +127,7 @@ export class ActiveCompaniesComponent implements OnInit {
     this.subscriptions.push(this.CompaniesSanbox.companiesList$.subscribe((data) => {
       if (data && data.status == true) {
         this.CompaniesList = data.data;
-        console.log('CompaniesList', data.data.length)
+        this.filteredCompanies = this.CompaniesList;
       }
     }))
   }
@@ -180,10 +193,49 @@ export class ActiveCompaniesComponent implements OnInit {
 
   }
 
-  filtertoggle() {
-    console.log('filter');
-    this.isfilterbarvisible = !this.isfilterbarvisible
+  clearfilter(){
+    this.filterCompanyForm.reset();
+    this.filteredCompanies = this.CompaniesList
   }
+  filtertoggle() {
+    this.filterCompanyForm.reset();
+    this.isfilterbarvisible = !this.isfilterbarvisible;
+    this.filteredCompanies = this.CompaniesList
+  }
+
+ filterCompany() {
+  const param = this.filterCompanyForm.value;
+
+  this.filteredCompanyList = [
+    {
+      key: 'location',
+      value: param.location,
+      filterType: 1
+    },
+    {
+      key: 'industryType',
+      value: param.industryType,
+      filterType: 2
+    },
+    {
+      key: 'participatedPlacementEvents',
+      value: param.participatedPlacementEvents,
+      filterType: 3
+    }
+  ].filter(f => f.value && f.value !== '');
+  this.filteredCompanies = this.CompaniesList.filter((company: any) => {
+  return this.filteredCompanyList.some((filter: any) => {
+    if (filter.key === 'participatedPlacementEvents') {
+      return Array.isArray(company[filter.key]) &&
+             Array.isArray(filter.value) &&
+             filter.value.some((val: string) => company[filter.key].includes(val));
+    }
+    return company[filter.key] === filter.value;
+  });
+});
+
+}
+
 
   sort() {
 
@@ -258,7 +310,7 @@ export class ActiveCompaniesComponent implements OnInit {
         companyWebsite: company.companyWebsite,
         participatedPlacementEvents: company.participatedPlacementEvents,
         mouSigned: company.mouSigned,
-        studentsPlacedSoFar: company.studentsPlacedSoFar,
+        studentsPlacedSoFar: (company.studentsPlacedSoFar).toString(),
         averageCtc: company.averageCtc
       })
     }

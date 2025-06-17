@@ -23,7 +23,7 @@ import { reducers, metaReducers } from './app.reducer';
     StoreModule.forRoot(reducers, { metaReducers }),
     ToastrModule.forRoot({
       positionClass: 'toast-top-right',
-      timeOut: 5000,
+      timeOut: 3000,
       easing: 'ease-in',
       preventDuplicates: true,
       closeButton: true,

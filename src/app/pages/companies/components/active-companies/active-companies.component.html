@@ -1,3 +1,8 @@
+<div *ngIf="CompaniesSanbox.companiesListLoading$ | async as isLoading">
+    <div class="overall_div" *ngIf="isLoading">
+        <app-skeletonloader *ngFor="let n of skeletonCount"></app-skeletonloader>
+    </div>
+</div>
 <div class="overall_div" *ngIf="CompaniesList && CompaniesList.length > 0">
     <div class="header_company row mx-0">
         <button class="add-cmp col-md-3" (click)="addCompanyOpen()">
@@ -19,7 +24,7 @@
     </div>
 
     <div class="company-card-grid">
-        <div class="company-card" *ngFor="let company of CompaniesList">
+        <div class="company-card" *ngFor="let company of filteredCompanies">
             <div class="card-header">
                 <img [src]="company.logo" class="company-logo" /> <!--logo to be added-->
                 <div class="company-details">
@@ -60,18 +65,50 @@
         </div>
     </div>
 
-    <div class="filterbar" [ngClass]="{'show': isfilterbarvisible, 'hide': !isfilterbarvisible}">
-        <div class="filterheader">
-            <button class="filter-close" (click)="filtertoggle()">&#10005;</button>
-            <h6 style="font-size: 15px;padding: 10px;">Filter Companies</h6>
-        </div>
-        <div class="filtercontent">
+    <div class="filterbar" [class.show]="isfilterbarvisible" [class.hide]="!isfilterbarvisible">
+        <form [formGroup]="filterCompanyForm" (ngSubmit)="filterCompany()">
 
-        </div>
-        <div class="filterfooter">
+            <div class="filter-header">
+                <h6>Filter Companies</h6>
+                <button class="close-btn" (click)="filtertoggle()">&#10005;</button>
+            </div>
 
-        </div>
+            <div class="filter-body">
+
+                <!-- Location -->
+                <label for="location" class="filter-label">Location</label>
+                <div class="input-wrapper">
+                    <input id="location" type="text" placeholder="Type a location" formControlName="location" />
+                    <i class='fas location-icon'>&#xf3c5;</i>
+                </div>
+
+                <!-- Industry Type -->
+                <label for="industryType" class="filter-label required">Industry type</label>
+                <ng-select [items]="industryOptions" bindLabel="name" bindValue="name" placeholder="Select"
+                    [searchable]="true" [clearable]="true" formControlName="industryType" class="ng-select"
+                    [class.invalid]="filterCompanyForm.get('industryType')?.invalid && filterCompanyForm.get('industryType')?.touched">
+                </ng-select>
+                <div class="error-text"
+                    *ngIf="filterCompanyForm.get('industryType')?.invalid && filterCompanyForm.get('industryType')?.touched">
+                    Industry type is required.
+                </div>
+
+                <!-- Placement Event -->
+                <label for="eventName" class="filter-label">Participated placement events</label>
+                <ng-select [items]="placementEventOptions" [multiple]="true" bindValue="name" [searchable]="true"
+                    bindLabel="name" [closeOnSelect]="false" formControlName="participatedPlacementEvents">
+                </ng-select>
+
+            </div>
+
+            <div class="filter-footer">
+                <a class="clear-link" (click)="clearfilter()">Clear filter</a>
+                <button type="submit" [disabled]="filterCompanyForm.invalid" class="apply-btn">Apply</button>
+            </div>
+
+        </form>
     </div>
+
 
 </div>
 
@@ -85,7 +122,6 @@
         </div>
         <div class="sidebar-content">
             <div class="container">
-
                 <div class="step-header">
                     <div class="step-icon">1</div>
                     <h6>Company Basics</h6>
@@ -259,7 +295,7 @@
 </div>
 
 <!-- no-placement-events.component.html -->
-<div class="event-card" *ngIf=" CompaniesList && CompaniesList.length === 0">
+<div class="event-card" *ngIf="CompaniesList.length === 0 && !(CompaniesSanbox.companiesListLoading$ | async)">
 
     <div class="icon-wrapper">
         <img src="assets/icons/archive.svg" alt="Box Icon" class="box-icon" />

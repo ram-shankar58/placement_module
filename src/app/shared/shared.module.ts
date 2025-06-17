@@ -6,6 +6,7 @@ import { FooterbarComponent } from './components/footerbar/footerbar.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { RouterModule } from '@angular/router';
 import { AddPlacementEventComponent } from './popup/add-placement-event/add-placement-event.component';
+import { SkeletonloaderComponent } from './components/skeletonloader/skeletonloader.component';
 
 
 
@@ -18,6 +19,7 @@ import { AddPlacementEventComponent } from './popup/add-placement-event/add-plac
     CommonheaderComponent,
     FooterbarComponent,
     BreadcrumbsComponent,
+    SkeletonloaderComponent,
     RouterModule
   ],
   declarations: [
@@ -25,7 +27,8 @@ import { AddPlacementEventComponent } from './popup/add-placement-event/add-plac
      CommonheaderComponent,
      FooterbarComponent,
      BreadcrumbsComponent,
-     AddPlacementEventComponent
+     AddPlacementEventComponent,
+     SkeletonloaderComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
