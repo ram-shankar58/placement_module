@@ -157,7 +157,6 @@
         right: 0;
         top: 25px;
         margin-top: 10px;
-        background: white;
         border-radius: 12px;
         display: flex;
         flex-direction: column;
@@ -165,7 +164,8 @@
         font-family: "Poppins", sans-serif;
         min-width: 160px;
         padding: 8px 0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        background-color: #f4f4f4;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
         z-index: 999;
         transform: translateY(-10px);
         pointer-events: none;

@@ -7,34 +7,33 @@
   body {
     font-family: poppins, sans-serif;
     position: static;
-    overflow: visible;
   }
 
   .company-card-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+  }
 
-.company-card {
+  .company-card {
     background: #fff;
     border-radius: 14px;
     padding: 12px;
     box-shadow: 6px 6px 54px 0px #0000000D;
-    font-family: Poppins, sans-serif;
     max-width: 300px;
     max-height: 280px;
     border: 1px solid #d1d1d6;
-    margin:  8px 4px 4px 0px;
+    margin: 8px 4px 4px 0px;
   }
 
   .content-wrapper {
     padding: 24px;
     background-color: #f5f7fa;
-    min-height: calc(100vh - 130px);
 
     &.main-wrapper {
       padding: 10px;
+      min-height: calc(100vh - 130px);
       background-color: #fff;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
       border-radius: 8px;
@@ -115,7 +114,6 @@
   .container {
     max-width: 700px;
     margin: auto;
-    font-family: 'Inter', sans-serif;
     color: #1f2937;
 
     h6 {
@@ -134,7 +132,6 @@
     }
 
     input[type="text"],
-    input[type="search"],
     input[type="email"],
     input[type="number"],
     input[type="url"],
@@ -236,16 +233,18 @@
   }
 
   ng-select.ng-invalid.ng-touched .ng-select-container {
-  border: 1px solid #e74c3c !important; /* red border for invalid field */
-  box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
-}
+    border: 1px solid #e74c3c !important;
+    /* red border for invalid field */
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+  }
 
-.error-text {
-  color: #e74c3c;
-  font-size: 12px;
-  margin-top: 2px;
-}
-:root {
+  .error-text {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  :root {
     /* Font Sizes */
     --font-size-xsmall: 10px;
     --font-size-small: 12px;
@@ -258,6 +257,6 @@
     --color-text-light: #757575;
 
     --font-light: 400;
-    --font-regular:500;
+    --font-regular: 500;
     --font-medium: 600;
   }

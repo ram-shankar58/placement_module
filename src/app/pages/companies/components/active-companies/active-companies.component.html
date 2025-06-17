@@ -1,6 +1,11 @@
-<div class="overall_div">
+<div *ngIf="CompaniesSanbox.companiesListLoading$ | async as isLoading">
+    <div class="overall_div" *ngIf="isLoading">
+        <app-skeletonloader *ngFor="let n of skeletonCount"></app-skeletonloader>
+    </div>
+</div>
+<div class="overall_div" *ngIf="CompaniesList && CompaniesList.length > 0">
     <div class="header_company row mx-0">
-        <button class="add-cmp col-md-3" (click)="toggleSidebar()">
+        <button class="add-cmp col-md-3" (click)="addCompanyOpen()">
             <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
             Add a New Company
         </button>
@@ -8,7 +13,7 @@
         <div class="search-sort col-md-4 p-0">
             <input type="text" class="search-box col-md-4" placeholder="Search" (ngModelChange)="eventsearch($event)" />
 
-            <div class="icon-button col-md-3" (click)="filter()">
+            <div class="icon-button col-md-3 filter" (click)="filtertoggle()">
                 <i class="fa fa-filter"></i> Filter
             </div>
 
@@ -19,198 +24,298 @@
     </div>
 
     <div class="company-card-grid">
-        <div class="company-card" *ngFor="let company of CompaniesList">
+        <div class="company-card" *ngFor="let company of filteredCompanies">
             <div class="card-header">
-                <img [src]="company.logoUrl" class="company-logo" />
+                <img [src]="company.logo" class="company-logo" /> <!--logo to be added-->
                 <div class="company-details">
-                    <h3 class="company-name">{{company.name}}</h3>
+                    <h3 class="company-name">{{company.companyName}}</h3>
                     <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
                 </div>
+
                 <div class="card-menu">
-                    <i class="fas fa-ellipsis-v menu-icon"></i>
+                    <i class="fas fa-ellipsis-v menu-icon" (click)="toggleMenu(company.id)"></i>
+                    <div class="menu-options" [ngClass]="{ 'show': isMenuOpen, 'hide': !isMenuOpen }"
+                        *ngIf="openMenuId === company.id">
+                        <div class="option update" (click)="updateCompanyOpen(company.id)">Update company details</div>
+                        <div class="option copycmp" (click)="onCopy(company.id)">Copy as new company</div>
+                        <div class="option archive" (click)="onArchive()">Move to archive</div>
+                    </div>
                 </div>
             </div>
             <div class="card-sub-details">
-                <p class="industry"><i class="fas fa-briefcase"></i>{{company.industry}}</p>
-                <p class="size"><i class="fas fa-users"></i>{{company.size}}</p>
+                <p class="industry"><i class="fas fa-briefcase"></i>{{company.industryType}}</p>
+                <p class="size"><i class="fas fa-users"></i>{{company.numberOfEmployees}}</p>
             </div>
 
             <p class="description">
-                {{company.description}}
+                {{company.companyDescription}}
             </p>
 
             <div class="card-footer">
                 <div>
-                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.placementEvents}} Placement events</div>
+                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.eventCount}}
+                        Placement events</div>
                 </div>
                 <div class="footer-item">
-                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlaced}} Students<span
-                            style="color: #757575;"> Placed</span></p>
-                    <p> ₹ Avg. CTC: {{company.avgCtc}} LPA</p>
+                    <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlacedSoFar}}
+                        Students<span style="color: #757575;"> Placed</span></p>
+                    <p> ₹ Avg. CTC: {{company.averageCtc}} LPA</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="sidebar" [class.active]="issidebarvisible">
-        <form [formGroup]="addCompanyForm" (ngSubmit)="addCompany()">
-            <div class="sidebar-header">
-                <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
-                <h6 style="font-size: 17px;">Add a New Company</h6>
-                <p style="font-size: 12px;">detail out the new company information with required fields</p>
+    <div class="filterbar" [class.show]="isfilterbarvisible" [class.hide]="!isfilterbarvisible">
+        <form [formGroup]="filterCompanyForm" (ngSubmit)="filterCompany()">
+
+            <div class="filter-header">
+                <h6>Filter Companies</h6>
+                <button class="close-btn" (click)="filtertoggle()">&#10005;</button>
             </div>
-            <div class="sidebar-content">
-                <div class="container">
 
-                    <div class="step-header">
-                        <div class="step-icon">1</div>
-                        <h6>Company Basics</h6>
-                    </div>
+            <div class="filter-body">
 
-                    <div class="sidebar-sub-section">
-                        <label for="company_name">Comnpany name</label>
+                <!-- Location -->
+                <label for="location" class="filter-label">Location</label>
+                <div class="input-wrapper">
+                    <input id="location" type="text" placeholder="Type a location" formControlName="location" />
+                    <i class='fas location-icon'>&#xf3c5;</i>
+                </div>
+
+                <!-- Industry Type -->
+                <label for="industryType" class="filter-label required">Industry type</label>
+                <ng-select [items]="industryOptions" bindLabel="name" bindValue="name" placeholder="Select"
+                    [searchable]="true" [clearable]="true" formControlName="industryType" class="ng-select"
+                    [class.invalid]="filterCompanyForm.get('industryType')?.invalid && filterCompanyForm.get('industryType')?.touched">
+                </ng-select>
+                <div class="error-text"
+                    *ngIf="filterCompanyForm.get('industryType')?.invalid && filterCompanyForm.get('industryType')?.touched">
+                    Industry type is required.
+                </div>
+
+                <!-- Placement Event -->
+                <label for="eventName" class="filter-label">Participated placement events</label>
+                <ng-select [items]="placementEventOptions" [multiple]="true" bindValue="name" [searchable]="true"
+                    bindLabel="name" [closeOnSelect]="false" formControlName="participatedPlacementEvents">
+                </ng-select>
+
+            </div>
+
+            <div class="filter-footer">
+                <a class="clear-link" (click)="clearfilter()">Clear filter</a>
+                <button type="submit" [disabled]="filterCompanyForm.invalid" class="apply-btn">Apply</button>
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
+
+<!--Sidebar-->
+<div class="sidebar" [class.active]="issidebarvisible">
+    <form [formGroup]="addCompanyForm" (ngSubmit)="addCompany()">
+        <div class="sidebar-header">
+            <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
+            <h6 style="font-size: 17px;">Add a New Company</h6>
+            <p style="font-size: 12px;">detail out the new company information with required fields</p>
+        </div>
+        <div class="sidebar-content">
+            <div class="container">
+                <div class="step-header">
+                    <div class="step-icon">1</div>
+                    <h6>Company Basics</h6>
+                </div>
+
+                <div class="sidebar-sub-section">
+                    <label for="company_name">Comnpany name</label>
+                    <div class="nameandlogo">
                         <input
                             [class.invalid]="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched"
                             type="search" id="company_name" formControlName="companyName">
 
-                        <div class="error-text"
-                            *ngIf="addCompanyForm.get('companyName')?.invalid && addCompanyForm.get('companyName')?.touched">
+                        <div class="attach-logo-container">
+                            <label class="attach-logo-label" for="logoUpload">
+                                <img src="assets/icons/attach_file.svg" alt="Attach Icon" class="attach-icon" />
+                                <span class="attach-text">Attach a logo</span>
+                                <img style="margin-left: 15px;" *ngIf="addCompanyForm.get('logo')?.value"
+                                    [src]="addCompanyForm.get('logo')?.value" width="30" height="30" alt="Preview" />
+                            </label>
+                            <input type="file" id="logoUpload" accept=".jpg, .jpeg, .png, .svg" hidden
+                                (change)="onFileUpload($event)">
+                            <div class="upload-note">Min. Size: 150x150 px</div>
+                        </div>
+                    </div>
+
+                    <div class="error-text"
+                        *ngIf="addCompanyForm.get('companyName')?.touched && addCompanyForm.get('companyName')?.errors">
+                        <span *ngIf="addCompanyForm.get('companyName')?.errors?.['required']">
                             Company name is required.
-                        </div>
-
-                        <label for="description">Company description</label>
-                        <textarea id="company_description" formControlName="companyDescription"></textarea>
-
-                        <label for="location">Location</label>
-                        <input type="text" id="location" formControlName="location">
-
-                        <div class="dropdown-label-flex">
-                            <label for="industry_type">Industry type</label>
-                            <label for="employee_count">No of employees</label>
-                        </div>
-                        <div class="dropdown-flex">
-                            <ng-select [items]="industryOptions" bindValue="name" placeholder="Select Industry"
-                                bindLabel="name" [searchable]="true" [clearable]="true" formControlName="industryType"
-                                [class.invalid]="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
-                            </ng-select>
-                            <div class="error-text"
-                                *ngIf="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
-                                Industry type is required.
-                            </div>
-                            <ng-select [items]="employeeOptions" bindValue="name" [searchable]="true" [clearable]="true"
-                                bindLabel="name" formControlName="numberOfEmployees">
-                            </ng-select>
-                        </div>
+                        </span>
+                        <span
+                            *ngIf="addCompanyForm.get('companyName')?.errors?.['pattern'] || addCompanyForm.get('companyName')?.errors?.['whitespace']">
+                            Company name cannot be empty.
+                        </span>
                     </div>
 
-                    <div class="step-header">
-                        <div class="step-icon">2</div>
-                        <h6>Contact Details</h6>
+                    <label for="description">Company description</label>
+                    <textarea id="company_description" formControlName="companyDescription"></textarea>
+
+                    <label for="location">Location</label>
+                    <input type="text" id="location" formControlName="location">
+
+                    <div class="dropdown-label-flex">
+                        <label for="industry_type">Industry type</label>
+                        <label for="employee_count">No of employees</label>
                     </div>
-                    <div class="sidebar-sub-section">
-                        <label for="contact_name">Contact person name</label>
-                        <input type="text" id="contact_name" placeholder="Name" formControlName="contactPersonName"
-                            [class.invalid]="addCompanyForm.get('contactPersonName')?.invalid && addCompanyForm.get('contactPersonName')?.touched">
+                    <div class="dropdown-flex">
+                        <ng-select [items]="industryOptions" bindValue="name" placeholder="Select Industry"
+                            bindLabel="name" [searchable]="true" [clearable]="true" formControlName="industryType"
+                            [class.invalid]="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
+                        </ng-select>
+                        <ng-select [items]="employeeOptions" bindValue="name" [searchable]="true" [clearable]="true"
+                            bindLabel="name" formControlName="numberOfEmployees">
+                        </ng-select>
+                    </div>
+                    <div class="error-text"
+                        *ngIf="addCompanyForm.get('industryType')?.invalid && addCompanyForm.get('industryType')?.touched">
+                        Industry type is required.
+                    </div>
+                </div>
 
-                        <div class="error-text"
-                            *ngIf="addCompanyForm.get('contactPersonName')?.invalid && addCompanyForm.get('contactPersonName')?.touched">
-                            Contact person name is required.
-                        </div>
+                <div class="step-header">
+                    <div class="step-icon">2</div>
+                    <h6>Contact Details</h6>
+                </div>
+                <div class="sidebar-sub-section">
+                    <label for="contact_name">Contact person name</label>
+                    <input type="text" id="contact_name" placeholder="Name" formControlName="contactPersonName"
+                        [class.invalid]="addCompanyForm.get('contactPersonName')?.invalid && addCompanyForm.get('contactPersonName')?.touched">
 
-                        <div class="dropdown-label-flex">
-                            <label for="contact_email">Contact Email</label>
-                            <label for="contact_number">Phone number</label>
-                        </div>
+                    <div class="error-text"
+                        *ngIf="addCompanyForm.get('contactPersonName')?.invalid && addCompanyForm.get('contactPersonName')?.touched">
+                        Contact person name is required.
+                    </div>
 
-                        <div class="dropdown-flex">
-                            <input type="text" id="contact_email" placeholder="Email" formControlName="contactEmail">
-                            <input type="text" id="contact_number" placeholder="Contact number"
-                                formControlName="phoneNumber"
-                                [class.invalid]="addCompanyForm.get('phoneNumber')?.invalid && addCompanyForm.get('phoneNumber')?.touched">
-                        </div>
+                    <div class="dropdown-label-flex">
+                        <label for="contact_email">Contact Email</label>
+                        <label for="contact_number">Phone number</label>
+                    </div>
 
-                        <div class="error-text" style="margin-left: 52%;"
-                            *ngIf="addCompanyForm.get('phoneNumber')?.touched && addCompanyForm.get('phoneNumber')?.errors">
-                            <span *ngIf="addCompanyForm.get('phoneNumber')?.errors?.['required']">
-                                Contact number is required.
-                            </span>
-                            <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required'] 
+                    <div class="dropdown-flex">
+                        <input type="text" id="contact_email" placeholder="Email" formControlName="contactEmail">
+                        <input type="text" id="contact_number" placeholder="Contact number"
+                            formControlName="phoneNumber"
+                            [class.invalid]="addCompanyForm.get('phoneNumber')?.invalid && addCompanyForm.get('phoneNumber')?.touched">
+                    </div>
+
+                    <div class="error-text" style="margin-left: 52%;"
+                        *ngIf="addCompanyForm.get('phoneNumber')?.touched && addCompanyForm.get('phoneNumber')?.errors">
+                        <span *ngIf="addCompanyForm.get('phoneNumber')?.errors?.['required']">
+                            Contact number is required.
+                        </span>
+                        <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required'] 
                                   && addCompanyForm.get('phoneNumber')?.errors?.['minlength']">
-                                Contact number must be at least 10 digits.
-                            </span>
-                            <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required']
+                            Contact number must be at least 10 digits.
+                        </span>
+                        <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required']
                                    && !addCompanyForm.get('phoneNumber')?.errors?.['minlength']
                                    && addCompanyForm.get('phoneNumber')?.errors?.['maxlength']">
-                                Contact number must not exceed 10 digits.
-                            </span>
-                            <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required']
+                            Contact number must not exceed 10 digits.
+                        </span>
+                        <span *ngIf="!addCompanyForm.get('phoneNumber')?.errors?.['required']
                                    && !addCompanyForm.get('phoneNumber')?.errors?.['minlength']
                                    && !addCompanyForm.get('phoneNumber')?.errors?.['maxlength']
                                    && addCompanyForm.get('phoneNumber')?.errors?.['pattern']">
-                                Contact number must be digits only.
-                            </span>
-                        </div>
-
-
-                        <label for="company_website">Company Website</label>
-                        <input type="text" id="company_website" placeholder="Enter the URL"
-                            formControlName="companyWebsite">
+                            Contact number must be digits only.
+                        </span>
                     </div>
 
 
-                    <div class="step-header">
-                        <div class="step-icon">3</div>
-                        <h6>Placement Details</h6>
+                    <label for="company_website">Company Website</label>
+                    <input type="text" id="company_website" placeholder="Enter the URL"
+                        formControlName="companyWebsite">
+                </div>
+
+
+                <div class="step-header">
+                    <div class="step-icon">3</div>
+                    <h6>Placement Details</h6>
+                </div>
+
+                <div class="sidebar-sub-section">
+                    <label for="placement_events">Participated placement events</label>
+                    <ng-select [items]="placementEventOptions" [multiple]="true" bindValue="name" [searchable]="true"
+                        bindLabel="name" [closeOnSelect]="false" formControlName="participatedPlacementEvents"
+                        [class.invalid]="addCompanyForm.get('participatedPlacementEvents')?.invalid && addCompanyForm.get('participatedPlacementEvents')?.touched">
+                    </ng-select>
+
+                    <div class="error-text"
+                        *ngIf="addCompanyForm.get('participatedPlacementEvents')?.invalid && addCompanyForm.get('participatedPlacementEvents')?.touched">
+                        Placement event is required.
                     </div>
 
-                    <div class="sidebar-sub-section">
-                        <label for="placement_events">Participated placement events</label>
-                        <ng-select [items]="placementEventOptions" [multiple]="true" bindValue="name"
-                            [searchable]="true" bindLabel="name" [closeOnSelect]="false"
-                            formControlName="participatedPlacementEvents"
-                            [class.invalid]="addCompanyForm.get('participatedPlacementEvents')?.invalid && addCompanyForm.get('participatedPlacementEvents')?.touched">
-                        </ng-select>
+                    <div class="toggle-container">
+                        <label class="switch">
+                            <input type="checkbox" id="mou_signed" formControlName="mouSigned" />
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="toggle-label">
+                            <label for="mou_signed">MoU Signed with college</label>
+                            <p>Mark if the institution and the company have agreed to collaborate for placements,
+                                internships or training, and that understanding has been formalized in writing.</p>
+                        </div>
+                    </div>
 
-                        <div class="error-text"
-                            *ngIf="addCompanyForm.get('participatedPlacementEvents')?.invalid && addCompanyForm.get('participatedPlacementEvents')?.touched">
-                            Placement event is required.
-                        </div>
+                    <div class="dropdown-label-flex">
+                        <label for="students_placed">Students placed so far</label>
+                        <label for="average_ctc">Average CTC(in ₹ lakhs)</label>
+                    </div>
 
-                        <div class="toggle-container">
-                            <label class="switch">
-                                <input type="checkbox" id="mou_signed" formControlName="mouSigned" />
-                                <span class="slider round"></span>
-                            </label>
-                            <div class="toggle-label">
-                                <label for="mou_signed">MoU Signed with college</label>
-                                <p>Mark if the institution and the company have agreed to collaborate for placements,
-                                    internships or training, and that understanding has been formalized in writing.</p>
-                            </div>
-                        </div>
-
-                        <div class="dropdown-label-flex">
-                            <label for="students_placed">Students placed so far</label>
-                            <label for="average_ctc">Average CTC(in ₹ lakhs)</label>
-                        </div>
-
-                        <div class="dropdown-flex">
-                            <input type="text" formControlName="studentsPlacedSoFar" placeholder="Students Placed" />
-                            <input type="text" formControlName="averageCtc" placeholder="Average CTC"
-                                [class.invalid]="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched" />
-                        </div>
-                        <div class="error-text" style="margin-left: 52%;"
-                            *ngIf="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched">
-                            Please enter a valid number (integer or decimal).
-                        </div>
+                    <div class="dropdown-flex">
+                        <input type="text" formControlName="studentsPlacedSoFar" placeholder="Students Placed" />
+                        <input type="text" formControlName="averageCtc" placeholder="Average CTC"
+                            [class.invalid]="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched" />
+                    </div>
+                    <div class="error-text" style="margin-left: 52%;"
+                        *ngIf="addCompanyForm.get('averageCtc')?.invalid && addCompanyForm.get('averageCtc')?.touched">
+                        Please enter a valid number (integer or decimal).
                     </div>
                 </div>
             </div>
-            <div class="sidebar-footer">
-                <input class="cancel_btn" (click)="toggleSidebar()" type="button" value="Cancel">
-                <input class="submit_btn" [disabled]="addCompanyForm.invalid" type="submit"
-                    value="Save Company Details">
-            </div>
-        </form>
+        </div>
+        <div class="sidebar-footer">
+            <input class="cancel_btn" (click)="toggleSidebar()" type="button" value="Cancel">
+            <input *ngIf="submit === 'add'" class="submit_btn" [disabled]="addCompanyForm.invalid" type="button"
+                (click)="addCompany()" value="Save Company Details">
+            <input *ngIf="submit === 'update'" class="submit_btn" [disabled]="addCompanyForm.invalid" type="button"
+                (click)="updateCompany()" value="Update Company Details">
+        </div>
+    </form>
+</div>
+
+<!-- no-placement-events.component.html -->
+<div class="event-card" *ngIf="CompaniesList.length === 0 && !(CompaniesSanbox.companiesListLoading$ | async)">
+
+    <div class="icon-wrapper">
+        <img src="assets/icons/archive.svg" alt="Box Icon" class="box-icon" />
     </div>
 
+    <h2 class="title">No Company Created</h2>
+
+    <p class="description">You haven’t added any companies yet. Start by creating one to notify students.</p>
+
+    <div class="actions">
+        <button class="btn-primary" (click)="addCompanyOpen()">
+            <svg class="btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            Add a New Company
+        </button>
+        <span class="or-text">or</span>
+        <a class="upload-link"><!-- (click)="uploadBulkEventDetails()" -->
+            <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
+            Upload bulk event details
+        </a>
+    </div>
 </div>

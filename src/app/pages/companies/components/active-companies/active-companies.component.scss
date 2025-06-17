@@ -1,5 +1,7 @@
 .overall_div {
   padding: 10px;
+  height: calc(100vh - 150px);
+  overflow-y: auto;
 }
 
 .add-cmp {
@@ -8,7 +10,7 @@
   width: 207px;
   height: 35px;
   padding: 8px 14px 8px 14px;
-  
+
   background-color: #4f46e5;
   border-radius: 8px;
   color: white;
@@ -18,7 +20,7 @@
   cursor: pointer;
 }
 
-.search-sort{
+.search-sort {
   display: flex;
   padding: 8px 14px 8px 14px;
   flex-direction: row;
@@ -26,8 +28,9 @@
   height: 35px;
 
 }
+
 .search-box {
-  padding: 8px 8px;
+  padding: 10px 10px;
   border-radius: 20px;
   border: 1px solid #ccc;
   width: 200px;
@@ -55,7 +58,6 @@
 
   .toggle-label {
     max-width: calc(100% - 60px);
-    ;
 
     label {
       font-weight: 500;
@@ -148,12 +150,13 @@
   }
 }
 
-  .invalid {
+.invalid {
+  border-color: #dc3545 !important;
+
+  .ng-select .ng-select-container {
     border-color: #dc3545 !important;
-    .ng-select .ng-select-container{
-      border-color: #dc3545 !important;
-    }
   }
+}
 
 .card-header {
   display: flex;
@@ -191,7 +194,69 @@
   color: var(--color-primary);
   padding: 0px 8px;
   cursor: pointer;
+  position: relative;
+  display: inline-block;
 }
+
+.menu-icon {
+  font-size: 1rem;
+  cursor: pointer;
+  color: var(--color-primary);
+  user-select: none;
+  padding: 0px 4px;
+}
+
+.menu-options {
+  position: absolute;
+  right: 0;
+  top: 15px;
+  margin-top: 10px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  color: var(--color-primary);
+  font-family: "Poppins", sans-serif;
+  min-width: 160px;
+  padding: 4px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+
+  .option {
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--color-primary);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      background-color: #f1f1f1;
+    }
+
+    &.archive {
+      color: #ff3b30;
+    }
+
+  }
+}
+
+.menu-options.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.menu-options.hide {
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+}
+
 
 .card-sub-details {
   display: flex;
@@ -258,4 +323,315 @@
 .footer-item i {
   margin-right: 6px;
   color: var(--color-secondary);
+}
+
+.attach-logo-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.attach-logo-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #007bff;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.attach-logo-label:hover {
+  text-decoration: underline;
+}
+
+.attach-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.upload-note {
+  font-size: 12px;
+  color: #666;
+  margin-left: 25px;
+  margin-top: 2px;
+}
+
+.nameandlogo {
+  display: flex;
+}
+
+.container {
+  input[type="search"] {
+    width: 75%;
+    padding: 10px 12px;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+}
+
+/* no-placement-events.component.scss */
+.event-card {
+  max-width: 480px;
+  margin: auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  border: 1px solid #e5e7eb;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: #6366f1; // Indigo-500
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937; // Gray-800
+  margin-bottom: 0.25rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: #6b7280; // Gray-500
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #6366f1;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #4f46e5;
+  }
+
+  .btn-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.upload-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: #007afe;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .btn-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+.or-text {
+  font-size: 0.875rem;
+  color: #9ca3af; // Gray-400
+}
+
+.box-icon {
+  width: 56px;
+  height: 56px;
+}
+
+//filterbar
+
+.filterbar {
+  position: absolute;
+  right: 35%;
+  top: 24%;
+  min-width: 400px;
+  height: auto;
+  border-radius: 12px;
+  background-color: #f2f2f7;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  opacity: 0;
+  transform: translateY(-10px);
+  pointer-events: none;
+  transition: all 0.3s ease;
+
+  &.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  &.hide {
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background-color: #f2f2f7;
+      border: 1px solid #e0e0e0;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+
+      h6 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 15px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+        cursor: pointer;
+      }
+    }
+
+    .filter-body {
+      background-color: #fff;
+      padding: 16px;
+
+      .filter-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: #414651;
+        margin-bottom: 6px;
+
+        &.required::after {
+          content: '*';
+          color: red;
+          margin-left: 4px;
+        }
+      }
+
+      .input-wrapper {
+        position: relative;
+        margin-bottom: 1rem;
+
+        input {
+          width: 100%;
+          padding: 10px 12px 10px 12px;
+          font-size: 0.9rem;
+          border: 1px solid #d1d5db;
+          border-radius: 8px;
+          box-sizing: border-box;
+        }
+
+        .location-icon {
+          position: absolute;
+          left: 90%;
+          top: 50%;
+          transform: translateY(-50%);
+          font-size: 14px;
+          color: #888;
+        }
+      }
+
+      input[type="search"] {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+      }
+
+      .ng-select {
+        margin-bottom: 1rem;
+
+        &.invalid ::ng-deep .ng-select-container {
+          border-color: red !important;
+        }
+      }
+
+      .error-text {
+        color: red;
+        font-size: 12px;
+        margin-top: -8px;
+        margin-bottom: 8px;
+      }
+    }
+
+    .filter-footer {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 10px;
+      background-color: #f2f2f7;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+
+      .clear-link {
+        font-size: 14px;
+        color: #007aff;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .apply-btn {
+        background-color: white;
+        color: #1E1E1E;
+        padding: 3px 7px;
+        font-size: 14px;
+        font-weight: 600;
+        border: 1px solid #D1D1D6;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .apply-btn:disabled {
+        background-color: #d9dade;
+        cursor: not-allowed;
+      }
+    }
+  }
 }

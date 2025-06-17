@@ -12,21 +12,59 @@ export function reducer(state = initialState, { type, payload }: any): Companies
 
         //add Companies
         case actions.ActionTypes.ADD_COMPANIES:
-            return Object.assign({},state, {
+            return Object.assign({}, state, {
                 addCompanies: [],
                 addCompaniesLoading: true
             });
-        
+
         case actions.ActionTypes.ADD_COMPANIES_SUCCESS:
-            return Object.assign({},state, {
+            return Object.assign({}, state, {
                 addCompanies: payload,
                 addCompaniesLoading: false
             })
 
         case actions.ActionTypes.ADD_COMPANIES_FAIL:
-            return Object.assign({},state, {
+            return Object.assign({}, state, {
                 addCompanies: [],
                 addCompaniesLoading: false
+            })
+
+        //companiesList
+        case actions.ActionTypes.COMPANIES_LIST:
+            return Object.assign({}, state, {
+                companiesList: [],
+                companiesListLoading: true
+            })
+
+        case actions.ActionTypes.COMPANIES_LIST_SUCCESS:
+            return Object.assign({}, state, {
+                companiesList: payload,
+                companiesListLoading: false
+            })
+
+        case actions.ActionTypes.COMPANIES_LIST_FAIL:
+            return Object.assign({}, state, {
+                companiesList: [],
+                companiesListLoading: false
+            })
+
+        //updateCompany
+        case actions.ActionTypes.UPDATE_COMPANY:
+            return Object.assign({}, state, {
+                updateCompany: [],
+                updateCompanyLoading: true
+            })
+
+        case actions.ActionTypes.UPDATE_COMPANY_SUCCESS:
+            return Object.assign({}, state, {
+                updateCompany: payload,
+                updateCompanyLoading: false
+            })
+
+        case actions.ActionTypes.UPDATE_COMPANY_FAIL:
+            return Object.assign({}, state, {
+                updateCompany: [],
+                updateCompanyLoading: false
             })
 
         default: {
@@ -39,3 +77,9 @@ export function reducer(state = initialState, { type, payload }: any): Companies
 
 export const addCompanies = (state: CompaniesState) => state.addCompanies;
 export const addCompaniesLoading = (state: CompaniesState) => state.addCompaniesLoading;
+
+export const companiesList = (state: CompaniesState) => state.companiesList;
+export const companiesListLoading = (state: CompaniesState) => state.companiesListLoading
+
+export const updateCompany = (state: CompaniesState) => state.updateCompany;
+export const updateCompanyLoading = (state: CompaniesState) => state.updateCompanyLoading;

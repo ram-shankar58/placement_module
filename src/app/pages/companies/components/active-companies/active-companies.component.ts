@@ -1,8 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr'
 import { CompaniesSanbox } from '../../companies.sandbox';
 import { Subscription } from 'rxjs';
+import moment from 'moment';
+import { AwsuploadService } from '../../../../providers/services/awsupload.service';
 
 @Component({
   selector: 'app-active-companies',
@@ -13,33 +15,24 @@ import { Subscription } from 'rxjs';
 export class ActiveCompaniesComponent implements OnInit {
 
   issidebarvisible = false;
-  submitted = false;
+  isMenuOpen = false;
+  isfilterbarvisible = false;
+  skeletonCount = Array(6);
+  openMenuId: string | null = null;
   addCompanyForm: any = FormGroup;
-  CompaniesList:any = [];
+  filterCompanyForm:any = FormGroup;
+  CompaniesList: any = [];
+  filteredCompanyList:any = [];
+  filteredCompanies:any = [];
+  submit: string = '';
+  imgurl: any;
   private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
     private fb: FormBuilder,
     public CompaniesSanbox: CompaniesSanbox,
+    private awsupload: AwsuploadService
   ) { }
-
-  initaddcompanyform() {
-    this.addCompanyForm = this.fb.group({
-      companyName: new FormControl('', [Validators.required]),
-      companyDescription: new FormControl(''),
-      location: new FormControl(''),
-      industryType: new FormControl('', [Validators.required]),
-      numberOfEmployees: new FormControl(''),
-      contactPersonName: new FormControl('', [Validators.required]),
-      contactEmail: new FormControl(''),
-      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('^[0-9]*$')]),
-      companyWebsite: new FormControl(''),
-      participatedPlacementEvents: new FormControl([], [Validators.required]),
-      mouSigned: new FormControl(false),
-      studentsPlacedSoFar: new FormControl(''),
-      averageCtc: new FormControl('', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]),
-    });
-  }
 
   industryOptions = [
     { id: 1, name: 'IT' },
@@ -64,121 +57,267 @@ export class ActiveCompaniesComponent implements OnInit {
   ngOnInit() {
     this.initaddcompanyform();
     this.companiesList();
+    this.initfilterCompanyForm();
+  }
+
+  initfilterCompanyForm(){
+    this.filterCompanyForm = this.fb.group({
+      location: new FormControl(''),
+      industryType: new FormControl('', [Validators.required]),
+      participatedPlacementEvents: new FormControl([])
+    });
+  }
+
+  initaddcompanyform() {
+    this.addCompanyForm = this.fb.group({
+      id: new FormControl(''),
+      companyName: new FormControl('', [Validators.required, Validators.pattern(/\S+/)]),
+      logo: new FormControl(''),
+      companyDescription: new FormControl(''),
+      location: new FormControl(''),
+      industryType: new FormControl('', [Validators.required]),
+      numberOfEmployees: new FormControl(''),
+      contactPersonName: new FormControl('', [Validators.required]),
+      contactEmail: new FormControl(''),
+      phoneNumber: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern('^[0-9]*$')]),
+      companyWebsite: new FormControl(''),
+      participatedPlacementEvents: new FormControl([], [Validators.required]),
+      mouSigned: new FormControl(false),
+      studentsPlacedSoFar: new FormControl(''),
+      averageCtc: new FormControl('', [Validators.required, Validators.pattern(/^\d+(\.\d+)?$/)]),
+    });
   }
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
     const clickedInsideNav = target.closest('.sidebar');
-    const clickedInsideBtn = target.closest('.add-cmp');
-    if (!clickedInsideNav && !clickedInsideBtn) {
+    const clickedInsideBtn = target.closest('.add-cmp') || target.closest('.btn-primary');
+    const clickedInsideCardMenu = target.closest('.menu-icon');
+    const clickedInsidefilterbartab = target.closest('.filterbar') || target.closest('.filter');
+    const clickedInsideUpdateandCopy = target.closest('.update') || target.closest('.copycmp');
+    if (!clickedInsideNav && !clickedInsideBtn && !clickedInsideUpdateandCopy && !clickedInsideCardMenu) {
       this.issidebarvisible = false;
+      this.isMenuOpen = false;
+    }
+    if (!clickedInsidefilterbartab) {
+      this.isfilterbarvisible = false;
     }
   }
 
+  addCompanyOpen() {
+    console.log('opennn');
+    this.issidebarvisible = !this.issidebarvisible;
+    this.addCompanyForm.reset();
+    this.submit = 'add';
+    console.log('issidebarvisible',this.issidebarvisible);
+  }
+
   toggleSidebar() {
+    this.addCompanyForm.reset();
     this.issidebarvisible = !this.issidebarvisible;
   }
 
+  toggleMenu(id: string) {
+    this.openMenuId = this.openMenuId === id ? null : id;
+    this.isMenuOpen = !this.isMenuOpen;
+  }
   companiesList() {
-    this.CompaniesList = [
-      {
-        name: "Johnson & Johnson",
-        logoUrl: "assets/images/johnson-logo.png",
-        location: "Great Falls, Maryland",
-        industry: "Children products",
-        size: "200 - 500 employees",
-        description: "A global leader in health and wellness products, committed to improving lives worldwide.",
-        placementEvents: 12,
-        studentsPlaced: 23,
-        avgCtc: 4.5
-      },
-      {
-        name: "Google",
-        logoUrl: "assets/images/google-logo.png",
-        location: "Mountain View, California",
-        industry: "Technology",
-        size: "10000+ employees",
-        description: "Shaping the future with AI-driven solutions and innovation at scale.",
-        placementEvents: 20,
-        studentsPlaced: 80,
-        avgCtc: 15
-      },
-      {
-        name: "Tata Consultancy Services",
-        logoUrl: "assets/images/tcs-logo.png",
-        location: "Mumbai, India",
-        industry: "IT Services",
-        size: "50000+ employees",
-        description: "A global IT consulting company delivering business solutions and digital transformation.",
-        placementEvents: 35,
-        studentsPlaced: 120,
-        avgCtc: 3.8
-      },
-      {
-        name: "Amazon",
-        logoUrl: "assets/images/amazon-logo.png",
-        location: "Seattle, Washington",
-        industry: "E-Commerce & Cloud",
-        size: "750000+ employees",
-        description: "Customer-obsessed tech company revolutionizing e-commerce and cloud computing.",
-        placementEvents: 15,
-        studentsPlaced: 65,
-        avgCtc: 13.2
-      },
-      {
-        name: "Zoho Corporation",
-        logoUrl: "assets/images/zoho-logo.png",
-        location: "Chennai, India",
-        industry: "SaaS",
-        size: "9000+ employees",
-        description: "An Indian software company offering a suite of online productivity tools and SaaS applications.",
-        placementEvents: 10,
-        studentsPlaced: 40,
-        avgCtc: 6.5
-      },
-      {
-        name: "Infosys",
-        logoUrl: "assets/images/infosys-logo.png",
-        location: "Bangalore, India",
-        industry: "Consulting & IT",
-        size: "25000+ employees",
-        description: "Helping enterprises transform through digital technology and consulting services.",
-        placementEvents: 25,
-        studentsPlaced: 98,
-        avgCtc: 4.2
+    this.CompaniesSanbox.companiesList();
+    this.subscriptions.push(this.CompaniesSanbox.companiesList$.subscribe((data) => {
+      if (data && data.status == true) {
+        this.CompaniesList = data.data;
+        this.filteredCompanies = this.CompaniesList;
       }
-    ];
-
+    }))
   }
 
-  addCompany() {
-    this.submitted = true
-    let param: any = {}
+  onFileUpload(event: any) {
+    const file: File = event.target.files[0];
+    if (!file || !file.type.match(/image\/*/)) {
+      console.error('Invalid file or unsupported type');
+      return;
+    }
 
+    const bucket = 'gradit-communication';
+    const bucketPath = moment().format('YYYY-MM-DD');
+    const fileType = file.type;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('bucket', bucket);
+    formData.append('bucketPath', bucketPath);
+    formData.append('fileType', fileType);
+
+    this.awsupload.ImgUpload(formData).subscribe({
+      next: (res: any) => {
+        console.log('Upload success:', res);
+        const uploadedUrl = res?.data?.[0]?.data?.[0];
+        if (uploadedUrl) {
+          this.imgurl = uploadedUrl;
+          this.addCompanyForm.get('logo')?.setValue(this.imgurl);
+        }
+      },
+      error: (err) => {
+        console.error('Upload failed:', err);
+      }
+    });
+  }
+
+
+  addCompany() {
+    let param: any = {}
     param = this.addCompanyForm.value;
+    param.mouSigned = !!param.mouSigned;
+    console.log("param,", param);
+
     this.CompaniesSanbox.addCompanies(param);
     this.subscriptions.push(this.CompaniesSanbox.addCompanies$.subscribe(data => {
-      console.log('data', data.status)
 
-      if (data.status == "true") {
-        console.log('true')
+      if (data && data.status == true) {
         this.toastr.success('Company Added Successfully')
+        return;
+      }
+
+      if (data && data.status == false) {
+        console.log('false')
+        this.toastr.error('Company Already Exists')
         return;
       }
     }))
     this.addCompanyForm.reset();
-  }
-  eventsearch(event:any){
-
+    this.companiesList();
   }
 
-  filter(){
+  eventsearch(event: any) {
 
   }
 
-  sort(){
+  clearfilter(){
+    this.filterCompanyForm.reset();
+    this.filteredCompanies = this.CompaniesList
+  }
+  filtertoggle() {
+    this.filterCompanyForm.reset();
+    this.isfilterbarvisible = !this.isfilterbarvisible;
+    this.filteredCompanies = this.CompaniesList
+  }
 
+ filterCompany() {
+  const param = this.filterCompanyForm.value;
+
+  this.filteredCompanyList = [
+    {
+      key: 'location',
+      value: param.location,
+      filterType: 1
+    },
+    {
+      key: 'industryType',
+      value: param.industryType,
+      filterType: 2
+    },
+    {
+      key: 'participatedPlacementEvents',
+      value: param.participatedPlacementEvents,
+      filterType: 3
+    }
+  ].filter(f => f.value && f.value !== '');
+  this.filteredCompanies = this.CompaniesList.filter((company: any) => {
+  return this.filteredCompanyList.some((filter: any) => {
+    if (filter.key === 'participatedPlacementEvents') {
+      return Array.isArray(company[filter.key]) &&
+             Array.isArray(filter.value) &&
+             filter.value.some((val: string) => company[filter.key].includes(val));
+    }
+    return company[filter.key] === filter.value;
+  });
+});
+
+}
+
+
+  sort() {
+
+  }
+  getCompaniesbyId(id: any) {
+    return this.CompaniesList.find((company: any) => company.id === id);
+  }
+
+  updateCompanyOpen(id: any) {
+    this.submit = 'update';
+    this.issidebarvisible = true;
+    const company = this.getCompaniesbyId(id);
+
+    if (company) {
+      this.imgurl = company.logo;
+      this.addCompanyForm.setValue({
+        id: company.id,
+        companyName: company.companyName,
+        logo:company.logo,
+        companyDescription: company.companyDescription,
+        location: company.location,
+        industryType: company.industryType,
+        numberOfEmployees: company.numberOfEmployees,
+        contactPersonName: company.contactPersonName,
+        contactEmail: company.contactEmail,
+        phoneNumber: company.phoneNumber,
+        companyWebsite: company.companyWebsite,
+        participatedPlacementEvents: company.participatedPlacementEvents,
+        mouSigned: company.mouSigned,
+        studentsPlacedSoFar: company.studentsPlacedSoFar,
+        averageCtc: company.averageCtc
+      })
+    }
+  }
+
+  updateCompany() {
+    let param: any = {}
+    param = this.addCompanyForm.value;
+
+    this.CompaniesSanbox.updatecompany(param);
+    this.subscriptions.push(this.CompaniesSanbox.updateCompany$.subscribe((data) => {
+      if (data && data.status == true) {
+        this.toastr.success('Company Updated Successfully')
+        return;
+      }
+      if (data && data.status == false) {
+        this.toastr.error('Company Not Updated')
+        return;
+      }
+    }))
+    this.addCompanyForm.reset();
+    this.companiesList();
+  }
+
+  onCopy(id: any) {
+    this.issidebarvisible = true;
+    const company = this.getCompaniesbyId(id);
+    this.submit = 'add';
+    if (company) {
+      this.imgurl = company.logo;
+      this.addCompanyForm.setValue({
+        id: company.id,
+        companyName: company.companyName,
+        logo:company.logo,
+        companyDescription: company.companyDescription,
+        location: company.location,
+        industryType: company.industryType,
+        numberOfEmployees: company.numberOfEmployees,
+        contactPersonName: company.contactPersonName,
+        contactEmail: company.contactEmail,
+        phoneNumber: company.phoneNumber,
+        companyWebsite: company.companyWebsite,
+        participatedPlacementEvents: company.participatedPlacementEvents,
+        mouSigned: company.mouSigned,
+        studentsPlacedSoFar: (company.studentsPlacedSoFar).toString(),
+        averageCtc: company.averageCtc
+      })
+    }
+  }
+
+  onArchive() {
+    // Handle archive logic
   }
 
 }

@@ -10,6 +10,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { CompaniesEffect } from './effects/companies.effect';
 import { CompaniesService } from './companies.service';
 import { CompaniesSanbox } from './companies.sandbox';
+import { BrowserModule } from '@angular/platform-browser';
+import { SharedModule } from '../../shared/shared.module';
 
 
 
@@ -53,6 +55,7 @@ const routes:any = [
     ReactiveFormsModule,
     FormsModule,
     NgSelectModule,
+    SharedModule,
     EffectsModule.forFeature([CompaniesEffect])
     ],
   schemas: [
