@@ -7,7 +7,8 @@ import { RouterModule } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSidenavModule } from '@angular/material/sidenav';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PlacementEventsSandbox } from './placement_events.sandbox';
 
 export const routes: any = [
   {
@@ -41,20 +42,28 @@ export const routes: any = [
 
 @NgModule({
   declarations: [
-    UpcomingEventsComponent,
     HistoricalEventsComponent,
-    LayoutComponent
+    UpcomingEventsComponent,
+    LayoutComponent,
+    
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
     NgbModalModule,
-    MatSidenavModule
+    MatSidenavModule,
+    ReactiveFormsModule,
+    FormsModule,
+    
 
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
+  ],
+
+  providers: [
+    PlacementEventsSandbox
   ]
 })
 export class PlacementEventsModule { }

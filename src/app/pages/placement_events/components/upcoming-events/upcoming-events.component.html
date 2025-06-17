@@ -1,32 +1,331 @@
 <div class="overall_div">
-  <div class="add_n_sort_event">
-    <button class="add-btn" (click)="addevent()">
-      <i class="fa fa-plus-circle"></i> Add a New Event
-    </button>
-
-    <div class="sidebar" [class.active]="issidebarvisible">
-      <div class="sidebar-header">
-        <button class="close-btn" (click)="toggleSidebar()">&#10005;</button>
-        <h6 style="font-size: 17px;">Add a New Event</h6>
-        <p style="font-size: 12px;">detail out the new event information with required fields</p>
-      </div>
-      <div class="sidebar-content">
-        <p>This is the sidebar content.</p>
-      </div>
-      <div class="sidebar-footer">
-        <input class="cancel_btn" type="button" value="Cancel">
-        <input class="submit_btn" type="button" value="Save Company Details">
+  <div class="add_n_sort_event row align-items-center mb-3">
+    <div class="col-auto">
+      <button class="add-btn" (click)="toggleSidebar()">
+        <i class="fa fa-plus-circle"></i> Add a New Event
+      </button>
+    </div>
+    <!-- Optional Search/Filter Buttons -->
+     <div class="col">
+      <input type="text" class="search-box" placeholder="Search" />
+    </div>
+    <div class="col-auto">
+      <div class="icon-button">
+        <i class="fa fa-filter"></i> Filter
       </div>
     </div>
-
-    <input type="text" class="search-box" placeholder="Search" (ngModelChange)="eventsearch($event)" />
-
-    <div class="icon-button" (click)="filter()">
-      <i class="fa fa-filter"></i> Filter
-    </div>
-
-    <div class="icon-button" (click)="sort()">
-      <i class="fa fa-sort"></i> Sort
+    <div class="col-auto">
+      <div class="icon-button">
+        <i class="fa fa-sort"></i> Sort
+      </div>
     </div>
   </div>
+
+    <div class="sidebar " [class.active]="issidebarvisible">
+      <form [formGroup]="addEventForm" >
+        <div class="sidebar-header">
+          <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
+          <h6 style="font-size: 17px;">Add a New Event</h6>
+          <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
+        </div>
+
+        <!-- Sidebar Content -->
+        <div class="sidebar-content">
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">1</div>
+              <h6>Event Basics</h6>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Event title<span style="color: red;">*</span></label>
+              <input type="text" placeholder="Enter a title" formControlName="eventName">
+              <div class="error" *ngIf="submitted && addEventForm.get('eventName')?.invalid">
+                Event title is required.
+              </div>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Write about the event</label>
+              <textarea placeholder="Enter a description..." formControlName="eventDescription"></textarea>
+            </div>
+
+            <!-- <div class="sidebar-sub-section">
+              <label>Mode of event</label>
+              <div class="mode-options">
+                <label data-label="On-campus">
+                  <input type="radio" name="mode" value="on-campus" />
+                  <span>At your college</span>
+                </label>
+                <label data-label="Off-campus">
+                  <input type="radio" name="mode" value="off-campus" />
+                  <span>External drive</span>
+                </label>
+                <label data-label="Pool">
+                  <input type="radio" name="mode" value="pool" />
+                  <span>Multi-college drive</span>
+                </label>
+                <label data-label="Virtual">
+                  <input type="radio" name="mode" value="virtual" />
+                  <span>Online process</span>
+                </label>
+              </div>
+            </div> -->
+            <div class="mode-options">
+              <label 
+                class="mode-box yellow" 
+                [class.selected]="addEventForm.get('mode')?.value === 'on-campus'"
+                (click)="addEventForm.get('mode')?.setValue('on-campus')"
+              >
+                <span><input type="radio" name="mode" value="on-campus" class="radioinput" /><strong>On-campus</strong>
+                <div class="description">At your college</div></span>
+                
+              </label>
+
+              <label 
+                class="mode-box green" 
+                [class.selected]="addEventForm.get('mode')?.value === 'off-campus'"
+                (click)="addEventForm.get('mode')?.setValue('off-campus')"
+              >
+                <span><input type="radio" name="mode" value="off-campus" class="radioinput" /><strong>Off-campus</strong></span>
+                
+                <div class="description">External drive</div>
+              </label>
+
+              <label 
+                class="mode-box blue" 
+                [class.selected]="addEventForm.get('mode')?.value === 'pool'"
+                (click)="addEventForm.get('mode')?.setValue('pool')"
+              >
+                <span><input type="radio" name="mode" value="pool" class="radioinput" /><strong>Pool</strong></span>
+                
+                <div class="description">Multi-college drive</div>
+              </label>
+
+              <label 
+                class="mode-box purple" 
+                [class.selected]="addEventForm.get('mode')?.value === 'virtual'"
+                (click)="addEventForm.get('mode')?.setValue('virtual')"
+              >
+                <span><input type="radio" name="mode" value="virtual" class="radioinput" /><strong>Virtual</strong></span>
+                
+                <div class="description">Online process</div>
+              </label>
+            </div>
+
+
+          </div>
+
+          <!-- Schedule -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">2</div>
+              <h6>Schedule</h6>
+            </div>
+
+            <!-- Updated: Date and Time same width as others -->
+            <div class="dual-field">
+              <div class="sidebar-sub-section">
+                <label>Event date as scheduled<span style="color: red;"> *</span></label>
+                <div class="input-icon-right">
+                  <input type="date" placeholder="select a date" formControlName="startDate"/>
+                  <i class="fa "></i>
+                </div>
+              </div>
+
+              <div class="sidebar-sub-section ">
+                <label>Event start time</label>
+                <div class="input-icon-right">
+                  <input type="time" formControlName="startTime"/>
+                  <i class="fa "></i>
+                  <div class="error" *ngIf="submitted && addEventForm.get('startTime')?.hasError('invalidTime')">
+                    Please enter a valid time in HH:MM (e.g., 23:45).
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div class="sidebar-sub-section">
+              <label>Venue or platform</label>
+              <input type="text" placeholder="Type a location" formControlName="venue"/>
+            </div>
+          </div>
+
+          <!-- Associated Companies -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">3</div>
+              <h6>Associated Companies</h6>
+            </div>
+
+            <div class="sidebar-sub-section">
+              <label>Company detail</label>
+              <input type="text" placeholder="Search or type to add" formControlName="companyDetails" />
+              <small>No companies selected.</small>
+            </div>
+          </div>
+
+          <!--  Eligibility -->
+          <div class="container" >
+            <div class="step-header">
+              <div class="step-icon">4</div>
+              <h6>Eligibility</h6>
+            </div>
+
+            <div class="sidebar-sub-section dual-field elligible">
+              <div>
+                <label>Eligible courses</label>
+                <select formControlName="eligibleCourses">
+                  <option value="" disabled selected>Select a course</option>
+                </select>
+              </div>
+              <div>
+                <label>Eligibility criteria</label>
+                <input type="text" placeholder="Enter criteria" formControlName="eligibilityCriteria" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Selection process -->
+          <div class="container">
+            <div class="step-header">
+              <div class="step-icon">5</div>
+              <h6>Selection process</h6>
+            </div>
+
+            <!-- Plain Checkboxes, No Box -->
+            <div class="" style="display: flex;">
+              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('rounds')?.value?.includes('1')" (change)="onRoundCheckboxChange($event, '1')" /> Aptitude test
+              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('rounds')?.value?.includes('2')" (change)="onRoundCheckboxChange($event, '2')" /> Technical interview
+              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('rounds')?.value?.includes('3')" (change)="onRoundCheckboxChange($event, '3')" /> HR interview
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+          <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
+          <button class="submit_btn"
+            type="submit"
+            [disabled]="addEventForm.invalid"
+            [ngClass]="{ 'active': addEventForm.valid }"
+            (click)="addEvent()">Save Event Details
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- upcoming events table -->
+    <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px;">
+      <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of EventsList">
+        <div class="event-card">
+          <div class="header">
+            <div >
+              <div class="step-header-events">
+                <div class="step-icon-events">
+              <div class="date" style="align-items: center; text-align: center;">{{ event.startDate | date: 'dd' }}
+                <div class="month" style="align-items: center; text-align: center;">{{ event.startDate | date: 'MMM' }}</div>
+                </div>
+              </div>
+              </div>
+            </div>
+            <div class="event-details">
+              <div class="event-id">{{ event.id }}</div>
+              <div class="title" (click)="openEventDetails(event)" style="cursor: pointer;">{{ event.name }}</div>
+              <div class="meta">
+                <span class="time">{{ event.time }}</span>
+                <span class="badge" [ngClass]="{'on-campus': event.type === 'On-campus', 'virtual': event.type !== 'On-campus'}">{{ event.type }}</span>
+                <img src="assets/icons/location_on.png" > <span class="venue">{{ event.venue }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="companies">
+            <ng-container *ngFor="let company of event.companies; let i = index">
+              <ng-container *ngIf=" i < 4">
+                <img [src]="company.logo" alt=" {{company.name}} logo" class="company-logo" /><span style="color:#007AFF"> {{company.name}} </span>
+              </ng-container>
+              <span *ngIf = "i === 4" class="more-companies">+ {{ event.companies.length - i }} more </span>
+            </ng-container>
+          </div>
+          
+          <div class="course-eligibility">
+            <div>
+              <label>Eligible Courses</label>
+              <div>{{ event.eligibleCourses.join(', ') }}</div>
+            </div>
+            <div>
+              <label>Eligibility Criteria</label>
+              <div>{{ event.eligibilityCriteria }}</div>
+            </div>
+          </div>
+          <div class="footer">
+            <div class="status" *ngIf="event.status === 'not_sent'">
+              <span class="warning">⚠️ Event not sent to students yet</span>
+            </div>
+            <button class="shortlist-btn" *ngIf="event.status === 'not_sent'; else showShortlist">Shortlist Students</button>
+            <ng-template #showShortlist>
+              <span>12 students shortlisted</span>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-overlay" *ngIf="selectedEvent" (click)="closeEventDetails()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Event Details</h3>
+      <button class="close-btn" (click)="closeEventDetails()"><img src="assets/icons/x.png" /> </button>
+    </div>
+
+    <div class="modal-section">
+      <label>Event Title</label>
+      <div class="event-title">
+        <strong>{{ selectedEvent.name }}</strong>
+        <div class="meta">
+          {{ selectedEvent.startDate | date: 'dd MMM yyyy' }}, {{ selectedEvent.time }} 
+          <span class="badge" [ngClass]="{'on-campus': selectedEvent.type === 'On-campus', 'virtual': selectedEvent.type !== 'On-campus'}">{{ selectedEvent.type }}</span>
+          <img src="assets/icons/location_on.png" > {{ selectedEvent.venue }}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section" *ngIf="selectedEvent.eventDescription">
+      <label>Event Description</label>
+      <p>{{ selectedEvent.eventDescription }}</p>
+    </div>
+
+    <div class="modal-section">
+      <label>Associated Companies</label>
+      <div class="companies">
+        <img *ngFor="let comp of selectedEvent.companies" [src]="comp.logo" [alt]="comp.name" />
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <label>Eligible Courses</label>
+      <p>{{ selectedEvent.eligibleCourses.join(', ') }}</p>
+    </div>
+
+    <div class="modal-section">
+      <label>Eligibility Criteria</label>
+      <p><strong>{{ selectedEvent.eligibilityCriteria }}</strong></p>
+    </div>
+
+    <div class="modal-section">
+      <label>Selection Process</label>
+      <div class="badges">
+    <span *ngIf="selectedEvent.rounds?.includes('1')" class="badge"> <img src="assets/icons/selection-icon.png"> Aptitude test</span>
+    <span *ngIf="selectedEvent.rounds?.includes('2')" class="badge"> <img src="assets/icons/selection-icon.jpg"> Technical interview</span>
+    <span *ngIf="selectedEvent.rounds?.includes('3')" class="badge"> <img src="assets/icons/selection-icon.jpg"> HR interview</span>
+  </div>
+    </div>
+
+    <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button class="update-btn">Update Event Details</button>
+      <button class="close-btn-plain" (click)="closeEventDetails()">Close</button>
+    </div>
+  </div>
+</div>
 </div>
