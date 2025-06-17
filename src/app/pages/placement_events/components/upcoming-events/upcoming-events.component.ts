@@ -20,6 +20,7 @@ export class UpcomingEventsComponent implements OnInit {
   addEventForm!: FormGroup;
   EventsList: any[] = [];
   private subscriptions: Subscription[] = [];
+  selectedEvent: any = null;
 
   constructor(
     private fb: FormBuilder,
@@ -124,6 +125,14 @@ export class UpcomingEventsComponent implements OnInit {
   });
 }
 
+  openEventDetails(event: any){
+      this.selectedEvent = event;
+  }
+    
+  closeEventDetails(){
+      this.selectedEvent=null;
+  }
+
 
   loadEventsList(){
     this.EventsList = [
@@ -143,6 +152,7 @@ export class UpcomingEventsComponent implements OnInit {
         ],
         eligibleCourses: ['B.E CSE', 'B.Tech IT'],
         eligibilityCriteria: 'CGPA > 7, No standing arrears',
+        rounds: '123',
         status: 'not_sent'
       },
       
@@ -159,7 +169,25 @@ export class UpcomingEventsComponent implements OnInit {
       ],
       eligibleCourses: ['B.E ECE', 'B.Tech ME'],
       eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
-      status: 'not_sent'
+      rounds: '123',
+      status: 'sent'
+    },
+    {
+      id: 'EVT002',
+      name: 'Mega Placement Fair',
+      type: 'Pool',
+      startDate: '2025-08-05',
+      time: '09:00 AM',
+      venue: 'Convention Center, XYZ University',
+      companies: [
+        { name: 'Google', logo: 'assets/logos/google.png' },
+        { name: 'Amazon', logo: 'assets/logos/amazon.png' }
+      ],
+      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+      rounds: '23',
+      status: 'sent'
+      
     }
       
     ];

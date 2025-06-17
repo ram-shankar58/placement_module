@@ -227,7 +227,7 @@
             </div>
             <div class="event-details">
               <div class="event-id">{{ event.id }}</div>
-              <div class="title">{{ event.name }}</div>
+              <div class="title" (click)="openEventDetails(event)" style="cursor: pointer;">{{ event.name }}</div>
               <div class="meta">
                 <span class="time">{{ event.time }}</span>
                 <span class="badge" [ngClass]="{'on-campus': event.type === 'On-campus', 'virtual': event.type !== 'On-campus'}">{{ event.type }}</span>
@@ -244,7 +244,7 @@
               <span *ngIf = "i === 4" class="more-companies">+ {{ event.companies.length - i }} more </span>
             </ng-container>
           </div>
-
+          
           <div class="course-eligibility">
             <div>
               <label>Eligible Courses</label>
@@ -255,16 +255,74 @@
               <div>{{ event.eligibilityCriteria }}</div>
             </div>
           </div>
-
           <div class="footer">
             <div class="status" *ngIf="event.status === 'not_sent'">
               <span class="warning">⚠️ Event not sent to students yet</span>
             </div>
-            <button class="shortlist-btn">Shortlist Students</button>
+            <button class="shortlist-btn" *ngIf="event.status === 'not_sent'; else showShortlist">Shortlist Students</button>
+            <ng-template #showShortlist>
+              <span>students shortlisted</span>
+            </ng-template>
           </div>
         </div>
       </div>
     </div>
+    <div class="modal-overlay" *ngIf="selectedEvent" (click)="closeEventDetails()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>Event Details</h3>
+      <button class="close-btn" (click)="closeEventDetails()">×</button>
+    </div>
+
+    <div class="modal-section">
+      <label>Event Title</label>
+      <div class="event-title">
+        <strong>{{ selectedEvent.name }}</strong>
+        <div class="meta">
+          {{ selectedEvent.startDate | date: 'dd MMM yyyy' }}, {{ selectedEvent.time }} 
+          <span class="badge" [ngClass]="{'on-campus': selectedEvent.type === 'On-campus', 'virtual': selectedEvent.type !== 'On-campus'}">{{ selectedEvent.type }}</span>
+          — {{ selectedEvent.venue }}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-section" *ngIf="selectedEvent.eventDescription">
+      <label>Event Description</label>
+      <p>{{ selectedEvent.eventDescription }}</p>
+    </div>
+
+    <div class="modal-section">
+      <label>Associated Companies</label>
+      <div class="companies">
+        <img *ngFor="let comp of selectedEvent.companies" [src]="comp.logo" [alt]="comp.name" />
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <label>Eligible Courses</label>
+      <p>{{ selectedEvent.eligibleCourses.join(', ') }}</p>
+    </div>
+
+    <div class="modal-section">
+      <label>Eligibility Criteria</label>
+      <p><strong>{{ selectedEvent.eligibilityCriteria }}</strong></p>
+    </div>
+
+    <div class="modal-section">
+      <label>Selection Process</label>
+      <div class="badges">
+    <span *ngIf="selectedEvent.rounds?.includes('1')" class="badge"> Aptitude test</span>
+    <span *ngIf="selectedEvent.rounds?.includes('2')" class="badge"> Technical interview</span>
+    <span *ngIf="selectedEvent.rounds?.includes('3')" class="badge"> HR interview</span>
+  </div>
+    </div>
+
+    <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <button class="update-btn">Update Event Details</button>
+      <button class="close-btn-plain" (click)="closeEventDetails()">Close</button>
+    </div>
+  </div>
+</div>
 </div>
 
 
