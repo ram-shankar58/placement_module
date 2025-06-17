@@ -93,7 +93,7 @@ export class UpcomingEventsComponent implements OnInit {
     return regex.test(time) ? null : { invalidTime: true };
   };
 
-
+  
   addEvent() {
   this.submitted = true;
 
@@ -144,11 +144,10 @@ export class UpcomingEventsComponent implements OnInit {
         time: '10:00 AM',
         venue: 'Main Auditorium, ABC Engineering College',
         companies: [
-          { name: 'Johnson & Johnson', logo: 'assets/logos/jnj.png' },
-          { name: 'Adidas', logo: 'assets/logos/adidas.png' },
-          { name: 'Tata Group', logo: 'assets/logos/tata.png' },
-          { name: 'Apple', logo: 'assets/logos/apple.png' },
-          { name: 'Starbucks', logo: 'assets/logos/starbucks.png' }
+          { name: 'Johnson & Johnson', logo: 'assets/icons/johnson.png' },
+          { name: 'Adidas', logo: 'assets/icons/adidas.png' },
+          { name: 'Tata Group', logo: 'assets/icons/TCS.png' },
+          { name: 'Apple', logo: 'assets/icons/apple.png' },
         ],
         eligibleCourses: ['B.E CSE', 'B.Tech IT'],
         eligibilityCriteria: 'CGPA > 7, No standing arrears',
@@ -164,8 +163,8 @@ export class UpcomingEventsComponent implements OnInit {
       time: '09:00 AM',
       venue: 'Convention Center, XYZ University',
       companies: [
-        { name: 'Google', logo: 'assets/logos/google.png' },
-        { name: 'Amazon', logo: 'assets/logos/amazon.png' }
+        { name: 'Google', logo: 'assets/icons/google-icon.png' },
+        { name: 'Dell', logo: 'assets/icons/dell.png' }
       ],
       eligibleCourses: ['B.E ECE', 'B.Tech ME'],
       eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
@@ -180,8 +179,8 @@ export class UpcomingEventsComponent implements OnInit {
       time: '09:00 AM',
       venue: 'Convention Center, XYZ University',
       companies: [
-        { name: 'Google', logo: 'assets/logos/google.png' },
-        { name: 'Amazon', logo: 'assets/logos/amazon.png' }
+        { name: 'Google', logo: 'assets/icons/google-icon.png' },
+        { name: 'Dell', logo: 'assets/icons/dell.png' }
       ],
       eligibleCourses: ['B.E ECE', 'B.Tech ME'],
       eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
