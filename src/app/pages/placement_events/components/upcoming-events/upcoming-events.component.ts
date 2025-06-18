@@ -195,7 +195,23 @@ export class UpcomingEventsComponent implements OnInit {
       rounds: '23',
       status: 'sent'
       
-    }
+    },
+    {
+      id: 'EVT002',
+      name: 'Mega Placement Fair',
+      type: 'Pool',
+      startDate: '2025-08-05',
+      time: '09:00 AM',
+      venue: 'Convention Center, XYZ University',
+      companies: [
+        { name: 'Google', logo: 'assets/icons/google-icon.png' },
+        { name: 'Dell', logo: 'assets/icons/dell.png' }
+      ],
+      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+      rounds: '123',
+      status: 'sent'
+    },
       
     ];
 
