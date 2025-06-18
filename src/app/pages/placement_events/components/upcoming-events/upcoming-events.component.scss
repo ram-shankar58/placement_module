@@ -353,8 +353,9 @@ select {
 .mode-options {
   display: flex;
   flex-wrap: wrap; // ✅ No wrapping
-  gap: 10px;
+  gap: 5px;
   justify-content: space-between;
+  padding-left: 10px;
   // overflow-x: auto; // ✅ Scroll if too small screen
 }
 
@@ -363,7 +364,7 @@ select {
 
 .mode-box {
   flex:1 1 20%; // ✅ Fixed width so 4 fit side by side
-
+  
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -684,7 +685,7 @@ select {
         border: none;
         font-size: 24px;
         cursor: pointer;
-        height: 200%;
+        height: auto;
       }
     }
 
@@ -794,4 +795,12 @@ select {
     align-items: center;
     margin-bottom: 1rem;
   }
+
+::ng-deep .mat-datepicker-content  {
+  background-color: #D1D1D6 !important; /* base background */
+  color: #1a237e !important;          /* deep indigo text */
+  font-weight: 500;
+  border-radius: 50%;
+}
+
 

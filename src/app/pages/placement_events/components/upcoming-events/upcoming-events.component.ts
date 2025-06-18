@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -25,7 +25,8 @@ export class UpcomingEventsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
-    public eventsSandbox: PlacementEventsSandbox
+    public eventsSandbox: PlacementEventsSandbox,
+    private elRef: ElementRef
   ) {}
 
   ngOnInit() {
@@ -82,15 +83,19 @@ export class UpcomingEventsComponent implements OnInit {
 
   }
 
+  
+
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    const clickedInsideNav = target.closest('.sidebar');
-    const clickedInsideBtn = target.closest('.add-btn');
-    if (!clickedInsideNav && !clickedInsideBtn) {
+    const clickedInsideSidebar = this.elRef.nativeElement.contains(target);
+    const clickedInsideOverlay = !!target.closest('.cdk-overlay-container');
+
+    if (!clickedInsideSidebar && !clickedInsideOverlay) {
       this.issidebarvisible = false;
     }
   }
+
 
 
   timeValidation: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {

@@ -127,10 +127,16 @@
             <div class="dual-field">
               <div class="sidebar-sub-section">
                 <label>Event date as scheduled<span style="color: red;"> *</span></label>
-                <div class="input-icon-right">
+                <!-- <div class="input-icon-right">
                   <input type="date" placeholder="select a date" formControlName="startDate"/>
                   <i class="fa "></i>
-                </div>
+                </div> -->
+                <mat-form-field appearance="outline">
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="picker" formControlName="startDate">
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
               </div>
 
               <div class="sidebar-sub-section ">
@@ -220,14 +226,14 @@
     <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px;">
       <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of EventsList">
         <div class="event-card">
-          <div class="header">
+          <div class="header" (click)="openEventDetails(event)" style="cursor: pointer;">
             <div >
               <div class="step-header-events">
                 <div class="step-icon-events">
-              <div class="date" style="align-items: center; text-align: center;">{{ event.startDate | date: 'dd' }}
-                <div class="month" style="align-items: center; text-align: center;">{{ event.startDate | date: 'MMM' }}</div>
+                  <div class="date" style="align-items: center; text-align: center;">{{ event.startDate | date: 'dd' }}
+                    <div class="month" style="align-items: center; text-align: center;">{{ event.startDate | date: 'MMM' }}</div>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
             <div class="event-details">
