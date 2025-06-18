@@ -24,7 +24,7 @@
     <div class="sidebar " [class.active]="issidebarvisible">
       <form [formGroup]="addEventForm" >
         <div class="sidebar-header">
-          <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
+          <button class="close-btn" type="button" (click)="cancel()">&#10005;</button>
           <h6 style="font-size: 17px;">Add a New Event</h6>
           <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
         </div>
@@ -205,7 +205,7 @@
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer">
-          <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
+          <button class="cancel_btn" type="button" (click)="cancel()">Cancel</button>
           <button class="submit_btn"
             type="submit"
             [disabled]="addEventForm.invalid"

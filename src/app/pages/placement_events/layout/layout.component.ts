@@ -7,15 +7,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
-export class LayoutComponent implements OnInit{
-  pageInfo: any;
-  constructor(
-    public router:Router,
-    public activatedroute: ActivatedRoute
-  ){
+export class LayoutComponent{
+  // pageInfo: any;
+  // constructor(
+  //   public router:Router,
+  //   public activatedroute: ActivatedRoute
+  // ){
 
-  }
-  ngOnInit() {
+  // }
+  // ngOnInit() {
     
-  }
+  // }
 }

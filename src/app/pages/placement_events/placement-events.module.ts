@@ -9,6 +9,11 @@ import { NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PlacementEventsSandbox } from './placement_events.sandbox';
+import { exitCode } from 'process';
+import { EffectsModule } from '@ngrx/effects';
+import { PlacementEventsEffect } from './effects/placement-events.effects';
+import { PlacementEventsService } from './placement-events.service';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 export const routes: any = [
   {
@@ -20,7 +25,7 @@ export const routes: any = [
         component: HistoricalEventsComponent,
         data: {
           title: 'historical-events',
-          urls: [{ title: 'Home' }, { title: 'Placement events' }, { title: 'Historical' }]
+          // urls: [{ title: 'Home' }, { title: 'Placement events' }, { title: 'Historical' }]
         }
       },
       {
@@ -28,7 +33,7 @@ export const routes: any = [
         component: UpcomingEventsComponent,
         data: {
           title: 'upcoming-events',
-          urls: [{ title: 'Home' }, { title: 'Placement events' }, { title: 'Upcoming' }]
+          // urls: [{ title: 'Home' }, { title: 'Placement events' }, { title: 'Upcoming' }]
         }
       },
       {
@@ -51,10 +56,12 @@ export const routes: any = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
+    NgSelectModule,
     NgbModalModule,
     MatSidenavModule,
     ReactiveFormsModule,
     FormsModule,
+    EffectsModule.forFeature([PlacementEventsEffect])
     
 
   ],
@@ -63,7 +70,8 @@ export const routes: any = [
   ],
 
   providers: [
-    PlacementEventsSandbox
+    PlacementEventsSandbox,
+    PlacementEventsService
   ]
 })
 export class PlacementEventsModule { }

@@ -15,7 +15,7 @@ import { SharedModule } from '../../shared/shared.module';
 
 
 
-const routes:any = [
+export const routes:any = [
   {
     path: '',
     component: CompaniesLayoutComponent,
@@ -54,7 +54,7 @@ const routes:any = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,
-    NgSelectModule,
+    NgSelectModule,//not there in placement-events
     SharedModule,
     EffectsModule.forFeature([CompaniesEffect])
     ],

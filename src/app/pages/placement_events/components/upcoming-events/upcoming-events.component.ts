@@ -74,6 +74,14 @@ export class UpcomingEventsComponent implements OnInit {
     this.issidebarvisible = !this.issidebarvisible
   }
 
+  cancel(){
+    this.issidebarvisible=false;
+    this.addEventForm.reset();
+    this.submitted= false;
+    this.selectedEvent=null;
+
+  }
+
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;

@@ -24,12 +24,6 @@ export class addPlacementEvents implements Action{
     }
 }
 
-export class addPlacementEventsList implements Action{
-    type=ActionTypes.PLACEMENT_EVENTS_LIST;
-    constructor(public payload = null){
-
-    }
-}
 
 export class addPlacementEventsSuccess implements Action{
     type=ActionTypes.ADD_PLACEMENT_EVENTS_SUCCESS;
