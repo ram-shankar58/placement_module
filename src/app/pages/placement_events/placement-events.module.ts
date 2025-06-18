@@ -14,11 +14,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { PlacementEventsEffect } from './effects/placement-events.effects';
 import { PlacementEventsService } from './placement-events.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatNativeDateModule } from '@angular/material/core';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+
 
 export const routes: any = [
   {
@@ -68,10 +64,6 @@ export const routes: any = [
     ReactiveFormsModule,
     FormsModule,
     EffectsModule.forFeature([PlacementEventsEffect]),
-    MatDatepickerModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatNativeDateModule,
     
 
   ],
