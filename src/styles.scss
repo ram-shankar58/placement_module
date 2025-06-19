@@ -40,6 +40,16 @@
     }
   }
 
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+  }
+
   // sample
   .sidebar {
     position: fixed;
@@ -259,4 +269,16 @@
     --font-light: 400;
     --font-regular: 500;
     --font-medium: 600;
+  }
+
+  .custom-tooltip {
+    max-width: 300px !important;
+    white-space: normal !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    background-color: #333 !important;
+    color: #fff !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
   }

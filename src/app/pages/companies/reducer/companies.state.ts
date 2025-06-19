@@ -11,6 +11,8 @@ export interface CompaniesState extends Map<string, any> {
     updateCompany: any;
     updateCompanyLoading: boolean;
 
+    archiveCompany: any;
+    archiveCompanyLoading: boolean;
 
 }
 
@@ -25,5 +27,7 @@ export const companiesSateRecord = Record({
     updateCompany: [],
     updateCompanyLoading: false,
 
+    archiveCompany: [],
+    archiveCompanyLoading: false,
 
 })

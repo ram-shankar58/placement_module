@@ -12,6 +12,9 @@ import {
     updateCompany,
     updateCompanyLoading,
 
+    archiveCompany,
+    archiveCompanyLoading,
+
 } from '../companies/reducer/companies.selector'
 
 @Injectable()
@@ -26,6 +29,9 @@ export class CompaniesSanbox {
     public updateCompany$
     public updateCompanyLoading$
 
+    public archiveComapany$
+    public archiveComapanyLoading$
+
 
     constructor(
         protected appState: Store<store.AppState>
@@ -38,6 +44,9 @@ export class CompaniesSanbox {
 
         this.updateCompany$ = this.appState.select(updateCompany);
         this.updateCompanyLoading$ = this.appState.select(updateCompanyLoading);
+
+        this.archiveComapany$ = this.appState.select(archiveCompany);
+        this.archiveComapanyLoading$ = this.appState.select(archiveCompanyLoading);
 
     }
 
@@ -54,6 +63,11 @@ export class CompaniesSanbox {
     //update company
     public updatecompany(params: any) {
         this.appState.dispatch(new CompaniesAction.updateCompany(params));
+    }
+
+    // archieve company
+    public archivecompany(params:any){
+        this.appState.dispatch(new CompaniesAction.archiveCompany(params));
     }
 
 }

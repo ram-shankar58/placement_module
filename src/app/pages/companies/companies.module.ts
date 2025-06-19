@@ -11,7 +11,9 @@ import { CompaniesEffect } from './effects/companies.effect';
 import { CompaniesService } from './companies.service';
 import { CompaniesSanbox } from './companies.sandbox';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '../../shared/shared.module';
+
 
 
 
@@ -54,6 +56,7 @@ const routes:any = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,
+    MatTooltipModule,
     NgSelectModule,
     SharedModule,
     EffectsModule.forFeature([CompaniesEffect])

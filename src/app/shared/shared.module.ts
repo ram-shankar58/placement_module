@@ -7,6 +7,7 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
 import { RouterModule } from '@angular/router';
 import { AddPlacementEventComponent } from './popup/add-placement-event/add-placement-event.component';
 import { SkeletonloaderComponent } from './components/skeletonloader/skeletonloader.component';
+import { GlobalFilterPipe } from './components/searchfilter/global-filter.pipe';
 
 
 
@@ -20,7 +21,8 @@ import { SkeletonloaderComponent } from './components/skeletonloader/skeletonloa
     FooterbarComponent,
     BreadcrumbsComponent,
     SkeletonloaderComponent,
-    RouterModule
+    RouterModule,
+    GlobalFilterPipe
   ],
   declarations: [
      SidebarComponent,
@@ -28,7 +30,8 @@ import { SkeletonloaderComponent } from './components/skeletonloader/skeletonloa
      FooterbarComponent,
      BreadcrumbsComponent,
      AddPlacementEventComponent,
-     SkeletonloaderComponent
+     SkeletonloaderComponent,
+     GlobalFilterPipe
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

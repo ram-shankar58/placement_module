@@ -55,8 +55,6 @@ export const routes: any = [
     MatSidenavModule,
     ReactiveFormsModule,
     FormsModule,
-    
-
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
