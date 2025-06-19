@@ -20,11 +20,12 @@ export class ActiveCompaniesComponent implements OnInit {
   skeletonCount = Array(6);
   openMenuId: string | null = null;
   addCompanyForm: any = FormGroup;
-  filterCompanyForm:any = FormGroup;
+  filterCompanyForm: any = FormGroup;
   CompaniesList: any = [];
-  filteredCompanyList:any = [];
-  filteredCompanies:any = [];
+  filteredCompanyList: any = [];
+  filteredCompanies: any = [];
   submit: string = '';
+  searchTerm: string = '';
   imgurl: any;
   private subscriptions: Array<Subscription> = [];
   constructor(
@@ -60,10 +61,10 @@ export class ActiveCompaniesComponent implements OnInit {
     this.initfilterCompanyForm();
   }
 
-  initfilterCompanyForm(){
+  initfilterCompanyForm() {
     this.filterCompanyForm = this.fb.group({
       location: new FormControl(''),
-      industryType: new FormControl('', [Validators.required]),
+      industryType: new FormControl(''),
       participatedPlacementEvents: new FormControl([])
     });
   }
@@ -110,7 +111,7 @@ export class ActiveCompaniesComponent implements OnInit {
     this.issidebarvisible = !this.issidebarvisible;
     this.addCompanyForm.reset();
     this.submit = 'add';
-    console.log('issidebarvisible',this.issidebarvisible);
+    console.log('issidebarvisible', this.issidebarvisible);
   }
 
   toggleSidebar() {
@@ -193,7 +194,7 @@ export class ActiveCompaniesComponent implements OnInit {
 
   }
 
-  clearfilter(){
+  clearfilter() {
     this.filterCompanyForm.reset();
     this.filteredCompanies = this.CompaniesList
   }
@@ -203,38 +204,41 @@ export class ActiveCompaniesComponent implements OnInit {
     this.filteredCompanies = this.CompaniesList
   }
 
- filterCompany() {
-  const param = this.filterCompanyForm.value;
-
-  this.filteredCompanyList = [
-    {
-      key: 'location',
-      value: param.location,
-      filterType: 1
-    },
-    {
-      key: 'industryType',
-      value: param.industryType,
-      filterType: 2
-    },
-    {
-      key: 'participatedPlacementEvents',
-      value: param.participatedPlacementEvents,
-      filterType: 3
+  filterCompany() {
+    const param = this.filterCompanyForm.value;
+    this.filteredCompanyList = [
+      {
+        key: 'location',
+        value: param.location,
+        filterType: 1
+      },
+      {
+        key: 'industryType',
+        value: param.industryType,
+        filterType: 2
+      },
+      {
+        key: 'participatedPlacementEvents',
+        value: param.participatedPlacementEvents,
+        filterType: 3
+      }
+    ].filter(f => f.value && f.value !== '' && f);
+    if (this.filteredCompanyList.length > 0) {
+      this.filteredCompanies = this.CompaniesList.filter((company: any) => {
+        return this.filteredCompanyList.some((filter: any) => {
+          if (filter.key === 'participatedPlacementEvents') {
+            return Array.isArray(company[filter.key]) &&
+              Array.isArray(filter.value) &&
+              filter.value.some((val: string) => company[filter.key].includes(val));
+          }
+          return company[filter.key] === filter.value;
+        });
+      });
     }
-  ].filter(f => f.value && f.value !== '');
-  this.filteredCompanies = this.CompaniesList.filter((company: any) => {
-  return this.filteredCompanyList.some((filter: any) => {
-    if (filter.key === 'participatedPlacementEvents') {
-      return Array.isArray(company[filter.key]) &&
-             Array.isArray(filter.value) &&
-             filter.value.some((val: string) => company[filter.key].includes(val));
+    else {
+      this.filteredCompanies = this.CompaniesList
     }
-    return company[filter.key] === filter.value;
-  });
-});
-
-}
+  }
 
 
   sort() {
@@ -254,7 +258,7 @@ export class ActiveCompaniesComponent implements OnInit {
       this.addCompanyForm.setValue({
         id: company.id,
         companyName: company.companyName,
-        logo:company.logo,
+        logo: company.logo,
         companyDescription: company.companyDescription,
         location: company.location,
         industryType: company.industryType,
@@ -299,7 +303,7 @@ export class ActiveCompaniesComponent implements OnInit {
       this.addCompanyForm.setValue({
         id: company.id,
         companyName: company.companyName,
-        logo:company.logo,
+        logo: company.logo,
         companyDescription: company.companyDescription,
         location: company.location,
         industryType: company.industryType,
@@ -316,8 +320,22 @@ export class ActiveCompaniesComponent implements OnInit {
     }
   }
 
-  onArchive() {
-    // Handle archive logic
+  onArchive(comapnyId: any) {
+    let params = {
+      id: comapnyId
+    }
+    this.CompaniesSanbox.archivecompany(params);
+    this.subscriptions.push(this.CompaniesSanbox.archiveComapany$.subscribe((data) => {
+      if (data && data.status == true) {
+        this.toastr.success('Company is Archived')
+        return;
+      }
+      if (data && data.status == false) {
+        this.toastr.success('Company Not Archived')
+        return;
+      }
+    }))
+    this.companiesList();
   }
 
 }

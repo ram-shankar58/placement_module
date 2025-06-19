@@ -11,7 +11,7 @@
         </button>
         <div class="col-md-4"></div>
         <div class="search-sort col-md-4 p-0">
-            <input type="text" class="search-box col-md-4" placeholder="Search" (ngModelChange)="eventsearch($event)" />
+            <input type="text" class="search-box col-md-4" placeholder="Search" [(ngModel)]="searchTerm" />
 
             <div class="icon-button col-md-3 filter" (click)="filtertoggle()">
                 <i class="fa fa-filter"></i> Filter
@@ -24,9 +24,9 @@
     </div>
 
     <div class="company-card-grid">
-        <div class="company-card" *ngFor="let company of filteredCompanies">
+        <div class="company-card" *ngFor="let company of filteredCompanies | globalFilter:searchTerm">
             <div class="card-header">
-                <img [src]="company.logo" class="company-logo" /> <!--logo to be added-->
+                <img [src]="company.logo" class="company-logo" />
                 <div class="company-details">
                     <h3 class="company-name">{{company.companyName}}</h3>
                     <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
@@ -38,7 +38,7 @@
                         *ngIf="openMenuId === company.id">
                         <div class="option update" (click)="updateCompanyOpen(company.id)">Update company details</div>
                         <div class="option copycmp" (click)="onCopy(company.id)">Copy as new company</div>
-                        <div class="option archive" (click)="onArchive()">Move to archive</div>
+                        <div class="option archive" (click)="onArchive(company.id)">Move to archive</div>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,9 @@
                 <p class="size"><i class="fas fa-users"></i>{{company.numberOfEmployees}}</p>
             </div>
 
-            <p class="description">
-                {{company.companyDescription}}
+            <p class="description-card" [matTooltip]="company.companyDescription" matTooltipPosition="above"
+                matTooltipClass="custom-tooltip" matTooltipShowDelay="400">
+                {{ company.companyDescription }}
             </p>
 
             <div class="card-footer">
@@ -88,10 +89,10 @@
                     [searchable]="true" [clearable]="true" formControlName="industryType" class="ng-select"
                     [class.invalid]="filterCompanyForm.get('industryType')?.invalid && filterCompanyForm.get('industryType')?.touched">
                 </ng-select>
-                <div class="error-text"
+                <!-- <div class="error-text"
                     *ngIf="filterCompanyForm.get('industryType')?.invalid && filterCompanyForm.get('industryType')?.touched">
                     Industry type is required.
-                </div>
+                </div> -->
 
                 <!-- Placement Event -->
                 <label for="eventName" class="filter-label">Participated placement events</label>
@@ -103,13 +104,15 @@
 
             <div class="filter-footer">
                 <a class="clear-link" (click)="clearfilter()">Clear filter</a>
-                <button type="submit" [disabled]="filterCompanyForm.invalid" class="apply-btn">Apply</button>
+                <button type="submit" class="apply-btn">Apply</button>
             </div>
 
         </form>
     </div>
 
+</div>
 
+<div class="overlay" *ngIf="issidebarvisible" (click)="toggleSidebar()">
 </div>
 
 <!--Sidebar-->

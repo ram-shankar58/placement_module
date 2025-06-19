@@ -67,6 +67,24 @@ export function reducer(state = initialState, { type, payload }: any): Companies
                 updateCompanyLoading: false
             })
 
+        case actions.ActionTypes.ARCHIVE_COMPANY:
+            return Object.assign({},state, {
+                archiveCompany: [],
+                archiveCompanyLoading: true
+            })
+
+        case actions.ActionTypes.ARCHIVE_COMPANY_SUCCESS:
+            return Object.assign({},state, {
+                archiveCompany: payload,
+                archiveCompanyLoading: false
+            })
+
+        case actions.ActionTypes.ARCHIVE_COMAPANY_FAIL:
+            return Object.assign({},state, {
+                archiveCompany: [],
+                archiveCompanyLoading: false
+            })
+
         default: {
             return state;
         }
@@ -83,3 +101,6 @@ export const companiesListLoading = (state: CompaniesState) => state.companiesLi
 
 export const updateCompany = (state: CompaniesState) => state.updateCompany;
 export const updateCompanyLoading = (state: CompaniesState) => state.updateCompanyLoading;
+
+export const archiveCompany = (state: CompaniesState) => state.archiveCompany;
+export const archiveCompanyLoading = (state: CompaniesState) => state.archiveCompanyLoading;
