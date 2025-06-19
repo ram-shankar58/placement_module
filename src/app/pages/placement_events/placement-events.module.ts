@@ -14,7 +14,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { PlacementEventsEffect } from './effects/placement-events.effects';
 import { PlacementEventsService } from './placement-events.service';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 export const routes: any = [
   {
@@ -57,10 +58,10 @@ export const routes: any = [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
-    
+    NgbDatepickerModule,
     NgSelectModule,
     NgbModalModule,
-    MatSidenavModule,
+    NgbModule,
     ReactiveFormsModule,
     FormsModule,
     EffectsModule.forFeature([PlacementEventsEffect]),

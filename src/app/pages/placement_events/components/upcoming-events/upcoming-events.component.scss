@@ -183,12 +183,6 @@
   position: relative;
 }
 
-.dual-field input[type="date"],
-.dual-field input[type="time"],
-.dual-field input[type="text"] {
-  padding-left: 32px;
-  font-size: 14px;
-}
 
 .dual-field > div::before {
   content: '';
