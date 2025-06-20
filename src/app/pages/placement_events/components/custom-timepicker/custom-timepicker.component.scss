@@ -25,7 +25,8 @@
     cursor: pointer;
 
     &.active {
-      border-bottom: 2px solid white;
+      border-bottom: 2px solid yellow;
+      color: yellow
     }
     &:hover{
       color: #ffecb3
@@ -66,10 +67,10 @@
 
 .clock-needle {
   width: 2px;
-  height: 90px;
+  height: 70px;
   background: #4F46E5;
   position: absolute;
-  top: 10px;
+  top: 30px;
   left: 99px;
   transform-origin: bottom center;
   transition: transform 0.3s ease;

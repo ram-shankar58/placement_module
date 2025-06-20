@@ -58,6 +58,7 @@ const routes:any = [
     FormsModule,
     NgSelectModule,//not there in placement-event
     SharedModule,
+    MatTooltipModule,
     EffectsModule.forFeature([CompaniesEffect])
     ],
   schemas: [

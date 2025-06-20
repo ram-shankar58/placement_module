@@ -10,7 +10,7 @@ export class CustomTimepickerComponent {
   selectedHour = 4;
   selectedMinute = 40;
   isSelectingHour = true;
-  meridian: 'AM' | 'PM' = 'AM';
+  meridian: 'AM' | 'PM' = 'PM';
 
   manualTimeInput = '04:40';
 
