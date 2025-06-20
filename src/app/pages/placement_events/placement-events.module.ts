@@ -69,7 +69,6 @@ export const routes: any = [
     FormsModule,
     EffectsModule.forFeature([PlacementEventsEffect]),
     
-
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

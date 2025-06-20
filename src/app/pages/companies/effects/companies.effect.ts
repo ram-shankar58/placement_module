@@ -70,6 +70,21 @@ export class CompaniesEffect implements OnDestroy {
                 })
         )
 
+        //archivecomapny
+        this.subscriptions.add(
+            this.action$.pipe(
+                ofType(actions.ActionTypes.ARCHIVE_COMPANY),
+                map((action: actions.archiveCompany) => action.payload),
+                switchMap((state:any) => 
+                this.companiesservice.archiveCompany(state).pipe(
+                    map((result:any) => new actions.archiveComapanySuccess(result)),
+                    catchError(console => of(new actions.archiveComapanyFail(console.error)))
+                )
+            )).subscribe((action:any) => {
+                this.store.dispatch(action)
+            })
+        )
+
     }
     ngOnDestroy() {
         this.subscriptions.unsubscribe();

@@ -15,6 +15,10 @@ export const ActionTypes = {
     UPDATE_COMPANY_SUCCESS: type('[companies] UPDATE COMPANY SUCCESS'),
     UPDATE_COMPANY_FAIL: type('[companies] UPDATE COMPANY FAIL'),
 
+    ARCHIVE_COMPANY: type('[companies] ARCHIVE COMPANY'),
+    ARCHIVE_COMPANY_SUCCESS: type('[companies] ARCHIVE COMPANY SUCCESS'),
+    ARCHIVE_COMAPANY_FAIL: type('[companies] ARCHIVE COMPANY FAIL')
+
 }
 
 //add companies
@@ -74,6 +78,28 @@ export class updateCompanySuccess implements Action{
 export class updateCompanyFail implements Action{
     type = ActionTypes.UPDATE_COMPANY_FAIL;
     constructor(public payload: any){
+        
+    }
+}
+
+//archive company
+export class archiveCompany implements Action{
+    type = ActionTypes.ARCHIVE_COMPANY;
+    constructor(public payload:any){
+
+    }
+}
+
+export class archiveComapanySuccess implements Action{
+    type = ActionTypes.ARCHIVE_COMPANY_SUCCESS;
+    constructor(public payload:ResponseInterface){
+
+    }
+}
+
+export class archiveComapanyFail implements Action{
+    type = ActionTypes.ARCHIVE_COMAPANY_FAIL;
+    constructor(public payload:any){
         
     }
 }
