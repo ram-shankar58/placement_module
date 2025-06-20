@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Component({
   standalone: false,
@@ -16,9 +16,24 @@ export class CustomTimepickerComponent {
 
   @Output() timeSelected = new EventEmitter<string>();
 
+  @Output() timePickerClosed = new EventEmitter<void>();
+  constructor(private elementRef: ElementRef){}
+
+  @HostListener('document:click', ['$event.target'])
+  public onClick(targetElement: HTMLElement){
+    const clickedInside = this.elementRef.nativeElement.contains(targetElement);
+    if(!clickedInside){
+      this.emitTime();
+    }
+  }
+
   get displayTime(): string {
     return `${this.selectedHour.toString().padStart(2, '0')}:${this.selectedMinute.toString().padStart(2, '0')}`;
   }
+
+  // hideTimePicker(){
+  //   this.showTimePicker
+  // }
 
   setMeridian(value: 'AM' | 'PM') {
     if (this.meridian !== value) {
@@ -33,6 +48,10 @@ export class CustomTimepickerComponent {
       this.meridian = value;
       this.updateManualInput();
       // this.emitTime();
+    }
+    else{
+      this.meridian=value;
+      this.updateManualInput();
     }
   }
 
@@ -63,16 +82,28 @@ export class CustomTimepickerComponent {
   }
 
   onManualTimeBlur() {
-    const regex = /^([01]?\d|2[0-3]):([0-5]\d)$/;
-    if (regex.test(this.manualTimeInput)) {
-      const [h, m] = this.manualTimeInput.split(':').map(Number);
-      this.selectedHour = h > 12 ? h - 12 : h === 0 ? 12 : h;
-      this.meridian = h >= 12 ? 'PM' : 'AM';
-      this.selectedMinute = m;
-      this.emitTime();
+  const regex = /^([01]?\d|2[0-3]):([0-5]\d)$/;
+  if (regex.test(this.manualTimeInput)) {
+    const [h, m] = this.manualTimeInput.split(':').map(Number);
+    if (h === 0) {
+      this.selectedHour = 12;
+      this.meridian = 'AM';
+    } else if (h === 12) {
+      this.selectedHour = 12;
+      this.meridian = 'PM';
+    } else if (h > 12) {
+      this.selectedHour = h - 12;
+      this.meridian = 'PM';
     } else {
-      alert('Invalid time format. Please use HH:MM.');
-      this.updateManualInput(); // Reset to valid
+      this.selectedHour = h;
+      this.meridian = 'AM';
     }
+    this.selectedMinute = m;
+    this.updateManualInput();
+    this.emitTime();
+  } else {
+    alert('Invalid time format. Please use HH:MM.');
+    this.updateManualInput(); // Reset to valid
   }
+}
 }
