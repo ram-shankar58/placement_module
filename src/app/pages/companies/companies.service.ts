@@ -11,6 +11,7 @@ export class CompaniesService extends Api {
   //add companies
   addCompanies(payload: any): Observable<ResponseInterface> {
     return this.http.post<ResponseInterface>(this.URL + '/company/add-new-company', payload)
+
   }
 
   //companiesList

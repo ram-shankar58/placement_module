@@ -42,6 +42,12 @@
   gap: 6px;
 }
 
+
+
+.sidebar-header{
+  padding-bottom: 10%;
+}
+
 // /* MODE OPTIONS — On-campus / Off-campus / Pool / Virtual */
 // .mode-options {
 //   display: flex;
@@ -179,12 +185,6 @@
   position: relative;
 }
 
-.dual-field input[type="date"],
-.dual-field input[type="time"],
-.dual-field input[type="text"] {
-  padding-left: 32px;
-  font-size: 14px;
-}
 
 .dual-field > div::before {
   content: '';
@@ -353,8 +353,9 @@ select {
 .mode-options {
   display: flex;
   flex-wrap: wrap; // ✅ No wrapping
-  gap: 10px;
+  gap: 5px;
   justify-content: space-between;
+  padding-left: 10px;
   // overflow-x: auto; // ✅ Scroll if too small screen
 }
 
@@ -363,7 +364,7 @@ select {
 
 .mode-box {
   flex:1 1 20%; // ✅ Fixed width so 4 fit side by side
-
+  
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -486,13 +487,17 @@ select {
 }
 
 .event-card {
-  background: #fff;
-  border-radius: 12px;
+  width: 100%;
+  height: 100%;
   padding: 16px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.08);
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #D1D1D6;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  justify-content: space-between;
+
 
   .header {
     display: flex;
@@ -531,10 +536,16 @@ select {
         gap: 8px;
         font-size: 14px;
 
+        img{
+          max-height: 15px;
+        }
+
         .badge {
+          max-height: 20px;
           padding: 2px 6px;
           border-radius: 6px;
           font-size: 12px;
+          text-align: center;
           &.on-campus {
             background: #e8fff0;
             color: #28a745;
@@ -548,6 +559,7 @@ select {
     }
   }
 
+ 
   .companies {
     border-top-color: #D9D9D9;
     border-top-style: solid;
@@ -673,7 +685,7 @@ select {
         border: none;
         font-size: 24px;
         cursor: pointer;
-        height: 200%;
+        height: auto;
       }
     }
 
@@ -784,3 +796,242 @@ select {
     margin-bottom: 1rem;
   }
 
+
+  .sidebar-footer {
+    padding: 10px;
+    color: black;
+    background-color: white;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+
+//Sidebar has been put here again from styles.css because boostrap added locally in the component overrides the global styles.css. 
+//Do not remove this until fix for boostrap has been found.
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 650px;
+    height: 100%;
+    background-color: #f4f4f4;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    border-top-left-radius: 10px;
+  }
+
+  .sidebar.active {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    padding: 10px;
+    color: black;
+    background-color: #e8e8e8;
+    height: 50px;
+  }
+
+  .sidebar-footer {
+    padding: 10px;
+    color: black;
+    background-color: white;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    padding: 15px;
+    background-color: white;
+    overflow-y: hidden;
+    width: 100%;
+    height: calc(100vh - 105px)
+  }
+
+  .sidebar-content:hover {
+    overflow-y: auto;
+  }
+
+  .sidebar-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .sidebar-content::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  .close-btn {
+    background-color: transparent;
+    color: #333;
+    border: none;
+    font-size: 20px;
+    float: right;
+    cursor: pointer;
+    height: 1px;
+    font-weight: bold;
+  }
+
+  .container {
+    max-width: 700px;
+    margin: auto;
+    color: #1f2937;
+
+    h6 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 1.5rem 0 1rem;
+      color: #757575;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #414651;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="url"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    ::ng-deep ng-select {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    ::ng-deep .ng-select-container {
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      min-height: 38px;
+      font-size: 0.9rem;
+      padding: 4px 8px;
+    }
+
+    .dropdown-label-flex {
+      display: flex;
+      justify-content: space-between;
+
+      label {
+        flex: 1;
+
+        &:first-child {
+          margin-right: 10px;
+        }
+      }
+    }
+
+    .dropdown-flex {
+      display: flex;
+      gap: 1rem;
+
+      ng-select {
+        flex: 1;
+        margin-bottom: 1rem;
+      }
+    }
+
+    input[type="checkbox"] {
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    label[for="mou_signed"] {
+      display: block;
+      margin-top: 1.5rem;
+
+      p {
+        font-size: 0.8rem;
+        color: #6b7280;
+        margin: 4px 0 12px;
+      }
+    }
+  }
+
+  .step-icon {
+    background-color: #E43128;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+    margin-right: 0.5rem;
+    margin-top: 10px;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .sidebar-sub-section {
+    margin-left: 10px;
+  }
+
+  h6 {
+    line-height: 0.5;
+    font-weight: 600;
+  }
+
+  ng-select.ng-invalid.ng-touched .ng-select-container {
+    border: 1px solid #e74c3c !important;
+    /* red border for invalid field */
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+  }
+
+  .error-text {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  :root {
+    /* Font Sizes */
+    --font-size-xsmall: 10px;
+    --font-size-small: 12px;
+    --font-size-medium: 14px;
+    --font-size-large: 16px;
+    /* Font Colors */
+    --color-primary: #007AFF;
+    --color-secondary: #1E1E1E;
+    --color-text-dark: #414651;
+    --color-text-light: #757575;
+
+    --font-light: 400;
+    --font-regular: 500;
+    --font-medium: 600;
+  }
+
+.timepicker-container {
+  position: absolute;
+  z-index: 9999;
+  margin-top: 5px;
+}

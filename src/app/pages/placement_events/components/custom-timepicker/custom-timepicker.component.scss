@@ -1,0 +1,95 @@
+.timepicker-container {
+  width: 250px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+}
+
+.time-display {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  background-color: #00bcd4;
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: white;
+
+  button {
+    background: transparent;
+    border: none;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+
+    &.active {
+      border-bottom: 2px solid white;
+    }
+    &:hover{
+      color: #ffecb3
+    }
+  }
+
+  .manual-time-input {
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid white;
+    color: white;
+    font-size: 20px;
+    width: 60px;
+    text-align: center;
+    outline: none;
+  }
+}
+
+.clock-face {
+  width: 200px;
+  height: 200px;
+  background: #f3f3f3;
+  border-radius: 50%;
+  margin: auto;
+  position: relative;
+}
+
+.clock-center {
+  width: 8px;
+  height: 8px;
+  background: #00bcd4;
+  border-radius: 50%;
+  position: absolute;
+  top: 96px;
+  left: 96px;
+  z-index: 2;
+}
+
+.clock-needle {
+  width: 2px;
+  height: 90px;
+  background: #00bcd4;
+  position: absolute;
+  top: 10px;
+  left: 99px;
+  transform-origin: bottom center;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.clock-number {
+  position: absolute;
+  width: 30px;
+  text-align: center;
+  top: 85px;
+  left: 85px;
+  font-size: 14px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s, transform 0.2s;
+
+  &:hover {
+    color: #00bcd4;
+    transform: scale(1.1);
+    font-weight: bold;
+  }
+}

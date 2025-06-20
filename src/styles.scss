@@ -271,6 +271,7 @@
     --font-medium: 600;
   }
 
+  //This alone was newly added during the merge
   .custom-tooltip {
     max-width: 300px !important;
     white-space: normal !important;
@@ -284,3 +285,5 @@
   }
 
   
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

@@ -23,8 +23,9 @@
 
     <div class="sidebar " [class.active]="issidebarvisible">
       <form [formGroup]="addEventForm" >
+        <div class="sidebar-scrollable">
         <div class="sidebar-header">
-          <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
+          <button class="close-btn" type="button" (click)="cancel()">&#10005;</button>
           <h6 style="font-size: 17px;">Add a New Event</h6>
           <p style="font-size: 12px;">Detail out the placement event with the required fields</p>
         </div>
@@ -124,26 +125,58 @@
             </div>
 
             <!-- Updated: Date and Time same width as others -->
-            <div class="dual-field">
-              <div class="sidebar-sub-section">
+            <div class="dual-field" style="display: flex; gap: 20px;">
+              <!-- Date -->
+              <div class="sidebar-sub-section" style="flex: 1;">
                 <label>Event date as scheduled<span style="color: red;"> *</span></label>
-                <div class="input-icon-right">
-                  <input type="date" placeholder="select a date" formControlName="startDate"/>
-                  <i class="fa "></i>
+                <input
+                  class="form-control"
+                  placeholder=""
+                  name="dp"
+                  ngbDatepicker
+                  formControlName="startDate"
+                  [ngClass]="{ 'is-invalid': submitted && addEventForm.controls['startDate'].errors }"
+                  #d="ngbDatepicker"
+                  (click)="d.toggle()"
+                  style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+                />
+                <div *ngIf="submitted && addEventForm.controls['startDate'].errors" class="invalid-feedback d-block">
+                  Start date is required.
                 </div>
               </div>
 
-              <div class="sidebar-sub-section ">
-                <label>Event start time</label>
-                <div class="input-icon-right">
-                  <input type="time" formControlName="startTime"/>
-                  <i class="fa "></i>
-                  <div class="error" *ngIf="submitted && addEventForm.get('startTime')?.hasError('invalidTime')">
-                    Please enter a valid time in HH:MM (e.g., 23:45).
-                  </div>
-                </div>
-              </div>
+              <!-- Time -->
+               <!-- TIME FIELD TRIGGER -->
+<div class="sidebar-sub-section">
+  <label>Event start time</label>
+  <div class="input-icon-right">
+    <input
+      type="text"
+      placeholder="HH:MM"
+      formControlName="startTime"
+      readonly
+      (click)="showClock = !showClock"
+    />
+    <div
+      *ngIf="showClock"
+      class="timepicker-container"
+    >
+      <app-custom-timepicker
+        (timeSelected)="onTimeSelected($event)"
+      ></app-custom-timepicker>
+    </div>
+    <div
+      class="error"
+      *ngIf="submitted && addEventForm.get('startTime')?.hasError('invalidTime')"
+    >
+      Please enter a valid time in HH:MM (e.g., 23:45).
+    </div>
+  </div>
+</div>
+
+
             </div>
+
             <br>
             <div class="sidebar-sub-section">
               <label>Venue or platform</label>
@@ -205,7 +238,7 @@
 
         <!-- Sidebar Footer -->
         <div class="sidebar-footer">
-          <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
+          <button class="cancel_btn" type="button" (click)="cancel()">Cancel</button>
           <button class="submit_btn"
             type="submit"
             [disabled]="addEventForm.invalid"
@@ -213,21 +246,23 @@
             (click)="addEvent()">Save Event Details
           </button>
         </div>
+        </div>
       </form>
+      
     </div>
 
     <!-- upcoming events table -->
     <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px;">
       <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of EventsList">
         <div class="event-card">
-          <div class="header">
+          <div class="header" (click)="openEventDetails(event)" style="cursor: pointer;">
             <div >
               <div class="step-header-events">
                 <div class="step-icon-events">
-              <div class="date" style="align-items: center; text-align: center;">{{ event.startDate | date: 'dd' }}
-                <div class="month" style="align-items: center; text-align: center;">{{ event.startDate | date: 'MMM' }}</div>
+                  <div class="date" style="align-items: center; text-align: center;">{{ event.startDate | date: 'dd' }}
+                    <div class="month" style="align-items: center; text-align: center;">{{ event.startDate | date: 'MMM' }}</div>
+                  </div>
                 </div>
-              </div>
               </div>
             </div>
             <div class="event-details">
@@ -235,7 +270,7 @@
               <div class="title" (click)="openEventDetails(event)" style="cursor: pointer;">{{ event.name }}</div>
               <div class="meta">
                 <span class="time">{{ event.time }}</span>
-                <span class="badge" [ngClass]="{'on-campus': event.type === 'On-campus', 'virtual': event.type !== 'On-campus'}">{{ event.type }}</span>
+                <span class="badge eventviewbadge" [ngClass]="{'on-campus': event.type === 'On-campus', 'virtual': event.type !== 'On-campus'}">{{ event.type }}</span>
                 <img src="assets/icons/location_on.png" > <span class="venue">{{ event.venue }}</span>
               </div>
             </div>

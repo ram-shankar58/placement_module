@@ -1,16 +1,13 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { PlacementEventsSandbox } from '../../placement_events.sandbox'; 
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
-
+import { PlacementEventsSandbox } from '../../placement_events.sandbox';
 
 @Component({
   
   selector: 'app-upcoming-events',
-  standalone : false,
+  standalone: false,
   templateUrl: './upcoming-events.component.html',
   styleUrls: ['./upcoming-events.component.scss']
 })
@@ -19,71 +16,80 @@ export class UpcomingEventsComponent implements OnInit {
   submitted = false;
   addEventForm!: FormGroup;
   EventsList: any[] = [];
-  private subscriptions: Subscription[] = [];
   selectedEvent: any = null;
+  private subscriptions: Subscription[] = [];
 
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
-    public eventsSandbox: PlacementEventsSandbox
+    public eventsSandbox: PlacementEventsSandbox,
+    private elRef: ElementRef
   ) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.initAddEventForm();
     this.loadEventsList();
   }
 
-  initAddEventForm() {
+  initAddEventForm(): void {
     this.addEventForm = this.fb.group({
-    eventName: ['', Validators.required],
-    eventDescription: [''],
-    companyDetails: [[]],
-    startDate: ['', Validators.required],
-    startTime: ['', [this.timeValidation]], 
-    venue: [''],
-    mode: [''],
-    eligibleCourses: [''],
-    eligibilityCriteria: [''],
-    rounds: [''] //here presence of 1 in the string represnts aptitude, 2 represents technical, 3 represents hr, more than one can be present
-
-});
-
+      eventName: ['', Validators.required],
+      eventDescription: [''],
+      companyDetails: [[]],
+      startDate: [null, Validators.required], // NgbDateStruct
+      startTime: ['', [this.timeValidation]],
+      venue: [''],
+      mode: [''],
+      eligibleCourses: [''],
+      eligibilityCriteria: [''],
+      rounds: [''] // '1' for aptitude, '2' for tech, '3' for HR
+    });
   }
 
-  onRoundCheckboxChange(event: any, round: string): void{
-    const roundsControl= this.addEventForm.get('rounds');
-    if(!roundsControl) return;
+  toggleSidebar(): void {
+    this.issidebarvisible = !this.issidebarvisible;
+  }
+
+  cancel(): void {
+    this.issidebarvisible = false;
+    this.addEventForm.reset();
+    this.submitted = false;
+    this.selectedEvent = null;
+  }
+
+  onRoundCheckboxChange(event: any, round: string): void {
+    const roundsControl = this.addEventForm.get('rounds');
+    if (!roundsControl) return;
+
     let rounds: string = roundsControl.value || '';
-    if(event.target.checked){
-      if(!rounds.includes(round)){
-        rounds+=round;
-      }
-    }
-    else{
-      rounds=rounds.replace(round, '');
+    if (event.target.checked && !rounds.includes(round)) {
+      rounds += round;
+    } else {
+      rounds = rounds.replace(round, '');
     }
 
     roundsControl.setValue(rounds);
-    console.log('Updated rounds:', rounds);
-
-  }
-  
-
-  toggleSidebar() {
-     console.log('Toggling sidebar. Was:', this.issidebarvisible);
-    this.issidebarvisible = !this.issidebarvisible
   }
 
   @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
+  onClickOutside(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const clickedInsideNav = target.closest('.sidebar');
-    const clickedInsideBtn = target.closest('.add-btn');
-    if (!clickedInsideNav && !clickedInsideBtn) {
+    const clickedInsideSidebar = this.elRef.nativeElement.contains(target);
+
+    const clickedInsideOverlay = !!target.closest('.cdk-overlay-container');
+    const clickedInsideDatepicker = !!target.closest('ngb-datepicker') || !!target.closest('.ngb-dp-container');
+
+    if (!clickedInsideSidebar && !clickedInsideOverlay && !clickedInsideDatepicker) {
       this.issidebarvisible = false;
     }
   }
 
+  showClock = false;
+
+onTimeSelected(time: string) {
+  this.addEventForm.get('startTime')?.setValue(time);
+  this.showClock = false;
+}
 
   timeValidation: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const time = control.value;
@@ -93,48 +99,54 @@ export class UpcomingEventsComponent implements OnInit {
     return regex.test(time) ? null : { invalidTime: true };
   };
 
-  
-  addEvent() {
-  this.submitted = true;
+  addEvent(): void {
+    this.submitted = true;
 
-  if (this.addEventForm.invalid) {
-    this.toastr.error('Please fill in all required fields.');
-    return;
+    if (this.addEventForm.invalid) {
+      this.toastr.error('Please fill in all required fields.');
+      return;
+    }
+
+    const formValue = this.addEventForm.value;
+
+    const { year, month, day } = formValue.startDate;
+    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+    const param = {
+      ...formValue,
+      startDate: formattedDate
+    };
+
+    this.eventsSandbox.addPlacementEvents(param);
+
+    this.subscriptions.push(
+      this.eventsSandbox.addPlacementEvents$.subscribe(data => {
+        if (data?.status === 'true') {
+          this.toastr.success('Event added successfully');
+          this.addEventForm.reset();
+          this.submitted = false;
+          this.issidebarvisible = false;
+        }
+      })
+    );
+
+    // Debug types
+    Object.keys(param).forEach(key => {
+      const value = param[key];
+      const type = value === null ? null : value.constructor?.name || typeof value;
+      console.log(`key: ${key}, value: ${value}, type: ${type}`);
+    });
   }
 
-  const param = this.addEventForm.value;
-  this.eventsSandbox.addPlacementEvents(param);
-
-  this.subscriptions.push(
-    this.eventsSandbox.addPlacementEvents$.subscribe(data => {
-      if (data?.status === 'true') {
-        this.toastr.success('Event added successfully');
-        this.addEventForm.reset();
-        this.submitted = false;
-        this.issidebarvisible = false;
-      }
-    })
-  );
-
-  //for datatype and value debugging
-  const formvalue=this.addEventForm.value;
-  Object.keys(formvalue).forEach(key=>{
-    const value=formvalue[key];
-    const type = value === null ? null : value.constructor? value.constructor.name: typeof value;
-    console.log(`key: ${key}, value: ${value}, type: ${type}`);
-  });
-}
-
-  openEventDetails(event: any){
-      this.selectedEvent = event;
-  }
-    
-  closeEventDetails(){
-      this.selectedEvent=null;
+  openEventDetails(event: any): void {
+    this.selectedEvent = event;
   }
 
+  closeEventDetails(): void {
+    this.selectedEvent = null;
+  }
 
-  loadEventsList(){
+  loadEventsList(): void {
     this.EventsList = [
       {
         id: 'EVT001',
@@ -147,51 +159,29 @@ export class UpcomingEventsComponent implements OnInit {
           { name: 'Johnson & Johnson', logo: 'assets/icons/johnson.png' },
           { name: 'Adidas', logo: 'assets/icons/adidas.png' },
           { name: 'Tata Group', logo: 'assets/icons/TCS.png' },
-          { name: 'Apple', logo: 'assets/icons/apple.png' },
+          { name: 'Apple', logo: 'assets/icons/apple.png' }
         ],
         eligibleCourses: ['B.E CSE', 'B.Tech IT'],
         eligibilityCriteria: 'CGPA > 7, No standing arrears',
         rounds: '123',
         status: 'not_sent'
       },
-      
       {
-      id: 'EVT002',
-      name: 'Mega Placement Fair',
-      type: 'Pool',
-      startDate: '2025-08-05',
-      time: '09:00 AM',
-      venue: 'Convention Center, XYZ University',
-      companies: [
-        { name: 'Google', logo: 'assets/icons/google-icon.png' },
-        { name: 'Dell', logo: 'assets/icons/dell.png' }
-      ],
-      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
-      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
-      rounds: '123',
-      status: 'sent'
-    },
-    {
-      id: 'EVT002',
-      name: 'Mega Placement Fair',
-      type: 'Pool',
-      startDate: '2025-08-05',
-      time: '09:00 AM',
-      venue: 'Convention Center, XYZ University',
-      companies: [
-        { name: 'Google', logo: 'assets/icons/google-icon.png' },
-        { name: 'Dell', logo: 'assets/icons/dell.png' }
-      ],
-      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
-      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
-      rounds: '23',
-      status: 'sent'
-      
-    }
-      
+        id: 'EVT002',
+        name: 'Mega Placement Fair',
+        type: 'Pool',
+        startDate: '2025-08-05',
+        time: '09:00 AM',
+        venue: 'Convention Center, XYZ University',
+        companies: [
+          { name: 'Google', logo: 'assets/icons/google-icon.png' },
+          { name: 'Dell', logo: 'assets/icons/dell.png' }
+        ],
+        eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+        eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+        rounds: '123',
+        status: 'sent'
+      }
     ];
-
-
-
   }
 }

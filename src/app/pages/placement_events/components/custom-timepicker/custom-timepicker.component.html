@@ -1,0 +1,47 @@
+<div class="timepicker-container">
+  <div class="time-display">
+    <button [class.active]="meridian === 'AM'" (click)="setMeridian('AM')">AM</button>
+    <button [class.active]="meridian === 'PM'" (click)="setMeridian('PM')">PM</button>
+
+    <input
+      [(ngModel)]="manualTimeInput"
+      (blur)="onManualTimeBlur()"
+      class="manual-time-input"
+      placeholder="HH:MM"
+    />
+  </div>
+
+  <div class="clock-face">
+    <!-- Center dot -->
+    <div class="clock-center"></div>
+
+    <!-- Needle -->
+    <div
+      class="clock-needle"
+      [style.transform]="'rotate(' + (isSelectingHour ? selectedHour * 30 : selectedMinute * 6) + 'deg)'"
+    ></div>
+
+    <!-- Numbers (simplified to just 12 hours or 60 minutes) -->
+    <ng-container *ngIf="isSelectingHour; else minutePicker">
+      <div
+        *ngFor="let hour of [1,2,3,4,5,6,7,8,9,10,11,12]"
+        class="clock-number"
+        [style.transform]="'rotate(' + (hour * 30) + 'deg) translate(0, -90px) rotate(-' + (hour * 30) + 'deg)'"
+        (click)="selectHour(hour)"
+      >
+        {{ hour }}
+      </div>
+    </ng-container>
+
+    <ng-template #minutePicker>
+      <div
+        *ngFor="let min of [0,5,10,15,20,25,30,35,40,45,50,55]"
+        class="clock-number"
+        [style.transform]="'rotate(' + (min * 6) + 'deg) translate(0, -90px) rotate(-' + (min * 6) + 'deg)'"
+        (click)="selectMinute(min)"
+      >
+        {{ min.toString().padStart(2, '0') }}
+      </div>
+    </ng-template>
+  </div>
+</div>

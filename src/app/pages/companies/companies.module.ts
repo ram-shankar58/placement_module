@@ -56,8 +56,7 @@ const routes:any = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,
-    MatTooltipModule,
-    NgSelectModule,
+    NgSelectModule,//not there in placement-event
     SharedModule,
     EffectsModule.forFeature([CompaniesEffect])
     ],
