@@ -6,6 +6,7 @@
     <input
       [(ngModel)]="manualTimeInput"
       (blur)="onManualTimeBlur()"
+      (keydown.enter)="onManualTimeBlur()"
       class="manual-time-input"
       placeholder=""
     />

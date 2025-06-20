@@ -152,10 +152,11 @@
   <div class="input-icon-right">
     <input
       type="text"
-      placeholder="HH:MM"
+      placeholder=""
       formControlName="startTime"
       readonly
       (click)="showClock = !showClock"
+      style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
     />
     <div
       *ngIf="showClock"
@@ -163,6 +164,7 @@
     >
       <app-custom-timepicker
         (timeSelected)="onTimeSelected($event)"
+        
       ></app-custom-timepicker>
     </div>
     <div
