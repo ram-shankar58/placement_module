@@ -21,9 +21,21 @@ export class CustomTimepickerComponent {
   }
 
   setMeridian(value: 'AM' | 'PM') {
-    this.meridian = value;
-    this.emitTime();
+    if (this.meridian !== value) {
+      if (value === 'PM' && this.selectedHour < 12) {
+        // this.selectedHour += 12;
+      } else if (value === 'AM' && this.selectedHour >= 12) {
+        this.selectedHour -= 12;
+        if (this.selectedHour === 0) {
+          this.selectedHour = 12;
+        }
+      }
+      this.meridian = value;
+      this.updateManualInput();
+      // this.emitTime();
+    }
   }
+
 
   selectHour(hour: number) {
     this.selectedHour = hour;
