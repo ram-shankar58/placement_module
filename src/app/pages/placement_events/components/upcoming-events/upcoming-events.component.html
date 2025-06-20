@@ -138,6 +138,7 @@
                   [ngClass]="{ 'is-invalid': submitted && addEventForm.controls['startDate'].errors }"
                   #d="ngbDatepicker"
                   (click)="d.toggle()"
+                  style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
                 />
                 <div *ngIf="submitted && addEventForm.controls['startDate'].errors" class="invalid-feedback d-block">
                   Start date is required.
