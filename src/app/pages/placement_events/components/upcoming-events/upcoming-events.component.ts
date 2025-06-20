@@ -84,6 +84,12 @@ export class UpcomingEventsComponent implements OnInit {
     }
   }
 
+  showClock = false;
+
+onTimeSelected(time: string) {
+  this.addEventForm.get('startTime')?.setValue(time);
+  this.showClock = false;
+}
 
   timeValidation: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
     const time = control.value;

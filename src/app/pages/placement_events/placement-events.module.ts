@@ -16,6 +16,8 @@ import { PlacementEventsService } from './placement-events.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CustomTimepickerComponent } from './components/custom-timepicker/custom-timepicker.component';
+
 
 export const routes: any = [
   {
@@ -52,6 +54,7 @@ export const routes: any = [
     HistoricalEventsComponent,
     UpcomingEventsComponent,
     LayoutComponent,
+    CustomTimepickerComponent,
     
   ],
   imports: [

@@ -146,18 +146,35 @@
               </div>
 
               <!-- Time -->
-              <div class="sidebar-sub-section" style="flex: 1;">
-                <label>Event start time</label>
-                <input 
-                  type="time" 
-                  class="form-control"
-                  formControlName="startTime"
-                  [ngClass]="{ 'is-invalid': submitted && addEventForm.get('startTime')?.hasError('invalidTime') }"
-                />
-                <div class="error" *ngIf="submitted && addEventForm.get('startTime')?.hasError('invalidTime')">
-                  Please enter a valid time in HH:MM (e.g., 23:45).
-                </div>
-              </div>
+               <!-- TIME FIELD TRIGGER -->
+<div class="sidebar-sub-section">
+  <label>Event start time</label>
+  <div class="input-icon-right">
+    <input
+      type="text"
+      placeholder="HH:MM"
+      formControlName="startTime"
+      readonly
+      (click)="showClock = !showClock"
+    />
+    <div
+      *ngIf="showClock"
+      class="timepicker-container"
+    >
+      <app-custom-timepicker
+        (timeSelected)="onTimeSelected($event)"
+      ></app-custom-timepicker>
+    </div>
+    <div
+      class="error"
+      *ngIf="submitted && addEventForm.get('startTime')?.hasError('invalidTime')"
+    >
+      Please enter a valid time in HH:MM (e.g., 23:45).
+    </div>
+  </div>
+</div>
+
+
             </div>
 
             <br>
