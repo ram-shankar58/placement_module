@@ -17,15 +17,20 @@ export class ActiveCompaniesComponent implements OnInit {
   issidebarvisible = false;
   isMenuOpen = false;
   isfilterbarvisible = false;
+  isCompanydetails = false;
+  isEventTooltipvisible = false;
   skeletonCount = Array(6);
   openMenuId: string | null = null;
   addCompanyForm: any = FormGroup;
-  filterCompanyForm:any = FormGroup;
+  filterCompanyForm: any = FormGroup;
   CompaniesList: any = [];
-  filteredCompanyList:any = [];
-  filteredCompanies:any = [];
+  filteredCompanyList: any = [];
+  filteredCompanies: any = [];
   submit: string = '';
+  searchTerm: string = '';
   imgurl: any;
+  companyId: any;
+  companyDetails:any = [];
   private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
@@ -60,10 +65,10 @@ export class ActiveCompaniesComponent implements OnInit {
     this.initfilterCompanyForm();
   }
 
-  initfilterCompanyForm(){
+  initfilterCompanyForm() {
     this.filterCompanyForm = this.fb.group({
       location: new FormControl(''),
-      industryType: new FormControl('', [Validators.required]),
+      industryType: new FormControl(''),
       participatedPlacementEvents: new FormControl([])
     });
   }
@@ -96,12 +101,21 @@ export class ActiveCompaniesComponent implements OnInit {
     const clickedInsideCardMenu = target.closest('.menu-icon');
     const clickedInsidefilterbartab = target.closest('.filterbar') || target.closest('.filter');
     const clickedInsideUpdateandCopy = target.closest('.update') || target.closest('.copycmp');
+    const clickedInsideCardDetails = target.closest('.CompanyDetailsCard') || target.closest('.company-name');
+    const clickedInsideEventTooltip = target.closest('.event-tooltip-container') || target.closest('.placement-events');
     if (!clickedInsideNav && !clickedInsideBtn && !clickedInsideUpdateandCopy && !clickedInsideCardMenu) {
       this.issidebarvisible = false;
       this.isMenuOpen = false;
     }
+    if(!clickedInsideCardDetails){
+      this.isCompanydetails = false;
+    }
     if (!clickedInsidefilterbartab) {
       this.isfilterbarvisible = false;
+    }
+
+    if(!clickedInsideEventTooltip){
+      this.isEventTooltipvisible = false
     }
   }
 
@@ -110,7 +124,7 @@ export class ActiveCompaniesComponent implements OnInit {
     this.issidebarvisible = !this.issidebarvisible;
     this.addCompanyForm.reset();
     this.submit = 'add';
-    console.log('issidebarvisible',this.issidebarvisible);
+    console.log('issidebarvisible', this.issidebarvisible);
   }
 
   toggleSidebar() {
@@ -193,55 +207,73 @@ export class ActiveCompaniesComponent implements OnInit {
 
   }
 
-  clearfilter(){
+  clearfilter() {
     this.filterCompanyForm.reset();
     this.filteredCompanies = this.CompaniesList
   }
+  CompanyDetailstoggle(){
+    this.isCompanydetails = !this.isCompanydetails;
+  }
+
   filtertoggle() {
     this.filterCompanyForm.reset();
     this.isfilterbarvisible = !this.isfilterbarvisible;
     this.filteredCompanies = this.CompaniesList
   }
 
- filterCompany() {
-  const param = this.filterCompanyForm.value;
-
-  this.filteredCompanyList = [
-    {
-      key: 'location',
-      value: param.location,
-      filterType: 1
-    },
-    {
-      key: 'industryType',
-      value: param.industryType,
-      filterType: 2
-    },
-    {
-      key: 'participatedPlacementEvents',
-      value: param.participatedPlacementEvents,
-      filterType: 3
+  filterCompany() {
+    const param = this.filterCompanyForm.value;
+    this.filteredCompanyList = [
+      {
+        key: 'location',
+        value: param.location,
+        filterType: 1
+      },
+      {
+        key: 'industryType',
+        value: param.industryType,
+        filterType: 2
+      },
+      {
+        key: 'participatedPlacementEvents',
+        value: param.participatedPlacementEvents,
+        filterType: 3
+      }
+    ].filter(f => f.value && f.value !== '' && f);
+    if (this.filteredCompanyList.length > 0) {
+      this.filteredCompanies = this.CompaniesList.filter((company: any) => {
+        return this.filteredCompanyList.every((filter: any) => {
+          if (filter.key === 'participatedPlacementEvents') {
+            return Array.isArray(company[filter.key]) &&
+              Array.isArray(filter.value) &&
+              filter.value.every((val: string) => company[filter.key].includes(val));
+          }
+          return company[filter.key] === filter.value;
+        });
+      });
     }
-  ].filter(f => f.value && f.value !== '');
-  this.filteredCompanies = this.CompaniesList.filter((company: any) => {
-  return this.filteredCompanyList.some((filter: any) => {
-    if (filter.key === 'participatedPlacementEvents') {
-      return Array.isArray(company[filter.key]) &&
-             Array.isArray(filter.value) &&
-             filter.value.some((val: string) => company[filter.key].includes(val));
+    else {
+      this.filteredCompanies = this.CompaniesList
     }
-    return company[filter.key] === filter.value;
-  });
-});
-
-}
-
+    this.isfilterbarvisible = false;
+  }
 
   sort() {
 
   }
+
   getCompaniesbyId(id: any) {
     return this.CompaniesList.find((company: any) => company.id === id);
+  }
+
+  comapanyDetailsOpen(id: any){
+    this.isCompanydetails = true;
+    this.companyDetails = this.getCompaniesbyId(id);  
+  }
+
+  OpenEventTooltip(id:any){
+    this.isEventTooltipvisible = !this.isEventTooltipvisible;
+    this.companyId = id;
   }
 
   updateCompanyOpen(id: any) {
@@ -254,7 +286,7 @@ export class ActiveCompaniesComponent implements OnInit {
       this.addCompanyForm.setValue({
         id: company.id,
         companyName: company.companyName,
-        logo:company.logo,
+        logo: company.logo,
         companyDescription: company.companyDescription,
         location: company.location,
         industryType: company.industryType,
@@ -299,7 +331,7 @@ export class ActiveCompaniesComponent implements OnInit {
       this.addCompanyForm.setValue({
         id: company.id,
         companyName: company.companyName,
-        logo:company.logo,
+        logo: company.logo,
         companyDescription: company.companyDescription,
         location: company.location,
         industryType: company.industryType,
@@ -316,8 +348,22 @@ export class ActiveCompaniesComponent implements OnInit {
     }
   }
 
-  onArchive() {
-    // Handle archive logic
+  onArchive(comapnyId: any) {
+    let params = {
+      id: comapnyId
+    }
+    this.CompaniesSanbox.archivecompany(params);
+    this.subscriptions.push(this.CompaniesSanbox.archiveComapany$.subscribe((data) => {
+      if (data && data.status == true) {
+        this.toastr.success('Company is Archived')
+        return;
+      }
+      if (data && data.status == false) {
+        this.toastr.success('Company Not Archived')
+        return;
+      }
+    }))
+    this.companiesList();
   }
 
 }

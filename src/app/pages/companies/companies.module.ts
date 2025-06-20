@@ -11,11 +11,13 @@ import { CompaniesEffect } from './effects/companies.effect';
 import { CompaniesService } from './companies.service';
 import { CompaniesSanbox } from './companies.sandbox';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { SharedModule } from '../../shared/shared.module';
 
 
 
-export const routes:any = [
+
+const routes:any = [
   {
     path: '',
     component: CompaniesLayoutComponent,
@@ -54,7 +56,7 @@ export const routes:any = [
     RouterModule.forChild(routes),
     ReactiveFormsModule,
     FormsModule,
-    NgSelectModule,//not there in placement-events
+    NgSelectModule,//not there in placement-event
     SharedModule,
     EffectsModule.forFeature([CompaniesEffect])
     ],
