@@ -9,7 +9,14 @@
             <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
             Add a New Company
         </button>
-        <div class="col-md-4"></div>
+        <div class="addUpload col-md-4">
+            <span class="or-text" style="margin-top: 5px;">or</span>
+            <a class="upload-link"><!-- (click)="uploadBulkEventDetails()" -->
+                <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
+                Upload bulk Company details
+            </a>
+        </div>
+
         <div class="search-sort col-md-4 p-0">
             <input type="text" class="search-box col-md-4" placeholder="Search" [(ngModel)]="searchTerm" />
 
@@ -28,7 +35,7 @@
             <div class="card-header">
                 <img [src]="company.logo" class="company-logo" />
                 <div class="company-details">
-                    <h3 class="company-name">{{company.companyName}}</h3>
+                    <h3 class="company-name" (click)="comapanyDetailsOpen(company.id)">{{company.companyName}}</h3>
                     <p class="company-location"><i class="fas fa-map-marker-alt"></i> {{company.location}}</p>
                 </div>
 
@@ -42,9 +49,18 @@
                     </div>
                 </div>
             </div>
-            <div class="card-sub-details">
+            <div class="event-binding">
+                <div class="card-sub-details">
                 <p class="industry"><i class="fas fa-briefcase"></i>{{company.industryType}}</p>
                 <p class="size"><i class="fas fa-users"></i>{{company.numberOfEmployees}}</p>
+            </div>
+
+            <div class="event-tooltip" [class.show]="isEventTooltipvisible && company.id == companyId" [class.hide]="!isEventTooltipvisible && company.id == companyId">
+                <div class="event-item">
+                    <div class="event-title">{{company.participatedPlacementEvents}}</div>
+                    <div class="event-date">{{company.createdOn | date: 'dd MMM y'}}</div>
+                </div>
+            </div>
             </div>
 
             <p class="description-card" [matTooltip]="company.companyDescription" matTooltipPosition="above"
@@ -54,8 +70,9 @@
 
             <div class="card-footer">
                 <div>
-                    <div class="placement-events"><i class="fas fa-calendar-alt"></i>{{company.eventCount}}
-                        Placement events</div>
+                    <div class="placement-events" (click)="OpenEventTooltip(company.id)">
+                        <i class="fas fa-calendar-alt"></i>{{company.eventCount}} Placement events
+                    </div>
                 </div>
                 <div class="footer-item">
                     <p class="students-placed"> <i class="fas fa-user-graduate"></i>{{company.studentsPlacedSoFar}}
@@ -109,6 +126,67 @@
 
         </form>
     </div>
+
+    <div class="CompanyDetailsCard" [class.show]="isCompanydetails" [class.hide]="!isCompanydetails">
+
+        <div class="filter-header">
+            <h6>Company Details</h6>
+            <button class="close-btn" (click)="CompanyDetailstoggle()">&#10005;</button>
+        </div>
+
+        <div class="filter-body">
+
+            <!-- Name -->
+            <div class="detail-part">
+                <label for="company_name" class="filter-label">Company Name</label>
+                <p>{{companyDetails.companyName}}</p>
+                <div class="company-meta">
+                    <span class="meta-data"><i class="fas fa-map-marker-alt "></i> {{companyDetails.location}}</span>
+                    <span class="meta-data"><i class="fas fa-briefcase "></i> {{companyDetails.industryType}}</span>
+                    <span class="meta-data"><i class="fas fa-users "></i> {{companyDetails.numberOfEmployees}}</span>
+                </div>
+            </div>
+
+            <!-- Company Description -->
+            <div class="detail-part">
+                <label for="company_description" class="filter-label">Company Description</label>
+                <p>{{companyDetails.companyDescription}}</p>
+            </div>
+
+
+            <!-- Participated Placement Event -->
+            <div class="detail-part">
+                <label for="placementevents" class="filter-label">Participated placement events</label>
+                <div class="eventdetail">{{companyDetails.participatedPlacementEvents}}</div>
+                <div class="mou-status" *ngIf="companyDetails.mouSigned == true">
+                    <img class="mou-icon" src="assets/icons/check-circle.png">
+                    <p>MOU Signed</p>
+                </div>
+                <div class="mou-status" *ngIf="companyDetails.mouSigned == false">
+                    <i class="mou-icon fa-regular fa-circle-xmark"></i>
+                    <p>MOU Not Signed</p>
+                </div>
+            </div>
+
+            <!-- placed and ctc-->
+            <div class="company-stats">
+                <div>
+                    <p class="filter-label">Students Placed So Far</p>
+                    <p class="value">{{companyDetails.studentsPlacedSoFar}}</p>
+                </div>
+                <div>
+                    <p class="label">Average CTC (In ₹ Lakhs)</p>
+                    <p class="value">{{companyDetails.averageCtc}} LPA</p>
+                </div>
+            </div>
+        </div>
+        <div class="filter-footer">
+            <input type="button" class="add-cmp" (click)="updateCompanyOpen(companyDetails.id)"
+                value="Update Company Details">
+            <input type="button" (click)="CompanyDetailstoggle()" class="apply-btn" value="Close">
+        </div>
+    </div>
+
 
 </div>
 
@@ -289,9 +367,9 @@
         </div>
         <div class="sidebar-footer">
             <input class="cancel_btn" (click)="toggleSidebar()" type="button" value="Cancel">
-            <input *ngIf="submit === 'add'" class="submit_btn" [disabled]="addCompanyForm.invalid" type="button"
+            <input *ngIf="submit === 'add'" class="add-cmp" [disabled]="addCompanyForm.invalid" type="button"
                 (click)="addCompany()" value="Save Company Details">
-            <input *ngIf="submit === 'update'" class="submit_btn" [disabled]="addCompanyForm.invalid" type="button"
+            <input *ngIf="submit === 'update'" class="add-cmp" [disabled]="addCompanyForm.invalid" type="button"
                 (click)="updateCompany()" value="Update Company Details">
         </div>
     </form>
@@ -318,7 +396,7 @@
         <span class="or-text">or</span>
         <a class="upload-link"><!-- (click)="uploadBulkEventDetails()" -->
             <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
-            Upload bulk event details
+            Upload bulk Company details
         </a>
     </div>
 </div>

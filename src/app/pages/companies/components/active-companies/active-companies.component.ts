@@ -17,6 +17,8 @@ export class ActiveCompaniesComponent implements OnInit {
   issidebarvisible = false;
   isMenuOpen = false;
   isfilterbarvisible = false;
+  isCompanydetails = false;
+  isEventTooltipvisible = false;
   skeletonCount = Array(6);
   openMenuId: string | null = null;
   addCompanyForm: any = FormGroup;
@@ -27,6 +29,8 @@ export class ActiveCompaniesComponent implements OnInit {
   submit: string = '';
   searchTerm: string = '';
   imgurl: any;
+  companyId: any;
+  companyDetails:any = [];
   private subscriptions: Array<Subscription> = [];
   constructor(
     private toastr: ToastrService,
@@ -97,12 +101,21 @@ export class ActiveCompaniesComponent implements OnInit {
     const clickedInsideCardMenu = target.closest('.menu-icon');
     const clickedInsidefilterbartab = target.closest('.filterbar') || target.closest('.filter');
     const clickedInsideUpdateandCopy = target.closest('.update') || target.closest('.copycmp');
+    const clickedInsideCardDetails = target.closest('.CompanyDetailsCard') || target.closest('.company-name');
+    const clickedInsideEventTooltip = target.closest('.event-tooltip-container') || target.closest('.placement-events');
     if (!clickedInsideNav && !clickedInsideBtn && !clickedInsideUpdateandCopy && !clickedInsideCardMenu) {
       this.issidebarvisible = false;
       this.isMenuOpen = false;
     }
+    if(!clickedInsideCardDetails){
+      this.isCompanydetails = false;
+    }
     if (!clickedInsidefilterbartab) {
       this.isfilterbarvisible = false;
+    }
+
+    if(!clickedInsideEventTooltip){
+      this.isEventTooltipvisible = false
     }
   }
 
@@ -198,6 +211,10 @@ export class ActiveCompaniesComponent implements OnInit {
     this.filterCompanyForm.reset();
     this.filteredCompanies = this.CompaniesList
   }
+  CompanyDetailstoggle(){
+    this.isCompanydetails = !this.isCompanydetails;
+  }
+
   filtertoggle() {
     this.filterCompanyForm.reset();
     this.isfilterbarvisible = !this.isfilterbarvisible;
@@ -225,11 +242,11 @@ export class ActiveCompaniesComponent implements OnInit {
     ].filter(f => f.value && f.value !== '' && f);
     if (this.filteredCompanyList.length > 0) {
       this.filteredCompanies = this.CompaniesList.filter((company: any) => {
-        return this.filteredCompanyList.some((filter: any) => {
+        return this.filteredCompanyList.every((filter: any) => {
           if (filter.key === 'participatedPlacementEvents') {
             return Array.isArray(company[filter.key]) &&
               Array.isArray(filter.value) &&
-              filter.value.some((val: string) => company[filter.key].includes(val));
+              filter.value.every((val: string) => company[filter.key].includes(val));
           }
           return company[filter.key] === filter.value;
         });
@@ -238,14 +255,25 @@ export class ActiveCompaniesComponent implements OnInit {
     else {
       this.filteredCompanies = this.CompaniesList
     }
+    this.isfilterbarvisible = false;
   }
-
 
   sort() {
 
   }
+
   getCompaniesbyId(id: any) {
     return this.CompaniesList.find((company: any) => company.id === id);
+  }
+
+  comapanyDetailsOpen(id: any){
+    this.isCompanydetails = true;
+    this.companyDetails = this.getCompaniesbyId(id);  
+  }
+
+  OpenEventTooltip(id:any){
+    this.isEventTooltipvisible = !this.isEventTooltipvisible;
+    this.companyId = id;
   }
 
   updateCompanyOpen(id: any) {
