@@ -6,23 +6,29 @@
     <input
       [(ngModel)]="manualTimeInput"
       (blur)="onManualTimeBlur()"
+      (input)="restrictManualInput($event)"
       (keydown.enter)="onManualTimeBlur()"
       class="manual-time-input"
       placeholder=""
     />
   </div>
 
+  <div
+  *ngIf="invalidTimeInput"
+  style="color:#e53935; font-size:13px; margin-top:4px; margin-bottom: 4px; text-align:left; width:100%;"
+>
+  Please enter a valid time in HH:MM format.
+</div>
+
   <div class="clock-face">
     <!-- Center dot -->
     <div class="clock-center"></div>
-
     <!-- Needle -->
     <div
       class="clock-needle"
       [style.transform]="'rotate(' + (isSelectingHour ? selectedHour * 30 : selectedMinute * 6) + 'deg)'"
     ></div>
-
-    <!-- Numbers (simplified to just 12 hours or 60 minutes) -->
+    <!-- Numbers ... -->
     <ng-container *ngIf="isSelectingHour; else minutePicker">
       <div
         *ngFor="let hour of [1,2,3,4,5,6,7,8,9,10,11,12]"
@@ -33,7 +39,6 @@
         {{ hour }}
       </div>
     </ng-container>
-
     <ng-template #minutePicker>
       <div
         *ngFor="let min of [0,5,10,15,20,25,30,35,40,45,50,55]"

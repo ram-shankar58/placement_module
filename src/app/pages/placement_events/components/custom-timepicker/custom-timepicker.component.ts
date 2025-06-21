@@ -11,7 +11,7 @@ export class CustomTimepickerComponent {
   selectedMinute = 40;
   isSelectingHour = true;
   meridian: 'AM' | 'PM' = 'PM';
-
+  invalidTimeInput = false;
   manualTimeInput = '04:40';
 
   @Output() timeSelected = new EventEmitter<string>();
@@ -121,12 +121,24 @@ export class CustomTimepickerComponent {
       this.selectedHour = h;
     }
     this.selectedMinute = m;
+    this.invalidTimeInput=false;
     this.updateManualInput();
     this.emitTime();
   } else {
-    alert('Invalid time format. Please use HH:MM.');
-    this.updateManualInput(); // Reset to valid
+    // alert('Invalid time format. Please use HH:MM.');
+    // this.updateManualInput(); // Reset to valid
+    this.invalidTimeInput=true;
   }
+}
+
+restrictManualInput( event: Event){
+  let value=(event.target as HTMLInputElement).value;
+  value=value.replace(/[^0-9:]/g, '').slice(0, 5);
+  const parts=value.split(':');
+  if(parts[0]) parts[0]=parts[0].slice(0,2);
+  if(parts[1]) parts[1]=parts[1].slice(0,2);
+
+  this.manualTimeInput=parts.join(':');
 }
 
 }
