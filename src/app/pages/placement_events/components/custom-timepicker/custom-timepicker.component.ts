@@ -81,32 +81,6 @@ export class CustomTimepickerComponent {
     this.manualTimeInput = this.displayTime;
   }
 
-//   onManualTimeBlur() {
-//   const regex = /^([01]?\d|2[0-3]):([0-5]\d)$/;
-//   if (regex.test(this.manualTimeInput)) {
-//     const [h, m] = this.manualTimeInput.split(':').map(Number);
-//     if (h === 0) {
-//       this.selectedHour = 12;
-//       this.meridian = 'AM';
-//     } else if (h === 12) {
-//       this.selectedHour = 12;
-//       this.meridian = 'PM';
-//     } else if (h > 12) {
-//       this.selectedHour = h - 12;
-//       this.meridian = 'PM';
-//     } else {
-//       this.selectedHour = h;
-//       this.meridian = 'AM';
-//     }
-//     this.selectedMinute = m;
-//     this.updateManualInput();
-//     this.emitTime();
-//   } else {
-//     alert('Invalid time format. Please use HH:MM.');
-//     this.updateManualInput(); // Reset to valid
-//   }
-// }
-
   onManualTimeBlur() {
   const regex = /^([01]?\d|2[0-3]):([0-5]\d)$/;
   if (regex.test(this.manualTimeInput)) {
