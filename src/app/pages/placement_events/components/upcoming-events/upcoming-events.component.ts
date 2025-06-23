@@ -32,19 +32,20 @@ export class UpcomingEventsComponent implements OnInit {
   }
 
   initAddEventForm(): void {
-    this.addEventForm = this.fb.group({
-      eventName: ['', Validators.required],
-      eventDescription: [''],
-      companyDetails: [[]],
-      startDate: [null, Validators.required], // NgbDateStruct
-      startTime: ['', [this.timeValidation]],
-      venue: [''],
-      mode: [''],
-      eligibleCourses: [''],
-      eligibilityCriteria: [''],
-      rounds: [''] // '1' for aptitude, '2' for tech, '3' for HR
-    });
-  }
+  this.addEventForm = this.fb.group({
+    eventTitle: ['', Validators.required],
+    aboutEvent: [''],
+    companyDetails: [[]],
+    eventDate: [null, Validators.required], // NgbDateStruct
+    eventTime: ['', [this.timeValidation]],
+    venue: [''],
+    modeOfEvent: [''],
+    eligibleCourses: [''],
+    eligibleCriteria: [''],
+    selectionProcess: [''] // '1' for aptitude, '2' for tech, '3' for HR
+  });
+}
+
 
   toggleSidebar(): void {
     this.issidebarvisible = !this.issidebarvisible;
@@ -100,43 +101,46 @@ onTimeSelected(time: string) {
   };
 
   addEvent(): void {
-    this.submitted = true;
+  this.submitted = true;
 
-    if (this.addEventForm.invalid) {
-      this.toastr.error('Please fill in all required fields.');
-      return;
-    }
-
-    const formValue = this.addEventForm.value;
-
-    const { year, month, day } = formValue.startDate;
-    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-    const param = {
-      ...formValue,
-      startDate: formattedDate
-    };
-
-    this.eventsSandbox.addPlacementEvents(param);
-
-    this.subscriptions.push(
-      this.eventsSandbox.addPlacementEvents$.subscribe(data => {
-        if (data?.status === 'true') {
-          this.toastr.success('Event added successfully');
-          this.addEventForm.reset();
-          this.submitted = false;
-          this.issidebarvisible = false;
-        }
-      })
-    );
-
-    // Debug types
-    Object.keys(param).forEach(key => {
-      const value = param[key];
-      const type = value === null ? null : value.constructor?.name || typeof value;
-      console.log(`key: ${key}, value: ${value}, type: ${type}`);
-    });
+  if (this.addEventForm.invalid) {
+    this.toastr.error('Please fill in all required fields.');
+    return;
   }
+
+  const formValue = this.addEventForm.value;
+
+  // Format eventDate if needed
+  let formattedDate = formValue.eventDate;
+  if (formValue.eventDate && formValue.eventDate.year) {
+    const { year, month, day } = formValue.eventDate;
+    formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  }
+
+  const param = {
+    ...formValue,
+    eventDate: formattedDate
+  };
+  this.eventsSandbox.addPlacementEvents(param);
+
+  this.subscriptions.push(
+    this.eventsSandbox.addPlacementEvents$.subscribe(data => {
+      if (data?.status === 'true') {
+        this.toastr.success('Event added successfully');
+        this.addEventForm.reset();
+        this.submitted = false;
+        this.issidebarvisible = false;
+      }
+    })
+  );
+
+  // Debug types
+  Object.keys(param).forEach(key => {
+    const value = param[key];
+    const type = value === null ? null : value.constructor?.name || typeof value;
+    console.log(`key: ${key}, value: ${value}, type: ${type}`);
+  });
+}
 
   openEventDetails(event: any): void {
     this.selectedEvent = event;
@@ -146,42 +150,45 @@ onTimeSelected(time: string) {
     this.selectedEvent = null;
   }
 
+  
   loadEventsList(): void {
     this.EventsList = [
-      {
-        id: 'EVT001',
-        name: 'Campus Recruitment Drive – Java Architects',
-        type: 'On-campus',
-        startDate: '2025-07-10',
-        time: '10:00 AM',
-        venue: 'Main Auditorium, ABC Engineering College',
-        companies: [
-          { name: 'Johnson & Johnson', logo: 'assets/icons/johnson.png' },
-          { name: 'Adidas', logo: 'assets/icons/adidas.png' },
-          { name: 'Tata Group', logo: 'assets/icons/TCS.png' },
-          { name: 'Apple', logo: 'assets/icons/apple.png' }
-        ],
-        eligibleCourses: ['B.E CSE', 'B.Tech IT'],
-        eligibilityCriteria: 'CGPA > 7, No standing arrears',
-        rounds: '123',
-        status: 'not_sent'
-      },
-      {
-        id: 'EVT002',
-        name: 'Mega Placement Fair',
-        type: 'Pool',
-        startDate: '2025-08-05',
-        time: '09:00 AM',
-        venue: 'Convention Center, XYZ University',
-        companies: [
-          { name: 'Google', logo: 'assets/icons/google-icon.png' },
-          { name: 'Dell', logo: 'assets/icons/dell.png' }
-        ],
-        eligibleCourses: ['B.E ECE', 'B.Tech ME'],
-        eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
-        rounds: '123',
-        status: 'sent'
-      }
+    {
+      id: 'EVT001',
+      eventTitle: 'Campus Recruitment Drive – Java Architects',
+      aboutEvent: 'A recruitment drive for Java Architects.',
+      modeOfEvent: 'on-campus',
+      eventDate: '2025-07-10',
+      eventTime: '10:00',
+      venue: 'Main Auditorium, ABC Engineering College',
+      companyDetails: [
+        { companyName: 'Johnson & Johnson', logo: 'assets/icons/johnson.png' },
+        { companyName: 'Adidas', logo: 'assets/icons/adidas.png' },
+        { companyName: 'Tata Group', logo: 'assets/icons/TCS.png' },
+        { companyName: 'Apple', logo: 'assets/icons/apple.png' }
+      ],
+      eligibleCourses: ['B.E CSE', 'B.Tech IT'],
+      eligibleCriteria: 'CGPA > 7, No standing arrears',
+      selectionProcess: '123',
+      status: 'not_sent'
+    },
+    {
+      id: 'EVT002',
+      eventTitle: 'Mega Placement Fair',
+      aboutEvent: 'A mega placement fair for multiple companies.',
+      modeOfEvent: 'pool',
+      eventDate: '2025-08-05',
+      eventTime: '09:00',
+      venue: 'Convention Center, XYZ University',
+      companyDetails: [
+        { companyName: 'Google', logo: 'assets/icons/google-icon.png' },
+        { companyName: 'Dell', logo: 'assets/icons/dell.png' }
+      ],
+      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+      eligibleCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+      selectionProcess: '123',
+      status: 'sent'
+    }
     ];
-  }
+}
 }
