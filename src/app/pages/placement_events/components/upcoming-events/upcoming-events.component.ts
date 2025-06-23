@@ -35,38 +35,34 @@ export class UpcomingEventsComponent implements OnInit {
 
   initAddEventForm() {
     this.addEventForm = this.fb.group({
-    eventName: ['', Validators.required],
-    eventDescription: [''],
-    companyDetails: [[]],
-    startDate: ['', Validators.required],
-    startTime: ['', [this.timeValidation]], 
-    venue: [''],
-    mode: [''],
-    eligibleCourses: [''],
-    eligibilityCriteria: [''],
-    rounds: [''] //here presence of 1 in the string represnts aptitude, 2 represents technical, 3 represents hr, more than one can be present
-
-});
-
+      eventTitle: ['', Validators.required], // eventName -> eventTitle
+      aboutEvent: [''], // eventDescription -> aboutEvent
+      companyDetails: [[]], // unchanged
+      eventDate: ['', Validators.required], // startDate -> eventDate
+      eventTime: ['', [this.timeValidation]], // startTime -> eventTime
+      venue: [''], // unchanged
+      modeOfEvent: [''], // mode -> modeOfEvent
+      eligibleCourses: [''], // unchanged
+      eligibleCriteria: [''], // eligibilityCriteria -> eligibleCriteria
+      selectionProcess: [''] // rounds -> selectionProcess
+    });
   }
-
-  onRoundCheckboxChange(event: any, round: string): void{
-    const roundsControl= this.addEventForm.get('rounds');
-    if(!roundsControl) return;
+  // Update all references to match new field names
+  onRoundCheckboxChange(event: any, round: string): void {
+    const roundsControl = this.addEventForm.get('selectionProcess');
+    if (!roundsControl) return;
     let rounds: string = roundsControl.value || '';
-    if(event.target.checked){
-      if(!rounds.includes(round)){
-        rounds+=round;
+    if (event.target.checked) {
+      if (!rounds.includes(round)) {
+        rounds += round;
       }
+    } else {
+      rounds = rounds.replace(round, '');
     }
-    else{
-      rounds=rounds.replace(round, '');
-    }
-
     roundsControl.setValue(rounds);
-    console.log('Updated rounds:', rounds);
-
+    console.log('Updated selectionProcess:', rounds);
   }
+  
   
 
   toggleSidebar() {
@@ -136,60 +132,60 @@ export class UpcomingEventsComponent implements OnInit {
 
   loadEventsList(){
     this.EventsList = [
-      {
-        id: 'EVT001',
-        name: 'Campus Recruitment Drive – Java Architects',
-        type: 'On-campus',
-        startDate: '2025-07-10',
-        time: '10:00 AM',
-        venue: 'Main Auditorium, ABC Engineering College',
-        companies: [
-          { name: 'Johnson & Johnson', logo: 'assets/icons/johnson.png' },
-          { name: 'Adidas', logo: 'assets/icons/adidas.png' },
-          { name: 'Tata Group', logo: 'assets/icons/TCS.png' },
-          { name: 'Apple', logo: 'assets/icons/apple.png' },
-        ],
-        eligibleCourses: ['B.E CSE', 'B.Tech IT'],
-        eligibilityCriteria: 'CGPA > 7, No standing arrears',
-        rounds: '123',
-        status: 'not_sent'
-      },
-      
-      {
-      id: 'EVT002',
-      name: 'Mega Placement Fair',
-      type: 'Pool',
-      startDate: '2025-08-05',
-      time: '09:00 AM',
-      venue: 'Convention Center, XYZ University',
-      companies: [
-        { name: 'Google', logo: 'assets/icons/google-icon.png' },
-        { name: 'Dell', logo: 'assets/icons/dell.png' }
-      ],
-      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
-      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
-      rounds: '123',
-      status: 'sent'
-    },
-    {
-      id: 'EVT002',
-      name: 'Mega Placement Fair',
-      type: 'Pool',
-      startDate: '2025-08-05',
-      time: '09:00 AM',
-      venue: 'Convention Center, XYZ University',
-      companies: [
-        { name: 'Google', logo: 'assets/icons/google-icon.png' },
-        { name: 'Dell', logo: 'assets/icons/dell.png' }
-      ],
-      eligibleCourses: ['B.E ECE', 'B.Tech ME'],
-      eligibilityCriteria: 'CGPA > 6.5, Max 1 standing arrear',
-      rounds: '23',
-      status: 'sent'
-      
-    }
-      
-    ];
+  {
+    id: 'EVT001',
+    eventTitle: 'Campus Recruitment Drive – Java Architects',
+    aboutEvent: 'A recruitment drive for Java Architects.',
+    eventDate: '2025-07-10',
+    eventTime: '10:00',
+    venue: 'Main Auditorium, ABC Engineering College',
+    companyDetails: [
+      { name: 'Johnson & Johnson', logo: 'assets/icons/johnson.png' },
+      { name: 'Adidas', logo: 'assets/icons/adidas.png' },
+      { name: 'Tata Group', logo: 'assets/icons/TCS.png' },
+      { name: 'Apple', logo: 'assets/icons/apple.png' },
+    ],
+    modeOfEvent: 'on-campus',
+    eligibleCourses: ['B.E CSE', 'B.Tech IT'],
+    eligibleCriteria: 'CGPA > 7, No standing arrears',
+    selectionProcess: '123',
+    status: 'not_sent'
+  },
+  {
+    id: 'EVT002',
+    eventTitle: 'Mega Placement Fair',
+    aboutEvent: 'A mega placement fair for multiple companies.',
+    eventDate: '2025-08-05',
+    eventTime: '09:00',
+    venue: 'Convention Center, XYZ University',
+    companyDetails: [
+      { name: 'Google', logo: 'assets/icons/google-icon.png' },
+      { name: 'Dell', logo: 'assets/icons/dell.png' }
+    ],
+    modeOfEvent: 'pool',
+    eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+    eligibleCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+    selectionProcess: '123',
+    status: 'sent'
+  },
+  {
+    id: 'EVT003',
+    eventTitle: 'Mega Placement Fair',
+    aboutEvent: 'A mega placement fair for multiple companies.',
+    eventDate: '2025-08-05',
+    eventTime: '09:00',
+    venue: 'Convention Center, XYZ University',
+    companyDetails: [
+      { name: 'Google', logo: 'assets/icons/google-icon.png' },
+      { name: 'Dell', logo: 'assets/icons/dell.png' }
+    ],
+    modeOfEvent: 'pool',
+    eligibleCourses: ['B.E ECE', 'B.Tech ME'],
+    eligibleCriteria: 'CGPA > 6.5, Max 1 standing arrear',
+    selectionProcess: '23',
+    status: 'sent'
+  }
+];
 
 
 

@@ -9,6 +9,7 @@ export class PlacementEventsSandbox{
     public addPlacementEvents$;
     public addPlacementEventsLoading$;
 
+
     constructor(protected appState: Store<store.AppState>){
         this.addPlacementEvents$ = this.appState.select(addPlacementEvents);
         this.addPlacementEventsLoading$ = this.appState.select(addPlacementEventsLoading);
