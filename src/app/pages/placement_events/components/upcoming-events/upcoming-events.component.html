@@ -242,7 +242,7 @@
         <div class="course-eligibility">
           <div>
             <label>Eligible Courses</label>
-            <div>{{ event.eligibleCourses.join(', ') }}</div>
+            <div>{{ event.eligibleCourses?.join(', ') || '' }}</div>
           </div>
           <div>
             <label>Eligibility Criteria</label>
