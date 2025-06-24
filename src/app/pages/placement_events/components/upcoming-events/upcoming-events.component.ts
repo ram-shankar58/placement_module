@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, 
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { PlacementEventsSandbox } from '../../placement_events.sandbox';
+import { CompaniesService } from '../../../companies/companies.service';
+import { GlobalFilterPipe } from '../../../../shared/components/searchfilter/global-filter.pipe';
 
 @Component({
   selector: 'app-upcoming-events',
@@ -18,28 +20,122 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   selectedEvent: any = null;
   private subscriptions: Subscription[] = [];
   showClock = false;
+  companySearch: string = '';
+  filteredCompanies: any[] = [];
+  showCompanyDropdown = false;
+  selectedCompanies: any[]= [];
+  companiesList: any[] =[];
 
   constructor(
     private fb: FormBuilder,
     private toastr: ToastrService,
     public eventsSandbox: PlacementEventsSandbox,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private companiesService: CompaniesService,
+    private globalFilterPipe: GlobalFilterPipe
   ) {}
 
+  coursesList = [
+  'Mechanical',
+  'CIVIL',
+  'EEE',
+  'ECE',
+  'CSE',
+  'IT'
+];
+
   ngOnInit(): void {
-    this.initAddEventForm();
-    // Fetch events from backend/store
-    this.eventsSandbox.placementEventsList();
-    // Subscribe to placementEventsList$ observable
-    this.subscriptions.push(
-      this.eventsSandbox.placementEventsList$.subscribe(data => {
-        if (data && data.status === true && Array.isArray(data.data)) {
-          this.EventsList = data.data;
-        } else {
-          this.EventsList = [];
-        }
-      })
+  this.initAddEventForm();
+  this.eventsSandbox.placementEventsList();
+  this.subscriptions.push(
+    this.eventsSandbox.placementEventsList$.subscribe(data => {
+      if (data && data.status === true && Array.isArray(data.data)) {
+        this.EventsList = data.data.map((event: any) => ({
+          id: event.eventId,
+          eventTitle: event.eventTitle,
+          aboutEvent: event.eventAbout,
+          modeOfEvent: event.eventMode,
+          eventDate: event.eventDate
+            ? event.eventDate.split('/').reverse().join('-')
+            : '',
+          eventTime: event.eventTime ? event.eventTime.substring(0, 5) : '',
+          venue: event.eventVenue,
+          companyDetails: event.eventCompanyDetails || [],
+          eligibleCourses: event.eventEligibleCourse
+            ? event.eventEligibleCourse.replace(/[{}]/g, '').split(',').map((c: string) => c.trim())
+            : [],
+          eligibleCriteria: event.eventEligibleCriteria,
+          selectionProcess: event.eventSelectionProcess
+            ? event.eventSelectionProcess.replace(/[{}"]/g, '').split(',').map((s: string) => s.trim())
+            : [],
+          status: 'sent'
+        }));
+      } else {
+        this.EventsList = [];
+      }
+    })
+  );
+  this.companiesService.companiesList().subscribe(res =>{
+    console.log('Companies API Response:', res);
+    if(res && res.status && Array.isArray(res.data)){
+      this.companiesList=res.data;
+      console.log('Companies List:', this.companiesList);
+    }
+    else{
+      console.warn('Companies not loaded or API Eerror:', res);
+    }
+  })
+}
+
+  onCompanySearch() {
+  this.showCompanyDropdown = true;
+  console.log('companiesList:', this.companiesList);
+  console.log('selectedCompanies:', this.selectedCompanies);
+
+  if (!this.companySearch) {
+    this.filteredCompanies = [];
+    return;
+  }
+
+  const search = this.companySearch.trim().toLowerCase();
+
+  const unselectedCompanies = this.companiesList
+    .filter(c => c.companyName)
+    .filter(c =>
+      !this.selectedCompanies.some(sel =>
+        sel.companyName && sel.companyName.toLowerCase() === c.companyName.toLowerCase()
+      )
     );
+
+  this.filteredCompanies = unselectedCompanies.filter(c =>
+    c.companyName.toLowerCase().includes(search)
+  );
+
+  console.log('Filtered Companies:', this.filteredCompanies);
+}
+
+  selectCompany(company: any){
+    this.selectedCompanies.push({ companyName: company.companyName, logo: company.logo});
+    this.companySearch = '';
+    this.filteredCompanies = [];
+    this.showCompanyDropdown = false;
+    this.updateCompanyDetailsForm();
+  }
+  updateCompanyDetailsForm(){
+    this.addEventForm.get('companyDetails')?.setValue(this.selectedCompanies);
+  }
+  removeCompany(company: any){
+    this.selectedCompanies = this.selectedCompanies.filter( c => c.companyName !== company.companyName);
+    this.updateCompanyDetailsForm();
+  }
+  addCompanyFromInput(){
+    if(this.companySearch && !this.selectedCompanies.some( c=> c.companyName === this.companySearch)){
+      this.selectedCompanies.push({ companyName: this.companySearch, logo: ' '});
+      this.companySearch = '';
+      this.filteredCompanies = [];
+      this.showCompanyDropdown = false;
+      this.updateCompanyDetailsForm();
+    }
   }
 
   ngOnDestroy(): void {
@@ -55,9 +151,9 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
       eventTime: ['', [this.timeValidation]],
       venue: [''],
       modeOfEvent: [''],
-      eligibleCourses: [''],
+      eligibleCourses: [[]],
       eligibleCriteria: [''],
-      selectionProcess: ['']
+      selectionProcess: [[]]
     });
   }
 
@@ -73,16 +169,18 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   }
 
   onRoundCheckboxChange(event: any, round: string): void {
-    const roundsControl = this.addEventForm.get('selectionProcess');
-    if (!roundsControl) return;
-    let rounds: string = roundsControl.value || '';
-    if (event.target.checked && !rounds.includes(round)) {
-      rounds += round;
-    } else {
-      rounds = rounds.replace(round, '');
+  const roundsControl = this.addEventForm.get('selectionProcess');
+  if (!roundsControl) return;
+  let rounds: string[] = Array.isArray(roundsControl.value) ? roundsControl.value : [];
+  if (event.target.checked) {
+    if (!rounds.includes(round)) {
+      rounds.push(round);
     }
-    roundsControl.setValue(rounds);
+  } else {
+    rounds = rounds.filter(r => r !== round);
   }
+  roundsControl.setValue(rounds);
+}
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
@@ -122,7 +220,10 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
     }
     const param = {
       ...formValue,
-      eventDate: formattedDate
+      eventDate: formattedDate,
+      companyDetails: Array.isArray(formValue.companyDetails) ? formValue.companyDetails : [],
+  eligibleCourses: Array.isArray(formValue.eligibleCourses) ? formValue.eligibleCourses : [],
+  selectionProcess: Array.isArray(formValue.selectionProcess) ? formValue.selectionProcess : []
     };
     this.eventsSandbox.addPlacementEvents(param);
     // Listen for add event response and refresh list on success

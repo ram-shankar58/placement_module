@@ -53,41 +53,41 @@
             <div class="mode-options">
               <label 
                 class="mode-box yellow" 
-                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'on-campus'"
-                (click)="addEventForm.get('modeOfEvent')?.setValue('on-campus')"
+                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'On-campus'"
+                (click)="addEventForm.get('modeOfEvent')?.setValue('On-campus')"
               >
                 <span>
-                  <input type="radio" name="modeOfEvent" value="on-campus" class="radioinput" /><strong>On-campus</strong>
+                  <input type="radio" name="modeOfEvent" value="On-campus" class="radioinput" /><strong>On-campus</strong>
                   <div class="description">At your college</div>
                 </span>
               </label>
               <label 
                 class="mode-box green" 
-                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'off-campus'"
-                (click)="addEventForm.get('modeOfEvent')?.setValue('off-campus')"
+                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'Off-campus'"
+                (click)="addEventForm.get('modeOfEvent')?.setValue('Off-campus')"
               >
                 <span>
-                  <input type="radio" name="modeOfEvent" value="off-campus" class="radioinput" /><strong>Off-campus</strong>
+                  <input type="radio" name="modeOfEvent" value="Off-campus" class="radioinput" /><strong>Off-campus</strong>
                 </span>
                 <div class="description">External drive</div>
               </label>
               <label 
                 class="mode-box blue" 
-                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'pool'"
-                (click)="addEventForm.get('modeOfEvent')?.setValue('pool')"
+                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'Pool'"
+                (click)="addEventForm.get('modeOfEvent')?.setValue('Pool')"
               >
                 <span>
-                  <input type="radio" name="modeOfEvent" value="pool" class="radioinput" /><strong>Pool</strong>
+                  <input type="radio" name="modeOfEvent" value="Pool" class="radioinput" /><strong>Pool</strong>
                 </span>
                 <div class="description">Multi-college drive</div>
               </label>
               <label 
                 class="mode-box purple" 
-                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'virtual'"
-                (click)="addEventForm.get('modeOfEvent')?.setValue('virtual')"
+                [class.selected]="addEventForm.get('modeOfEvent')?.value === 'Virtual'"
+                (click)="addEventForm.get('modeOfEvent')?.setValue('Virtual')"
               >
                 <span>
-                  <input type="radio" name="modeOfEvent" value="virtual" class="radioinput" /><strong>Virtual</strong>
+                  <input type="radio" name="modeOfEvent" value="Virtual" class="radioinput" /><strong>Virtual</strong>
                 </span>
                 <div class="description">Online process</div>
               </label>
@@ -152,10 +152,38 @@
               <h6>Associated Companies</h6>
             </div>
             <div class="sidebar-sub-section">
-              <label>Company detail</label>
-              <input type="text" placeholder="Search or type to add" formControlName="companyDetails" />
-              <small>No companies selected.</small>
-            </div>
+  <label>Company detail</label>
+  <input
+    type="text"
+    placeholder="Search or type to add"
+    [(ngModel)]="companySearch"
+    (input)="onCompanySearch()"
+    (keydown.enter)="addCompanyFromInput()"
+    [ngModelOptions]="{standalone: true}"
+    class="company-search-input"
+    autocomplete="off"
+  />
+  <div class="company-search-dropdown" *ngIf="filteredCompanies?.length && showCompanyDropdown">
+    <div
+      class="company-search-option"
+      *ngFor="let company of filteredCompanies"
+      (click)="selectCompany(company)"
+    >
+      <img [src]="company.logo" alt="{{company.companyName}}" class="company-logo-mini" />
+      {{ company.companyName }}
+    </div>
+  </div>
+  <small *ngIf="!filteredCompanies?.length && companySearch && showCompanyDropdown">
+    No companies found. Press Enter to add "{{ companySearch }}"
+  </small>
+  <div class="selected-companies">
+    <div class="selected-company-chip" *ngFor="let comp of selectedCompanies">
+      <img [src]="comp.logo" alt="{{comp.companyName}}" class="company-logo-mini" />
+      {{ comp.companyName }}
+      <span class="remove-chip" (click)="removeCompany(comp)">×</span>
+    </div>
+  </div>
+</div>
           </div>
 
           <!--  Eligibility -->
@@ -164,12 +192,21 @@
               <div class="step-icon">4</div>
               <h6>Eligibility</h6>
             </div>
-            <div class="sidebar-sub-section dual-field elligible">
+            <div class="sidebar-sub-section dual-field">
               <div>
-                <label>Eligible courses</label>
-                <select formControlName="eligibleCourses">
-                  <option value="" disabled selected>Select a course</option>
-                </select>
+                <label>Eligible Courses</label>
+                <mat-form-field appearance="fill" class="eligible-courses-field">
+                  <mat-select formControlName="eligibleCourses" multiple placeholder="Select eligible courses">
+                    <mat-option *ngFor="let course of coursesList" [value]="course">
+                      {{ course }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-chip-list *ngIf="addEventForm.get('eligibleCourses')?.value?.length" class="eligible-courses-chips">
+                    <mat-chip *ngFor="let course of addEventForm.get('eligibleCourses')?.value" color="primary" selected>
+                      {{ course }}
+                    </mat-chip>
+                  </mat-chip-list>
+                </mat-form-field>
               </div>
               <div>
                 <label>Eligibility criteria</label>
@@ -185,9 +222,9 @@
               <h6>Selection process</h6>
             </div>
             <div style="display: flex;">
-              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('selectionProcess')?.value?.includes('1')" (change)="onRoundCheckboxChange($event, '1')" /> Aptitude test
-              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('selectionProcess')?.value?.includes('2')" (change)="onRoundCheckboxChange($event, '2')" /> Technical interview
-              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('selectionProcess')?.value?.includes('3')" (change)="onRoundCheckboxChange($event, '3')" /> HR interview
+              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('selectionProcess')?.value?.includes('Aptitude test')" (change)="onRoundCheckboxChange($event, 'Aptitude test')" /> Aptitude test
+              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('selectionProcess')?.value?.includes('Technical interview')" (change)="onRoundCheckboxChange($event, 'Technical interview')" /> Technical interview
+              <input type="checkbox" style="margin-left: 15px;" [checked]="addEventForm.get('selectionProcess')?.value?.includes('HR interview')" (change)="onRoundCheckboxChange($event, 'HR interview')" /> HR interview
             </div>
           </div>
         </div>
@@ -231,13 +268,14 @@
         </div>
 
         <div class="companies">
-          <ng-container *ngFor="let company of event.companyDetails; let i = index">
-            <ng-container *ngIf=" i < 4">
-              <img [src]="company.logo" alt="{{company.companyName}} logo" class="company-logo" /><span style="color:#007AFF"> {{company.companyName}} </span>
-            </ng-container>
-            <span *ngIf="i === 4" class="more-companies">+ {{ event.companyDetails.length - i }} more </span>
-          </ng-container>
-        </div>
+  <ng-container *ngFor="let company of event.companyDetails; let i = index">
+    <ng-container *ngIf=" i < 4">
+      <img [src]="company.logo" alt="{{company.companyName}} logo" class="company-logo" />
+      <span style="color:#007AFF"> {{company.companyName}} </span>
+    </ng-container>
+    <span *ngIf="i === 4" class="more-companies">+ {{ event.companyDetails.length - i }} more </span>
+  </ng-container>
+</div>
         
         <div class="course-eligibility">
           <div>
@@ -249,7 +287,9 @@
             <div>{{ event.eligibleCriteria }}</div>
           </div>
         </div>
-        <div class="footer">
+
+        
+        <!-- <div class="footer">
           <div class="status" *ngIf="event.status === 'not_sent'">
             <span class="warning">⚠️ Event not sent to students yet</span>
           </div>
@@ -257,7 +297,7 @@
           <ng-template #showShortlist>
             <span>12 students shortlisted</span>
           </ng-template>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -302,14 +342,19 @@
         <p><strong>{{ selectedEvent.eligibleCriteria }}</strong></p>
       </div>
 
-      <div class="modal-section">
-        <label>Selection Process</label>
-        <div class="badges">
-          <span *ngIf="selectedEvent.selectionProcess?.includes('1')" class="badge"> <img src="assets/icons/selection-icon.png"> Aptitude test</span>
-          <span *ngIf="selectedEvent.selectionProcess?.includes('2')" class="badge"> <img src="assets/icons/selection-icon.jpg"> Technical interview</span>
-          <span *ngIf="selectedEvent.selectionProcess?.includes('3')" class="badge"> <img src="assets/icons/selection-icon.jpg"> HR interview</span>
-        </div>
-      </div>
+      <div class="modal-section" *ngIf="selectedEvent.selectionProcess?.length">
+  <label>Selection Process</label>
+  <div class="badges">
+    <span *ngFor="let round of selectedEvent.selectionProcess" class="badge">
+  <ng-container [ngSwitch]="round">
+    <img *ngSwitchCase="'Aptitude test'" src="assets/icons/selection-icon.png" alt="Aptitude" />
+    <img *ngSwitchCase="'Technical interview'" src="assets/icons/selection-icon.jpg" alt="Technical" />
+    <img *ngSwitchCase="'HR interview'" src="assets/icons/selection-icon.jpg" alt="HR" />
+  </ng-container>
+  {{ round }}
+</span>
+  </div>
+</div>
 
       <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
         <button class="update-btn">Update Event Details</button>

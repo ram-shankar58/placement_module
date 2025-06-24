@@ -17,8 +17,10 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomTimepickerComponent } from './components/custom-timepicker/custom-timepicker.component';
-
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatChipsModule } from '@angular/material/chips';
+import { CompaniesService } from '../companies/companies.service';
+import { GlobalFilterPipe } from '../../shared/components/searchfilter/global-filter.pipe';
 export const routes: any = [
   {
     path: '',
@@ -68,6 +70,8 @@ export const routes: any = [
     ReactiveFormsModule,
     FormsModule,
     EffectsModule.forFeature([PlacementEventsEffect]),
+    MatSelectModule,
+    MatChipsModule
     
   ],
   schemas: [
@@ -76,7 +80,9 @@ export const routes: any = [
 
   providers: [
     PlacementEventsSandbox,
-    PlacementEventsService
+    PlacementEventsService,
+    CompaniesService,
+    GlobalFilterPipe
   ]
 })
 export class PlacementEventsModule { }
