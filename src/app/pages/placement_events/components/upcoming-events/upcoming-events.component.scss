@@ -939,16 +939,33 @@ select {
   vertical-align: middle;
 }
 
+// Ensures the mat-select box looks like a normal white input
 ::ng-deep .eligible-courses-field .mat-form-field-flex {
   background-color: white !important;
-  height: 40px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc !important;
   border-radius: 4px;
+  padding: 0 12px;
+  height: 40px;
+  display: flex;
   align-items: center;
 }
 
+// Text alignment and size inside select
 ::ng-deep .eligible-courses-field .mat-select-trigger {
-  font-size: 14px;
-  padding: 0 12px;
   line-height: 40px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
 }
+
+// Remove floating label margin issues
+::ng-deep .eligible-courses-field .mat-form-field-label-wrapper {
+  top: -0.6em !important;
+}
+
+// Remove chips if any were used earlier
+::ng-deep .mat-chip-list {
+  display: none !important;
+}
+
+

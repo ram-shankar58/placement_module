@@ -5,12 +5,15 @@ import { Subscription } from 'rxjs';
 import { PlacementEventsSandbox } from '../../placement_events.sandbox';
 import { CompaniesService } from '../../../companies/companies.service';
 import { GlobalFilterPipe } from '../../../../shared/components/searchfilter/global-filter.pipe';
+import { ViewEncapsulation } from '@angular/core';
+
 
 @Component({
   selector: 'app-upcoming-events',
   standalone: false,
   templateUrl: './upcoming-events.component.html',
-  styleUrls: ['./upcoming-events.component.scss']
+  styleUrls: ['./upcoming-events.component.scss'],
+  // encapsulation: ViewEncapsulation.None
 })
 export class UpcomingEventsComponent implements OnInit, OnDestroy {
   issidebarvisible = false;

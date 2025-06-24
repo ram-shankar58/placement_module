@@ -197,18 +197,19 @@
             <div class="sidebar-sub-section dual-field">
               <div>
                 <label>Eligible Courses</label>
-                <mat-form-field appearance="fill" class="eligible-courses-field">
-                  <mat-select formControlName="eligibleCourses" multiple placeholder="Select eligible courses">
-                    <mat-option *ngFor="let course of coursesList" [value]="course">
-                      {{ course }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-chip-list *ngIf="addEventForm.get('eligibleCourses')?.value?.length" class="eligible-courses-chips">
-                    <mat-chip *ngFor="let course of addEventForm.get('eligibleCourses')?.value" color="primary" selected>
-                      {{ course }}
-                    </mat-chip>
-                  </mat-chip-list>
-                </mat-form-field>
+                <mat-form-field appearance="fill" class="eligible-courses-field" style="width: 100%;">
+  <mat-label>Select eligible courses</mat-label>
+  <mat-select formControlName="eligibleCourses" multiple>
+    <mat-select-trigger>
+      {{ addEventForm.get('eligibleCourses')?.value?.join(', ') || 'Select eligible courses' }}
+    </mat-select-trigger>
+    <mat-option *ngFor="let course of coursesList" [value]="course">
+      {{ course }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+
               </div>
               <div>
                 <label>Eligibility criteria</label>
