@@ -266,6 +266,46 @@ select {
     
   }
 }
+.company-search-dropdown, .selected-companies{
+  img{
+  width: 28px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+}
+
+.selected-companies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.selected-company-chip {
+  display: flex;
+  align-items: center;
+  background: #e6f7ff;
+  color: #007aff;
+  border-radius: 16px;
+  padding: 4px 12px 4px 4px;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.selected-company-chip .company-logo-mini {
+  margin-right: 6px;
+}
+
+.remove-chip {
+  margin-left: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ff4d4f;
+  font-size: 18px;
+}
 
 .cancel_btn,
   .submit_btn {
@@ -410,16 +450,10 @@ select {
       padding: 4px 10px;
       font-size: 13px;
     }
-    .company-logo {
-  width: 28px;
-  height: 30px;
-  object-fit: contain;
-  border-radius: 4px;
-  margin-right: 6px;
-  vertical-align: middle;
-}
+    
     
   }
+  
 
   .course-eligibility {
     display: flex;
@@ -874,8 +908,47 @@ select {
     --font-medium: 600;
   }
 
+
+
+.sidebar-sub-section input,
+.sidebar-sub-section .form-control {
+  height: 40px;
+  line-height: 40px;
+  padding: 8px 36px 8px 12px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input-icon-right {
+  position: relative;
+}
+
 .timepicker-container {
   position: absolute;
-  z-index: 9999;
-  margin-top: 5px;
+  z-index: 10;
+  top: 100%;
+  left: 0;
+}
+
+.company-logo {
+  width: 28px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 4px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+::ng-deep .eligible-courses-field .mat-form-field-flex {
+  background-color: white !important;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  align-items: center;
+}
+
+::ng-deep .eligible-courses-field .mat-select-trigger {
+  font-size: 14px;
+  padding: 0 12px;
+  line-height: 40px;
 }

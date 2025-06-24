@@ -100,44 +100,46 @@
               <div class="step-icon">2</div>
               <h6>Schedule</h6>
             </div>
-            <div class="dual-field" style="display: flex; gap: 20px;">
-              <div class="sidebar-sub-section" style="flex: 1;">
-                <label>Event date as scheduled<span style="color: red;"> *</span></label>
-                <input
-                  class="form-control"
-                  placeholder=""
-                  name="dp"
-                  ngbDatepicker
-                  formControlName="eventDate"
-                  [ngClass]="{ 'is-invalid': submitted && addEventForm.controls['eventDate'].errors }"
-                  #d="ngbDatepicker"
-                  (click)="d.toggle()"
-                  style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
-                />
-                <div *ngIf="submitted && addEventForm.controls['eventDate'].errors" class="invalid-feedback d-block">
-                  Event date is required.
-                </div>
-              </div>
-              <div class="sidebar-sub-section">
-                <label>Event start time</label>
-                <div class="input-icon-right">
-                  <input
-                    type="text"
-                    placeholder=""
-                    formControlName="eventTime"
-                    readonly
-                    (click)="showClock = !showClock"
-                    style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
-                  />
-                  <div *ngIf="showClock" class="timepicker-container">
-                    <app-custom-timepicker (timeSelected)="onTimeSelected($event)"></app-custom-timepicker>
-                  </div>
-                  <div class="error" *ngIf="submitted && addEventForm.get('eventTime')?.hasError('invalidTime')">
-                    Please enter a valid time in HH:MM (e.g., 23:45).
-                  </div>
-                </div>
-              </div>
-            </div>
+            <div class="dual-field">
+  <div class="sidebar-sub-section" style="flex: 1;">
+    <label>Event date as scheduled<span style="color: red;"> *</span></label>
+    <input
+      class="form-control"
+      placeholder=""
+      name="dp"
+      ngbDatepicker
+      formControlName="eventDate"
+      [ngClass]="{ 'is-invalid': submitted && addEventForm.controls['eventDate'].errors }"
+      #d="ngbDatepicker"
+      (click)="d.toggle()"
+      style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+    />
+    <div *ngIf="submitted && addEventForm.controls['eventDate'].errors" class="invalid-feedback d-block">
+      Event date is required.
+    </div>
+  </div>
+
+  <div class="sidebar-sub-section" style="flex: 1;">
+    <label>Event start time</label>
+    <div class="input-icon-right">
+      <input
+        type="text"
+        placeholder=""
+        formControlName="eventTime"
+        readonly
+        (click)="showClock = !showClock"
+        style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+      />
+      <div *ngIf="showClock" class="timepicker-container">
+        <app-custom-timepicker (timeSelected)="onTimeSelected($event)"></app-custom-timepicker>
+      </div>
+      <div class="error" *ngIf="submitted && addEventForm.get('eventTime')?.hasError('invalidTime')">
+        Please enter a valid time in HH:MM (e.g., 23:45).
+      </div>
+    </div>
+  </div>
+</div>
+
             <br>
             <div class="sidebar-sub-section">
               <label>Venue or platform</label>
