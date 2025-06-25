@@ -90,6 +90,44 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   })
 }
 
+
+selectedCourses: string[] = [];
+showCourseDropdown = false;
+
+toggleCourseDropdown() {
+  this.showCourseDropdown = !this.showCourseDropdown;
+}
+
+closeCourseDropdown() {
+  setTimeout(() => this.showCourseDropdown = false, 200); // small delay to register click
+}
+
+dropdownOpen = false;
+
+toggleDropdown() {
+  this.dropdownOpen = !this.dropdownOpen;
+}
+
+closeDropdown() {
+  this.dropdownOpen = false;
+}
+
+onCourseCheckboxChange(course: string, event: Event) {
+  const input = event.target as HTMLInputElement;
+  const checked = input.checked;
+
+  if (checked) {
+    if (!this.selectedCourses.includes(course)) {
+      this.selectedCourses.push(course);
+    }
+  } else {
+    this.selectedCourses = this.selectedCourses.filter(c => c !== course);
+  }
+
+  this.addEventForm.get('eligibleCourses')?.setValue(this.selectedCourses);
+}
+
+
   onCompanySearch() {
   this.showCompanyDropdown = true;
   console.log('companiesList:', this.companiesList);

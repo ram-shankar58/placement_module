@@ -21,6 +21,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { CompaniesService } from '../companies/companies.service';
 import { GlobalFilterPipe } from '../../shared/components/searchfilter/global-filter.pipe';
+import { ClickOutsideDirective } from './components/upcoming-events/click-outside-directive';
+
 export const routes: any = [
   {
     path: '',
@@ -57,6 +59,7 @@ export const routes: any = [
     UpcomingEventsComponent,
     LayoutComponent,
     CustomTimepickerComponent,
+    ClickOutsideDirective
     
   ],
   imports: [

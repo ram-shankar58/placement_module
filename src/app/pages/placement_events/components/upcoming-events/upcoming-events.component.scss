@@ -939,33 +939,92 @@ select {
   vertical-align: middle;
 }
 
-// Ensures the mat-select box looks like a normal white input
-::ng-deep .eligible-courses-field .mat-form-field-flex {
-  background-color: white !important;
-  border: 1px solid #ccc !important;
+.custom-dropdown {
+  position: relative;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px 12px;
   border-radius: 4px;
-  padding: 0 12px;
-  height: 40px;
+  cursor: pointer;
+  min-height: 40px;
+  user-select: none;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+
+  &:focus {
+    outline: none;
+    border-color: #007aff;
+  }
+
+  .selected-options {
+    flex: 1;
+    color: #333;
+    font-size: 14px;
+  }
+
+  .dropdown-arrow {
+    font-size: 12px;
+    margin-left: 10px;
+    color: #666;
+  }
+
+  .options-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 10;
+    max-height: 180px;
+    overflow-y: auto;
+
+    .dropdown-option {
+      display: block;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+
+      &:hover {
+        background: #f1f1f1;
+      }
+
+      input[type="checkbox"] {
+        margin-right: 8px;
+      }
+    }
+  }
 }
 
-// Text alignment and size inside select
-::ng-deep .eligible-courses-field .mat-select-trigger {
-  line-height: 40px;
+.custom-dropdown-btn {
+  background-color: white;
+  padding: 10px 12px;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: left;
+  position: relative;
   font-size: 14px;
+}
+
+.custom-dropdown-list {
+  border: 1px solid #ccc;
+  border-top: none;
+  background-color: white;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  padding: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.dropdown-option {
   display: flex;
   align-items: center;
+  margin: 6px 0;
+  font-size: 14px;
 }
-
-// Remove floating label margin issues
-::ng-deep .eligible-courses-field .mat-form-field-label-wrapper {
-  top: -0.6em !important;
-}
-
-// Remove chips if any were used earlier
-::ng-deep .mat-chip-list {
-  display: none !important;
-}
-
-

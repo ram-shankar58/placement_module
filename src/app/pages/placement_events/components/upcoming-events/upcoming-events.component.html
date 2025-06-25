@@ -194,23 +194,34 @@
               <div class="step-icon">4</div>
               <h6>Eligibility</h6>
             </div>
-            <div class="sidebar-sub-section dual-field">
-              <div>
-                <label>Eligible Courses</label>
-                <mat-form-field appearance="fill" class="eligible-courses-field" style="width: 100%;">
-  <mat-label>Select eligible courses</mat-label>
-  <mat-select formControlName="eligibleCourses" multiple>
-    <mat-select-trigger>
-      {{ addEventForm.get('eligibleCourses')?.value?.join(', ') || 'Select eligible courses' }}
-    </mat-select-trigger>
-    <mat-option *ngFor="let course of coursesList" [value]="course">
+            <div class="dual-field">
+              <div class="sidebar-sub-section">
+  <label>Eligible Courses</label>
+  <div class="dropdown-wrapper" (clickOutside)="closeDropdown()">
+  <button type="button" class="custom-dropdown-btn" (click)="toggleDropdown()">
+    {{ selectedCourses.length ? selectedCourses.join(', ') : 'Select eligible courses' }}
+    <i class="fa fa-caret-down"></i>
+  </button>
+
+  <div class="custom-dropdown-list" *ngIf="dropdownOpen">
+    <label *ngFor="let course of coursesList" class="dropdown-option">
+      <input
+        type="checkbox"
+        [value]="course"
+        (change)="onCourseCheckboxChange(course, $event)"
+        [checked]="selectedCourses.includes(course)"
+      />
       {{ course }}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+    </label>
+  </div>
+</div>
 
 
-              </div>
+</div>
+
+
+
+              
               <div>
                 <label>Eligibility criteria</label>
                 <input type="text" placeholder="Enter criteria" formControlName="eligibleCriteria" />
