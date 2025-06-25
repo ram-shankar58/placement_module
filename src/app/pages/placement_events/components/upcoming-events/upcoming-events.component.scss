@@ -415,21 +415,34 @@ select {
           max-height: 15px;
         }
 
-        .badge {
-          max-height: 20px;
-          padding: 2px 6px;
-          border-radius: 6px;
-          font-size: 12px;
-          text-align: center;
-          &.on-campus {
-            background: #e8fff0;
-            color: #28a745;
-          }
-          &.virtual {
-            background: #fff5e5;
-            color: #ff8c00;
-          }
-        }
+        .badge.eventviewbadge {
+  max-height: 20px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 600;
+  background: #eee;
+  color: #333;
+  margin-left: 8px;
+
+  &.on-campus {
+    background: #e8fff0;
+    color: #28a745;
+  }
+  &.off-campus {
+    background: #e5f0ff;
+    color: #007bff;
+  }
+  &.pool {
+    background: #f3e8ff;
+    color: #a020f0;
+  }
+  &.virtual {
+    background: #fff5e5;
+    color: #ff8c00;
+  }
+}
       }
     }
   }
@@ -684,7 +697,6 @@ select {
     justify-content: center;
     gap: 10px;
   }
-
 
 //Sidebar has been put here again from styles.css because boostrap added locally in the component overrides the global styles.css. 
 //Do not remove this until fix for boostrap has been found.
@@ -1027,4 +1039,48 @@ select {
   align-items: center;
   margin: 6px 0;
   font-size: 14px;
+}
+.badge.eventviewbadge {
+  max-height: 20px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 600;
+  background: #eee;
+  color: #333;
+  margin-left: 8px;
+
+  &.on-campus {
+    background: #e8fff0;
+    color: #28a745;
+  }
+  &.off-campus {
+    background: #e5f0ff;
+    color: #007bff;
+  }
+  &.pool {
+    background: #f3e8ff;
+    color: #a020f0;
+  }
+  &.virtual {
+    background: #fff5e5;
+    color: #ff8c00;
+  }
+}
+.sort-dropdown {
+  min-width: 160px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-top: 4px;
+}
+.sort-option {
+  padding: 10px 16px;
+  cursor: pointer;
+}
+.sort-option.selected, .sort-option:hover {
+  background: #f0f8ff;
+  color: #007aff;
 }

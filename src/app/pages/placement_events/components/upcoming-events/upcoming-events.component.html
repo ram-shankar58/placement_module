@@ -6,7 +6,7 @@
       </button>
     </div>
     <div class="col">
-      <input type="text" class="search-box" placeholder="Search" />
+      <input type="text" class="search-box event-search-input" [(ngModel)]="eventSearch" placeholder="Search" />
     </div>
     <div class="col-auto">
       <div class="icon-button">
@@ -14,9 +14,17 @@
       </div>
     </div>
     <div class="col-auto">
-      <div class="icon-button">
-        <i class="fa fa-sort"></i> Sort
-      </div>
+      <div class="sort-dropdown-wrapper" style="position: relative; display: inline-block;">
+  <button class="icon-button" (click)="sortDropdownOpen = !sortDropdownOpen">
+    <i class="fa fa-sort"></i> Sort
+  </button>
+  <div class="sort-dropdown" *ngIf="sortDropdownOpen" style="position: absolute; z-index: 10; background: #fff; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); min-width: 160px;">
+    <div class="sort-option" [class.selected]="sortOption === 'recent'" (click)="setSort('recent')">Recently added</div>
+    <div class="sort-option" [class.selected]="sortOption === 'name'" (click)="setSort('name')">Event Name</div>
+    <div class="sort-option" [class.selected]="sortOption === 'date'" (click)="setSort('date')">Event Date</div>
+    <div class="sort-option" [class.selected]="sortOption === 'type'" (click)="setSort('type')">Event Type</div>
+  </div>
+</div>
     </div>
   </div>
 
@@ -58,7 +66,7 @@
               >
                 <span>
                   <input type="radio" name="modeOfEvent" value="On-campus" class="radioinput" /><strong>On-campus</strong>
-                  <div class="description">At your college</div>
+                  <!-- <div class="description">At your college</div> -->
                 </span>
               </label>
               <label 
@@ -69,7 +77,7 @@
                 <span>
                   <input type="radio" name="modeOfEvent" value="Off-campus" class="radioinput" /><strong>Off-campus</strong>
                 </span>
-                <div class="description">External drive</div>
+                <!-- <div class="description">External drive</div> -->
               </label>
               <label 
                 class="mode-box blue" 
@@ -79,7 +87,7 @@
                 <span>
                   <input type="radio" name="modeOfEvent" value="Pool" class="radioinput" /><strong>Pool</strong>
                 </span>
-                <div class="description">Multi-college drive</div>
+                <!-- <div class="description">Multi-college drive</div> -->
               </label>
               <label 
                 class="mode-box purple" 
@@ -89,7 +97,7 @@
                 <span>
                   <input type="radio" name="modeOfEvent" value="Virtual" class="radioinput" /><strong>Virtual</strong>
                 </span>
-                <div class="description">Online process</div>
+                <!-- <div class="description">Online process</div> -->
               </label>
             </div>
           </div>
@@ -258,7 +266,7 @@
 
   <!-- upcoming events table -->
   <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px;">
-    <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of EventsList">
+    <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of sortedEvents | globalFilter:eventSearch">
       <div class="event-card">
         <div class="header" (click)="openEventDetails(event)" style="cursor: pointer;">
           <div>
@@ -274,31 +282,42 @@
             <div class="event-id">{{ event.id }}</div>
             <div class="title">{{ event.eventTitle }}</div>
             <div class="meta">
-              <span class="time">{{ event.eventTime }}</span>
-              <span class="badge eventviewbadge" [ngClass]="{'on-campus': event.modeOfEvent === 'on-campus', 'virtual': event.modeOfEvent !== 'on-campus'}">{{ event.modeOfEvent }}</span>
-              <img src="assets/icons/location_on.png" > <span class="venue">{{ event.venue }}</span>
+              <span class="time" *ngIf="event.eventTime?.length">{{ event.eventTime | timeAmPm }}</span>
+              <span
+  class="badge eventviewbadge"
+  [ngClass]="{
+    'on-campus': event.modeOfEvent === 'On-campus',
+    'off-campus': event.modeOfEvent === 'Off-campus',
+    'pool': event.modeOfEvent === 'Pool',
+    'virtual': event.modeOfEvent === 'Virtual'
+  }"
+  *ngIf="event.modeOfEvent?.length"
+>
+  {{ event.modeOfEvent }}
+</span>
+              <img src="assets/icons/location_on.png"  *ngIf="event.venue?.length"> <span class="venue" *ngIf="event.venue?.length">{{ event.venue }}</span>
             </div>
           </div>
         </div>
 
-        <div class="companies">
-  <ng-container *ngFor="let company of event.companyDetails; let i = index">
-    <ng-container *ngIf=" i < 4">
-      <img [src]="company.logo" alt="{{company.companyName}} logo" class="company-logo" />
-      <span style="color:#007AFF"> {{company.companyName}} </span>
-    </ng-container>
-    <span *ngIf="i === 4" class="more-companies">+ {{ event.companyDetails.length - i }} more </span>
-  </ng-container>
-</div>
+        <div class="companies" *ngIf="event.companyDetails?.length" >
+          <ng-container  *ngFor="let company of event.companyDetails; let i = index">
+            <ng-container *ngIf=" i < 4">
+              <img [src]="company.logo" alt="{{company.companyName}} logo" class="company-logo" />
+              <span style="color:#007AFF"> {{company.companyName}} </span>
+            </ng-container>
+            <span *ngIf="i === 4" class="more-companies">+ {{ event.companyDetails.length - i }} more </span>
+          </ng-container>
+        </div>
         
-        <div class="course-eligibility">
-          <div>
+        <div class="course-eligibility" *ngIf="getFilteredEligibleCourses(event).length || event.eligibleCriteria">
+          <div *ngIf="getFilteredEligibleCourses(event).length">
             <label>Eligible Courses</label>
-            <div>{{ event.eligibleCourses?.join(', ') || '' }}</div>
+            <div *ngIf="getFilteredEligibleCourses(event).length">{{ event.eligibleCourses?.join(', ') || '' }}</div>
           </div>
-          <div>
+          <div *ngIf="event.eligibleCriteria">
             <label>Eligibility Criteria</label>
-            <div>{{ event.eligibleCriteria }}</div>
+            <div *ngIf="event.eligibleCriteria">{{ event.eligibleCriteria }}</div>
           </div>
         </div>
 
@@ -327,9 +346,19 @@
         <div class="event-title">
           <strong>{{ selectedEvent.eventTitle }}</strong>
           <div class="meta">
-            {{ selectedEvent.eventDate | date: 'dd MMM yyyy' }}, {{ selectedEvent.eventTime }} 
-            <span class="badge" [ngClass]="{'on-campus': selectedEvent.modeOfEvent === 'on-campus', 'virtual': selectedEvent.modeOfEvent !== 'on-campus'}">{{ selectedEvent.modeOfEvent }}</span>
-            <img src="assets/icons/location_on.png" > {{ selectedEvent.venue }}
+            {{ selectedEvent.eventDate | date: 'dd MMM yyyy' }} {{ selectedEvent.eventTime | timeAmPm}} 
+            <span
+  class="badge eventviewbadge" *ngIf="selectedEvent.modeOfEvent?.length"
+  [ngClass]="{
+    'on-campus': selectedEvent.modeOfEvent?.toLowerCase() === 'on-campus',
+    'off-campus': selectedEvent.modeOfEvent?.toLowerCase() === 'off-campus',
+    'pool': selectedEvent.modeOfEvent?.toLowerCase() === 'pool',
+    'virtual': selectedEvent.modeOfEvent?.toLowerCase() === 'virtual'
+  }"
+>
+  {{ selectedEvent.modeOfEvent }}
+</span>
+            <img src="assets/icons/location_on.png" *ngIf="selectedEvent.venue?.length"> {{ selectedEvent.venue }}
           </div>
         </div>
       </div>
@@ -339,24 +368,24 @@
         <p>{{ selectedEvent.aboutEvent }}</p>
       </div>
 
-      <div class="modal-section">
+      <div class="modal-section" *ngIf="selectedEvent.companyDetails?.length">
         <label>Associated Companies</label>
         <div class="companies">
           <img *ngFor="let comp of selectedEvent.companyDetails" [src]="comp.logo" [alt]="comp.companyName" />
         </div>
       </div>
 
-      <div class="modal-section">
+      <div class="modal-section" *ngIf="getFilteredEligibleCourses(selectedEvent).length">
         <label>Eligible Courses</label>
-        <p>{{ selectedEvent.eligibleCourses.join(', ') }}</p>
+        <p>{{ getFilteredEligibleCourses(selectedEvent).join(', ') }}</p>
       </div>
 
-      <div class="modal-section">
+      <div class="modal-section" *ngIf="selectedEvent.eligibleCriteria">
         <label>Eligibility Criteria</label>
         <p><strong>{{ selectedEvent.eligibleCriteria }}</strong></p>
       </div>
 
-      <div class="modal-section" *ngIf="selectedEvent.selectionProcess?.length">
+      <div class="modal-section" *ngIf="getFilteredSelectionProcess(selectedEvent)?.length">
   <label>Selection Process</label>
   <div class="badges">
     <span *ngFor="let round of selectedEvent.selectionProcess" class="badge">

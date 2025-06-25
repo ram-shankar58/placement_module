@@ -28,6 +28,9 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   showCompanyDropdown = false;
   selectedCompanies: any[]= [];
   companiesList: any[] =[];
+  eventSearch: string = '';
+  sortDropdownOpen = false;
+  sortOption: string= 'recent';
 
   constructor(
     private fb: FormBuilder,
@@ -47,6 +50,13 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   'IT'
 ];
 
+getFilteredEligibleCourses(event: any): string[] {
+  return (event.eligibleCourses || []).filter((c: any) => !!c);
+}
+
+getFilteredSelectionProcess(event: any): string[] {
+  return(event.selectionProcess || []).filter((s:any) => !!s);
+}
   ngOnInit(): void {
   this.initAddEventForm();
   this.eventsSandbox.placementEventsList();
@@ -287,5 +297,30 @@ onCourseCheckboxChange(course: string, event: Event) {
 
   closeEventDetails(): void {
     this.selectedEvent = null;
+  }
+
+  setSort(option: string) {
+    this.sortOption = option;
+    this.sortDropdownOpen = false;
+  }
+
+  get sortedEvents() {
+    let events = [...this.EventsList];
+    switch (this.sortOption) {
+      case 'name':
+        events.sort((a, b) => (a.eventTitle || '').localeCompare(b.eventTitle || ''));
+        break;
+      case 'date':
+        events.sort((a, b) => (a.eventDate || '').localeCompare(b.eventDate || ''));
+        break;
+      case 'type':
+        events.sort((a, b) => (a.modeOfEvent || '').localeCompare(b.modeOfEvent || ''));
+        break;
+      case 'recent':
+      default:
+        events = events.reverse(); // Assuming most recent is last in the array
+        break;
+    }
+    return events;
   }
 }
