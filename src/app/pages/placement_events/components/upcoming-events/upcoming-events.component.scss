@@ -372,7 +372,7 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
+  position: relative;
 
   .header {
     display: flex;
@@ -1203,3 +1203,45 @@ select {
     cursor: pointer;
   }
 }
+.event-settings {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+
+  .settings-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .settings-dropdown {
+    position: absolute;
+    top: 28px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    min-width: 180px;
+    padding: 8px 0;
+
+    .settings-option {
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 14px;
+
+      &:hover {
+        background-color: #f1f1f1;
+      }
+
+      &.danger {
+        color: #e74c3c;
+        font-weight: 500;
+      }
+    }
+  }
+}
+

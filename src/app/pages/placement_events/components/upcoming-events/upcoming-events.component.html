@@ -383,6 +383,19 @@
     <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of displayedEvents"
 >
       <div class="event-card">
+        <!-- Settings Dropdown -->
+<div class="event-settings">
+  <button class="settings-btn" (click)="toggleSettings(event)">
+    <i class="fa fa-ellipsis-v"></i>
+  </button>
+
+  <div class="settings-dropdown" *ngIf="event.showSettings">
+    <div class="settings-option" (click)="onUpdateEvent(event)" >Update Event Details</div>
+    <div class="settings-option" (click)="onCopyEvent(event)">Copy as New Event</div>
+    <div class="settings-option danger" (click)="onDeleteEvent(event)">Cancel/Delete Event</div>
+  </div>
+</div>
+
         <div class="header" (click)="openEventDetails(event)" style="cursor: pointer;">
           <div>
             <div class="step-header-events">
@@ -391,6 +404,8 @@
                   <div class="month" style="align-items: center; text-align: center;">{{ event.eventDate | date: 'MMM' }}</div>
                 </div>
               </div>
+              
+
             </div>
           </div>
           <div class="event-details">

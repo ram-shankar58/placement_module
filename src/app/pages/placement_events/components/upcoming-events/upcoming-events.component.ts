@@ -512,4 +512,38 @@ onCourseCheckboxChange(course: string, event: Event) {
 
   return events;
 }
+toggleSettings(event: any) {
+  // Close all other settings dropdowns
+  this.filteredEvents.forEach(e => {
+    if (e !== event) e.showSettings = false;
+  });
+
+  // Toggle this one
+  event.showSettings = !event.showSettings;
+}
+
+onUpdateEvent(event: any) {
+  event.showSettings = false;
+  // Logic to open event in edit mode
+  console.log("Updating:", event);
+  // You can redirect or open modal here
+}
+
+onCopyEvent(event: any) {
+  event.showSettings = false;
+  // Logic to duplicate event data
+  console.log("Copying as new:", event);
+  // You can pre-fill the sidebar with this event's data
+}
+
+onDeleteEvent(event: any) {
+  event.showSettings = false;
+  // Confirm before deleting
+  if (confirm(`Are you sure you want to delete "${event.eventTitle}"?`)) {
+    this.EventsList = this.EventsList.filter(e => e !== event);
+    this.applyFilters(); // Reapply to update filtered list
+  }
+}
+
+
 }
