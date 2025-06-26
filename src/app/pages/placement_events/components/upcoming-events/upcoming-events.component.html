@@ -1,3 +1,4 @@
+
 <div class="overall_div">
   <div class="add_n_sort_event row align-items-center mb-3">
     <div class="col-auto">
@@ -9,10 +10,127 @@
       <input type="text" class="search-box event-search-input" [(ngModel)]="eventSearch" placeholder="Search" />
     </div>
     <div class="col-auto">
-      <div class="icon-button">
+      <button class="icon-button"(click)="toggleFilterPopup()">
         <i class="fa fa-filter"></i> Filter
+      </button>
       </div>
+    <div class="filter-dropdown" *ngIf="isFilterVisible" clickOutside >
+  <div class="filter-header">
+    <span>Filter Events</span>
+    <button class="close-btn" (click)="closeFilterPopup()">×</button>
+  </div>
+
+  <!-- Event Type -->
+  <!-- Event Type -->
+<div class="filter-section">
+  <label>Event Type</label>
+  <div class="event-type-options">
+    <label>
+      <input type="checkbox" value="On-campus" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('On-campus')" /> On-campus
+    </label>
+    <label>
+      <input type="checkbox" value="Off-campus" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('Off-campus')" /> Off-campus
+    </label>
+    <label>
+      <input type="checkbox" value="Pool" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('Pool')" /> Pool
+    </label>
+    <label>
+      <input type="checkbox" value="Virtual" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('Virtual')" /> Virtual
+    </label>
+  </div>
+</div>
+
+
+  <!-- Search -->
+  <div class="filter-section">
+    <label>Search Company</label>
+    <input
+    type="text"
+    placeholder="Search or type to add"
+    [(ngModel)]="filterCompanySearch"
+    (input)="onFilterCompanySearch()"
+    (keydown.enter)="addCompanyFromFilter()"
+    class="company-search-input"
+  />
+  <div class="company-search-dropdown" *ngIf="filteredFilterCompanies.length && showFilterCompanyDropdown">
+    <div class="company-search-option" *ngFor="let company of filteredFilterCompanies" (click)="selectCompanyFromFilter(company)">
+      <img [src]="company.logo" alt="{{ company.companyName }}" class="company-logo-mini" />
+      {{ company.companyName }}
     </div>
+  </div>
+  <div class="selected-companies">
+    <div class="selected-company-chip" *ngFor="let comp of selectedFilterCompanies">
+      <img [src]="comp.logo" alt="{{ comp.companyName }}" class="company-logo-mini" />
+      {{ comp.companyName }}
+      <span class="remove-chip" (click)="removeFilterCompany(comp)">×</span>
+    </div>
+  </div>
+
+  </div>
+
+  <!-- Date and Time in same row -->
+  <div class="filter-section dual-field">
+    <div style="flex: 1;">
+      <label>Event Date</label>
+    <input
+      ngbDatepicker
+      placeholder="Select Date"
+      [(ngModel)]="filterDate"
+      #fd="ngbDatepicker"
+      (click)="fd.toggle()"
+      class="form-control"
+      style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+    />
+    </div>
+    <div style="flex: 1;">
+      <label>Event Time</label>
+      <input
+      type="text"
+      readonly
+      [(ngModel)]="filterTime"
+      (click)="showFilterClock = !showFilterClock"
+      class="form-control"
+      style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+    />
+    <div *ngIf="showFilterClock" class="timepicker-container">
+      <app-custom-timepicker (timeSelected)="onFilterTimeSelected($event)"></app-custom-timepicker>
+    </div>
+    </div>
+  </div>
+
+  <!-- Eligible Courses -->
+  <div class="filter-section">
+    <label>Eligible Courses</label>
+    <!-- <select class="filter-select" multiple>
+      <option>B.Tech CSE</option>
+      <option>B.Tech ECE</option>
+      <option>M.Tech CSE</option>
+      <option>MBA</option>
+      <option>BCA</option>
+    </select> -->
+
+    <div class="eligible-course-list">
+    <label *ngFor="let course of coursesList" class="course-option">
+      <input type="checkbox" [value]="course" (change)="onFilterCourseChange($event)" [checked]="filterCourses.includes(course)" />
+      {{ course }}
+    </label>
+  </div>
+
+  <button type="button" class="custom-dropdown-btn" >
+    <i class="fa fa-caret-down"></i>
+  </button>
+  </div>
+
+  <!-- Footer -->
+  <div class="filter-footer">
+    <a class="clear-btn" (click)="resetFilters()">Clear</a>
+    <button class="apply-btn" (click)="applyFilters()">Apply</button>
+  </div>
+</div>
+
+
+      
+    
     <div class="col-auto">
       <div class="sort-dropdown-wrapper" style="position: relative; display: inline-block;">
   <button class="icon-button" (click)="sortDropdownOpen = !sortDropdownOpen">
@@ -226,10 +344,6 @@
 
 
 </div>
-
-
-
-              
               <div>
                 <label>Eligibility criteria</label>
                 <input type="text" placeholder="Enter criteria" formControlName="eligibleCriteria" />
@@ -266,7 +380,8 @@
 
   <!-- upcoming events table -->
   <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px;">
-    <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of sortedEvents | globalFilter:eventSearch">
+    <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of displayedEvents"
+>
       <div class="event-card">
         <div class="header" (click)="openEventDetails(event)" style="cursor: pointer;">
           <div>

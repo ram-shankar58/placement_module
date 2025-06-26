@@ -50,6 +50,141 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   'IT'
 ];
 
+// upcoming-events.component.ts
+
+  isFilterVisible = false;
+
+toggleFilterPopup() {
+  this.isFilterVisible = !this.isFilterVisible;
+}
+
+closeFilterPopup() {
+  this.isFilterVisible = false;
+}
+
+
+// Filtering-related fields
+filterCompanySearch = '';
+filteredFilterCompanies: { companyName: string; logo: string }[] = [];
+filterModes: string[] = [];
+
+selectedFilterCompanies: { companyName: string; logo: string }[] = [];
+showFilterCompanyDropdown = false;
+
+filterDate: any = null;
+filterTime: string = '';
+filterCourses: string[] = [];
+showFilterClock = false;
+
+onFilterModeChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+
+  if (target.checked) {
+    if (!this.filterModes.includes(value)) {
+      this.filterModes.push(value);
+    }
+  } else {
+    this.filterModes = this.filterModes.filter(mode => mode !== value);
+  }
+}
+
+
+// Company search (same as sidebar)
+onFilterCompanySearch() {
+  const query = this.filterCompanySearch.toLowerCase();
+  this.filteredFilterCompanies = this.companiesList.filter(company =>
+    company.companyName.toLowerCase().includes(query)
+  );
+  this.showFilterCompanyDropdown = true;
+}
+
+selectCompanyFromFilter(company: any) {
+  if (!this.selectedFilterCompanies.some(c => c.companyName === company.companyName)) {
+    this.selectedFilterCompanies.push(company);
+  }
+  this.filterCompanySearch = '';
+  this.showFilterCompanyDropdown = false;
+}
+
+addCompanyFromFilter() {
+  if (this.filterCompanySearch.trim()) {
+    const customCompany = {
+      companyName: this.filterCompanySearch.trim(),
+      logo: 'assets/icons/default-company-logo.png' //change required heres
+    };
+    this.selectedFilterCompanies.push(customCompany);
+    this.filterCompanySearch = '';
+    this.showFilterCompanyDropdown = false;
+  }
+}
+
+removeFilterCompany(comp: any) {
+  this.selectedFilterCompanies = this.selectedFilterCompanies.filter(c => c !== comp);
+}
+
+// Time selection
+onFilterTimeSelected(time: string) {
+  this.filterTime = time;
+  this.showFilterClock = false;
+}
+
+// Eligible courses selection
+onFilterCourseChange(event: any) {
+  const course = event.target.value;
+  if (event.target.checked) {
+    this.filterCourses.push(course);
+  } else {
+    this.filterCourses = this.filterCourses.filter(c => c !== course);
+  }
+}
+
+// Final filtered result
+filteredEvents: any[] = [];
+
+applyFilters() {
+  this.filteredEvents = this.EventsList.filter(event => {
+    const matchesCompany = this.selectedFilterCompanies.length === 0 ||
+      this.selectedFilterCompanies.some(comp =>
+        event.companyDetails.some((ec: {companyName: string}) => ec.companyName === comp.companyName)
+      );
+
+    const matchesCourse = this.filterCourses.length === 0 ||
+      this.filterCourses.some(course => event.eligibleCourses.includes(course));
+
+    const matchesDate = !this.filterDate || event.eventDate === this.formatDate(this.filterDate);
+
+    const matchesTime = !this.filterTime || event.eventTime === this.filterTime;
+
+    const matchesMode = this.filterModes.length === 0 ||
+      this.filterModes.includes(event.modeOfEvent);
+
+    return matchesCompany && matchesCourse && matchesDate && matchesTime && matchesMode;
+  });
+
+  this.isFilterVisible = false;
+}
+
+
+// Use filteredEvents instead of EventsList in HTML ngFor
+formatDate(date: any): string {
+  // Handles both Date object and NgbDate format
+  if (typeof date === 'object' && date.year) {
+    return `${date.year}-${String(date.month).padStart(2, '0')}-${String(date.day).padStart(2, '0')}`;
+  }
+  const d = new Date(date);
+  return d.toISOString().split('T')[0];
+}
+
+resetFilters() {
+  this.selectedFilterCompanies = [];
+  this.filterCompanySearch = '';
+  this.filterDate = null;
+  this.filterTime = '';
+  this.filterCourses = [];
+  this.filteredEvents = [...this.EventsList];
+}
+
 getFilteredEligibleCourses(event: any): string[] {
   return (event.eligibleCourses || []).filter((c: any) => !!c);
 }
@@ -57,7 +192,19 @@ getFilteredEligibleCourses(event: any): string[] {
 getFilteredSelectionProcess(event: any): string[] {
   return(event.selectionProcess || []).filter((s:any) => !!s);
 }
+
+@HostListener('document:click', ['$event'])
+onDocumentClick(event: MouseEvent) {
+  const target = event.target as HTMLElement;
+  const clickedInsideFilter = !!target.closest('.filter-dropdown');
+  const clickedInsideDatepicker = !!target.closest('ngb-datepicker') || !!target.closest('.ngb-dp-container');
+  if (!clickedInsideFilter && !clickedInsideDatepicker && this.isFilterVisible) {
+    this.closeFilterPopup();
+  }
+}
+
   ngOnInit(): void {
+  this.filteredEvents = [...this.EventsList];
   this.initAddEventForm();
   this.eventsSandbox.placementEventsList();
   this.subscriptions.push(
@@ -83,6 +230,7 @@ getFilteredSelectionProcess(event: any): string[] {
             : [],
           status: 'sent'
         }));
+        this.filteredEvents = [... this.EventsList];
       } else {
         this.EventsList = [];
       }
@@ -99,6 +247,8 @@ getFilteredSelectionProcess(event: any): string[] {
     }
   })
 }
+
+
 
 
 selectedCourses: string[] = [];
@@ -323,4 +473,43 @@ onCourseCheckboxChange(course: string, event: Event) {
     }
     return events;
   }
+
+  get displayedEvents() {
+  // Start with filtered events
+  let events = [...this.filteredEvents];
+
+  // Apply search
+  if (this.eventSearch && this.eventSearch.trim()) {
+    const search = this.eventSearch.trim().toLowerCase();
+    events = events.filter(event =>
+      (event.eventTitle && event.eventTitle.toLowerCase().includes(search)) ||
+      (event.aboutEvent && event.aboutEvent.toLowerCase().includes(search)) ||
+      (event.modeOfEvent && event.modeOfEvent.toLowerCase().includes(search)) ||
+      (event.venue && event.venue.toLowerCase().includes(search)) ||
+      (event.eligibleCourses && event.eligibleCourses.join(', ').toLowerCase().includes(search)) ||
+      (event.companyDetails && event.companyDetails.some((c: any) =>
+        c.companyName && c.companyName.toLowerCase().includes(search)
+      ))
+    );
+  }
+
+  // Apply sort
+  switch (this.sortOption) {
+    case 'name':
+      events.sort((a, b) => (a.eventTitle || '').localeCompare(b.eventTitle || ''));
+      break;
+    case 'date':
+      events.sort((a, b) => (a.eventDate || '').localeCompare(b.eventDate || ''));
+      break;
+    case 'type':
+      events.sort((a, b) => (a.modeOfEvent || '').localeCompare(b.modeOfEvent || ''));
+      break;
+    case 'recent':
+    default:
+      events = events.reverse();
+      break;
+  }
+
+  return events;
+}
 }
