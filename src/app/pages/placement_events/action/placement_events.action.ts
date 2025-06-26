@@ -15,6 +15,9 @@ export const ActionTypes = {
     UPDATE_PLACEMENT_EVENT_SUCCESS: type('[placement_events] UPDATE PLACEMENT_EVENT SUCCESS'),
     UPDATE_PLACEMENT_EVENT_FAIL: type('[placement_events] UPDATE PLACEMENT_EVENT FAIL'),
     
+    DELETE_PLACEMENT_EVENT: type('[placement_events] DELETE PLACEMENT_EVENT'),
+    DELETE_PLACEMENT_EVENT_SUCCESS: type('[placement_events] DELETE PLACEMENT_EVENT SUCCESS'),
+    DELETE_PLACEMENT_EVENT_FAIL: type('[placement_events] DELETE PLACEMENT_EVENT FAIL')
 }
 
 export class addPlacementEvents implements Action{
@@ -80,5 +83,26 @@ export class updatePlacementEventFail implements Action{
     type=ActionTypes.UPDATE_PLACEMENT_EVENT_FAIL;
     constructor(public payload: any){
 
+    }
+}
+
+export class deletePlacementEvent implements Action{
+    type=ActionTypes.DELETE_PLACEMENT_EVENT;
+    constructor(public payload: any){
+
+    }
+}
+
+export class deletePlacementEventSuccess implements Action{
+    type=ActionTypes.DELETE_PLACEMENT_EVENT_SUCCESS;
+    constructor(public payload: ResponseInterface){
+
+    }
+}
+
+export class deletePlacementEventFail implements Action{
+    type=ActionTypes.DELETE_PLACEMENT_EVENT_FAIL;
+    constructor(public payload: any){
+        
     }
 }

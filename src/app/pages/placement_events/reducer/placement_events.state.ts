@@ -9,6 +9,9 @@ export interface PlacementEventsState extends Map<String, any>{
 
     updatePlacementEvent: any;
     updatePlacementEventLoading: boolean;
+
+    deletePlacementEvent: any;
+    deletePlacementEventLoading: boolean;
     
 }
 
@@ -18,5 +21,7 @@ export const PlacementEventsStateRecord = Record({
     placementEventsList: [],
     placementEventsListLoading: false,
     updatePlacementEvent: [],
-    updatePlacementEventLoading: false
+    updatePlacementEventLoading: false,
+    deletePlacementEvent: [],
+    deletePlacementEventLoading: false
 });

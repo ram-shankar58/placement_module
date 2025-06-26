@@ -1,6 +1,6 @@
 import { PlacementEventsState, PlacementEventsStateRecord } from "./placement_events.state";
 import * as actions from '../action/placement_events.action';
-import { StateObservable } from "@ngrx/store";
+import { State, StateObservable } from "@ngrx/store";
 
 export const initialState: PlacementEventsState = new PlacementEventsStateRecord() as unknown as PlacementEventsState;
 
@@ -66,7 +66,24 @@ export function reducer(state = initialState, {type, payload }: any): PlacementE
                 updatePlacementEvent: [],
                 updatePlacementEventLoading: false
             })
+            
+        case actions.ActionTypes.DELETE_PLACEMENT_EVENT:
+            return Object.assign({}, state, {
+                deletePlacementEvent: [],
+                deletePlacementEventLoading: true
+            })
 
+        case actions.ActionTypes.DELETE_PLACEMENT_EVENT_SUCCESS:
+            return Object.assign({}, state, {
+                deletePlacementEvent: payload,
+                deletePlacementEventLoading: false
+            })
+
+        case actions.ActionTypes.DELETE_PLACEMENT_EVENT_FAIL:
+            return Object.assign({}, state, {
+                deletePlacementEvent: [],
+                deletePlacementEventLoading: false
+            })
 
         default: {
             return state;
@@ -82,3 +99,6 @@ export const placementEventsListLoading = (state: PlacementEventsState) => state
 
 export const updatePlacementEvent = (state: PlacementEventsState) => state.updatePlacementEvent;
 export const updatePlacementEventLoading = (state: PlacementEventsState) => state.updatePlacementEventLoading;
+
+export const deletePlacementEvent = (state: PlacementEventsState) => state.deletePlacementEvent;
+export const deletePlacementEventLoading = (state: PlacementEventsState)  => state.deletePlacementEventLoading;

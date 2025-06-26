@@ -13,3 +13,6 @@ export const placementEventsListLoading = createSelector(getPlacementEventsState
 
 export const updatePlacementEvent = createSelector(getPlacementEventsState, placementEventsReducer.updatePlacementEvent);
 export const updatePlacementEventLoading = createSelector(getPlacementEventsState, placementEventsReducer.updatePlacementEventLoading); 
+
+export const deletePlacementEvent = createSelector(getPlacementEventsState, placementEventsReducer.deletePlacementEvent);
+export const deletePlacementEventLoading = createSelector(getPlacementEventsState, placementEventsReducer.deletePlacementEventLoading);

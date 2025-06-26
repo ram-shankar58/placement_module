@@ -31,6 +31,8 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   eventSearch: string = '';
   sortDropdownOpen = false;
   sortOption: string= 'recent';
+  isUpdateMode = false;
+  eventToUpdate: any= null;
 
   constructor(
     private fb: FormBuilder,
@@ -426,6 +428,21 @@ onCourseCheckboxChange(course: string, event: Event) {
   eligibleCourses: Array.isArray(formValue.eligibleCourses) ? formValue.eligibleCourses : [],
   selectionProcess: Array.isArray(formValue.selectionProcess) ? formValue.selectionProcess : []
     };
+    if(this.isUpdateMode && this.eventToUpdate){
+      param.id=this.eventToUpdate.id;
+      this.eventsSandbox.updatePlacementEvent(param);
+      this.subscriptions.push(this.eventsSandbox.updatePlacementEvent$.subscribe(data =>{
+        if(data?.status==='true'){
+          this.toastr.success('Event updated successfully');
+            this.addEventForm.reset();
+            this.submitted = false;
+            this.issidebarvisible = false;
+            this.isUpdateMode = false;
+            this.eventToUpdate = null;
+            this.eventsSandbox.placementEventsList();
+        }
+      }))
+    } else{
     this.eventsSandbox.addPlacementEvents(param);
     // Listen for add event response and refresh list on success
     this.subscriptions.push(
@@ -439,6 +456,7 @@ onCourseCheckboxChange(course: string, event: Event) {
         }
       })
     );
+  }
   }
 
   openEventDetails(event: any): void {
@@ -522,26 +540,69 @@ toggleSettings(event: any) {
   event.showSettings = !event.showSettings;
 }
 
+parseDateForForm(dateStr: string) {
+    if (!dateStr) return null;
+    const d = new Date(dateStr);
+    return { year: d.getFullYear(), month: d.getMonth() + 1, day: d.getDate() };
+  }
+
 onUpdateEvent(event: any) {
-  event.showSettings = false;
-  // Logic to open event in edit mode
-  console.log("Updating:", event);
-  // You can redirect or open modal here
+  this.isUpdateMode = true;
+    this.eventToUpdate = event;
+    this.issidebarvisible = true;
+    this.addEventForm.patchValue({
+      eventTitle: event.eventTitle,
+      aboutEvent: event.aboutEvent,
+      companyDetails: event.companyDetails,
+      eventDate: this.parseDateForForm(event.eventDate),
+      eventTime: event.eventTime,
+      venue: event.venue,
+      modeOfEvent: event.modeOfEvent,
+      eligibleCourses: event.eligibleCourses,
+      eligibleCriteria: event.eligibleCriteria,
+      selectionProcess: event.selectionProcess
+    });
+    this.selectedCompanies = [...(event.companyDetails || [])];
+    this.selectedCourses = [...(event.eligibleCourses || [])];
+  
 }
 
 onCopyEvent(event: any) {
-  event.showSettings = false;
-  // Logic to duplicate event data
-  console.log("Copying as new:", event);
-  // You can pre-fill the sidebar with this event's data
+  this.isUpdateMode = false;
+  this.eventToUpdate = null;
+  this.issidebarvisible = true; // <-- This opens the sidebar
+  this.addEventForm.reset();
+
+  this.addEventForm.patchValue({
+    eventTitle: event.eventTitle,
+    aboutEvent: event.aboutEvent,
+    companyDetails: event.companyDetails,
+    eventDate: this.parseDateForForm(event.eventDate),
+    eventTime: event.eventTime,
+    venue: event.venue,
+    modeOfEvent: event.modeOfEvent,
+    eligibleCourses: event.eligibleCourses,
+    eligibleCriteria: event.eligibleCriteria,
+    selectionProcess: event.selectionProcess
+  });
+  this.selectedCompanies = [...(event.companyDetails || [])];
+  this.selectedCourses = [...(event.eligibleCourses || [])];
+
 }
 
 onDeleteEvent(event: any) {
   event.showSettings = false;
   // Confirm before deleting
   if (confirm(`Are you sure you want to delete "${event.eventTitle}"?`)) {
-    this.EventsList = this.EventsList.filter(e => e !== event);
-    this.applyFilters(); // Reapply to update filtered list
+    this.eventsSandbox.deletePlacementEvent({ id: event.id});
+    this.subscriptions.push(
+      this.eventsSandbox.deletePlacementEvent$.subscribe(data => {
+        if(data?.status === 'true'){
+          this.toastr.success('Event deleted successfully');
+          this.eventsSandbox.placementEventsList();
+        }
+      })
+    )
   }
 }
 

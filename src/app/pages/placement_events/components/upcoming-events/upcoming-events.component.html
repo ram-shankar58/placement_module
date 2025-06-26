@@ -371,7 +371,7 @@
             type="submit"
             [disabled]="addEventForm.invalid"
             [ngClass]="{ 'active': addEventForm.valid }"
-            (click)="addEvent()">Save Event Details
+            (click)="addEvent()">{{ isUpdateMode ? 'Update Event' : 'Add Event'}}
           </button>
         </div>
       </div>

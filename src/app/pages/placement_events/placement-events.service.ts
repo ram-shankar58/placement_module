@@ -20,5 +20,9 @@ export class PlacementEventsService extends Api{
         console.log('payload', payload);
         return this.http.put<any>(this.URL+'/placementEvents/update-event', payload)
     }
+    deletePlacementEvent(payload: any): Observable<any>{
+        console.log('payload', payload);
+        return this.http.delete<any>(this.URL+'/placementEvents/delete-event/'+payload.id, payload)
+    }
 
 }

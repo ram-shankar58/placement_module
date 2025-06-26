@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as store from '../../app.state';
 import * as PlacementEventsAction from './action/placement_events.action'
-import  { addPlacementEvents, addPlacementEventsLoading,placementEventsList, placementEventsListLoading, updatePlacementEvent, updatePlacementEventLoading } from './reducer/placement_events.selector';
+import  { addPlacementEvents, addPlacementEventsLoading,placementEventsList, placementEventsListLoading, updatePlacementEvent, updatePlacementEventLoading, deletePlacementEvent, deletePlacementEventLoading } from './reducer/placement_events.selector';
 
 @Injectable()
 export class PlacementEventsSandbox{
@@ -15,6 +15,9 @@ export class PlacementEventsSandbox{
     public updatePlacementEvent$;
     public updatePlacementEventLoading$;
 
+    public deletePlacementEvent$;
+    public deletePlacementEventLoading$;
+
     constructor(protected appState: Store<store.AppState>){
         this.addPlacementEvents$ = this.appState.select(addPlacementEvents);
         this.addPlacementEventsLoading$ = this.appState.select(addPlacementEventsLoading);
@@ -24,6 +27,9 @@ export class PlacementEventsSandbox{
         
         this.updatePlacementEvent$ = this.appState.select(updatePlacementEvent);
         this.updatePlacementEventLoading$ = this.appState.select(updatePlacementEventLoading);
+
+        this.deletePlacementEvent$ = this.appState.select(deletePlacementEvent);
+        this.deletePlacementEventLoading$=this.appState.select(deletePlacementEventLoading);
     }
 
     public addPlacementEvents(params: any){
@@ -37,6 +43,11 @@ export class PlacementEventsSandbox{
 
     public updatePlacementEvent(params: any){
         this.appState.dispatch(new PlacementEventsAction.updatePlacementEvent(params));
+    }
+
+    public deletePlacementEvent(params: any){
+        this.appState.dispatch (new PlacementEventsAction.deletePlacementEvent(params));
+        
     }
     
 

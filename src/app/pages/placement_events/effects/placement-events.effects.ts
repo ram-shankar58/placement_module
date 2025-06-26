@@ -58,6 +58,20 @@ export class PlacementEventsEffect implements OnDestroy{
             }
         )
     )
+    //deletion
+    this.subscriptions.add(
+        this.actions$.pipe(
+            ofType(PlacementEventsAction.ActionTypes.DELETE_PLACEMENT_EVENT),
+            map((action: PlacementEventsAction.deletePlacementEvent) => action.payload),
+            switchMap((state: any) =>
+            this.placementEventsService.deletePlacementEvent(state).pipe(
+                map((result: any) => new PlacementEventsAction.deletePlacementEventSuccess(result)),
+                catchError(error => of(new PlacementEventsAction.deletePlacementEventFail(error.error)))
+            ))
+        ).subscribe((action: any) => {
+            this.store.dispatch(action);
+        })
+    );
     }
     ngOnDestroy(){
         this.subscriptions.unsubscribe();
