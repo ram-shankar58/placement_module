@@ -179,6 +179,8 @@ formatDate(date: any): string {
 }
 
 resetFilters() {
+  this.isFilterVisible = false;
+  this.filterModes = [];
   this.selectedFilterCompanies = [];
   this.filterCompanySearch = '';
   this.filterDate = null;
@@ -365,11 +367,16 @@ onCourseCheckboxChange(course: string, event: Event) {
   }
 
   cancel(): void {
-    this.issidebarvisible = false;
-    this.addEventForm.reset();
-    this.submitted = false;
-    this.selectedEvent = null;
-  }
+  this.issidebarvisible = false;
+  this.addEventForm.reset();
+  this.submitted = false;
+  this.selectedEvent = null;
+  this.selectedCompanies = [];
+  this.selectedCourses = [];
+  this.showCompanyDropdown = false;
+  this.showCourseDropdown = false;
+  this.dropdownOpen = false;
+}
 
   onRoundCheckboxChange(event: any, round: string): void {
   const roundsControl = this.addEventForm.get('selectionProcess');
@@ -606,5 +613,14 @@ onDeleteEvent(event: any) {
   }
 }
 
+filterCourseDropdownOpen = false;
+
+toggleFilterCourseDropdown() {
+  this.filterCourseDropdownOpen = !this.filterCourseDropdownOpen;
+}
+
+closeFilterCourseDropdown() {
+  this.filterCourseDropdownOpen = false;
+}
 
 }
