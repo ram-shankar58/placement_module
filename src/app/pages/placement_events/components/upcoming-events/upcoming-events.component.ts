@@ -33,6 +33,8 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
   sortOption: string= 'recent';
   isUpdateMode = false;
   eventToUpdate: any= null;
+  filterFromDate: any=null;
+  filterToDate: any=null;
 
   constructor(
     private fb: FormBuilder,
@@ -73,8 +75,6 @@ filterModes: string[] = [];
 selectedFilterCompanies: { companyName: string; logo: string }[] = [];
 showFilterCompanyDropdown = false;
 
-filterDate: any = null;
-filterTime: string = '';
 filterCourses: string[] = [];
 showFilterClock = false;
 
@@ -125,11 +125,7 @@ removeFilterCompany(comp: any) {
   this.selectedFilterCompanies = this.selectedFilterCompanies.filter(c => c !== comp);
 }
 
-// Time selection
-onFilterTimeSelected(time: string) {
-  this.filterTime = time;
-  this.showFilterClock = false;
-}
+
 
 // Eligible courses selection
 onFilterCourseChange(event: any) {
@@ -146,27 +142,46 @@ filteredEvents: any[] = [];
 
 applyFilters() {
   this.filteredEvents = this.EventsList.filter(event => {
-    const matchesCompany = this.selectedFilterCompanies.length === 0 ||
+    // Company filter
+    const matchesCompany =
+      this.selectedFilterCompanies.length === 0 ||
       this.selectedFilterCompanies.some(comp =>
-        event.companyDetails.some((ec: {companyName: string}) => ec.companyName === comp.companyName)
+        event.companyDetails.some((ec: { companyName: string }) => ec.companyName === comp.companyName)
       );
 
-    const matchesCourse = this.filterCourses.length === 0 ||
+    // Course filter
+    const matchesCourse =
+      this.filterCourses.length === 0 ||
       this.filterCourses.some(course => event.eligibleCourses.includes(course));
 
-    const matchesDate = !this.filterDate || event.eventDate === this.formatDate(this.filterDate);
+    // Date range filter (From Date to To Date)
+    let matchesDate = true;
+    if (this.filterFromDate && this.filterToDate) {
+      // Convert filterFromDate and filterToDate (NgbDateStruct) to Date objects
+      const from = new Date(this.filterFromDate.year, this.filterFromDate.month - 1, this.filterFromDate.day, 0, 0, 0);
+      const to = new Date(this.filterToDate.year, this.filterToDate.month - 1, this.filterToDate.day, 23, 59, 59);
+      const eventDate = new Date(event.eventDate);
+      matchesDate = eventDate >= from && eventDate <= to;
+    } else if (this.filterFromDate) {
+      const from = new Date(this.filterFromDate.year, this.filterFromDate.month - 1, this.filterFromDate.day, 0, 0, 0);
+      const eventDate = new Date(event.eventDate);
+      matchesDate = eventDate >= from;
+    } else if (this.filterToDate) {
+      const to = new Date(this.filterToDate.year, this.filterToDate.month - 1, this.filterToDate.day, 23, 59, 59);
+      const eventDate = new Date(event.eventDate);
+      matchesDate = eventDate <= to;
+    }
 
-    const matchesTime = !this.filterTime || event.eventTime === this.filterTime;
-
-    const matchesMode = this.filterModes.length === 0 ||
+    // Mode filter
+    const matchesMode =
+      this.filterModes.length === 0 ||
       this.filterModes.includes(event.modeOfEvent);
 
-    return matchesCompany && matchesCourse && matchesDate && matchesTime && matchesMode;
+    return matchesCompany && matchesCourse && matchesDate && matchesMode;
   });
 
   this.isFilterVisible = false;
 }
-
 
 // Use filteredEvents instead of EventsList in HTML ngFor
 formatDate(date: any): string {
@@ -183,8 +198,8 @@ resetFilters() {
   this.filterModes = [];
   this.selectedFilterCompanies = [];
   this.filterCompanySearch = '';
-  this.filterDate = null;
-  this.filterTime = '';
+  this.filterFromDate = '';
+  this.filterToDate = '';
   this.filterCourses = [];
   this.filteredEvents = [...this.EventsList];
 }

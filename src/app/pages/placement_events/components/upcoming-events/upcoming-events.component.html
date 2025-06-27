@@ -17,12 +17,12 @@
       <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px;">
         <input type="text" class="search-box event-search-input" [(ngModel)]="eventSearch" placeholder="Search" />
         <button class="icon-button" (click)="toggleFilterPopup()">
-          <i class="fa fa-filter"></i> Filter
+          <img src="assets/icons/filter-icon.png"> Filter
         </button>
         <!-- Include sort here -->
         <div class="sort-dropdown-wrapper" style="position: relative; display: inline-block;">
           <button class="icon-button" (click)="sortDropdownOpen = !sortDropdownOpen">
-            <i class="fa fa-sort"></i> Sort
+            <img src="assets/icons/sort-icon.png"> Sort
             </button>
           <div class="sort-dropdown" *ngIf="sortDropdownOpen" style="position: absolute; z-index: 10; background: #fff; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); min-width: 160px;">
             <div class="sort-option" [class.selected]="sortOption === 'recent'" (click)="setSort('recent')">Recently added</div>
@@ -108,27 +108,27 @@
           <label>Event Date</label>
           <input
             ngbDatepicker
-            placeholder="Select Date"
-            [(ngModel)]="filterDate"
-            #fd="ngbDatepicker"
-            (click)="fd.toggle()"
+            placeholder="From Date"
+            [(ngModel)]="filterFromDate"
+            #fromDatePicker="ngbDatepicker"
+            (click)="fromDatePicker.toggle()"
             class="form-control"
             style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
           />
         </div>
         <div style="flex: 1;">
-          <label>Event Time</label>
+          <label>To Date</label>
           <input
-            type="text"
-            readonly
-            [(ngModel)]="filterTime"
-            (click)="showFilterClock = !showFilterClock"
+            ngbDatepicker
+            placeholder="To Date"
+            [(ngModel)]="filterToDate"
+            #toDatePicker="ngbDatepicker"
+            (click)="toDatePicker.toggle()"
             class="form-control"
-            style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+            style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
           />
-          <div *ngIf="showFilterClock" class="timepicker-container">
-            <app-custom-timepicker (timeSelected)="onFilterTimeSelected($event)"></app-custom-timepicker>
-          </div>
+            
+          
         </div>
       </div>
       <!-- Footer -->
@@ -380,7 +380,7 @@
             </div>
           </div>
           <div class="event-details">
-            <div class="event-id">{{ event.id }}</div>
+            <div class="event-id">EVNT{{ event.id }}</div>
             <div class="title">{{ event.eventTitle }}</div>
             <div class="meta">
               <span class="time" *ngIf="event.eventTime?.length">{{ event.eventTime | timeAmPm }}</span>
@@ -407,7 +407,7 @@
               <img [src]="company.logo" alt="{{company.companyName}} logo" class="company-logo" />
               <span style="color:#007AFF"> {{company.companyName}} </span>
             </ng-container>
-            <span *ngIf="i === 4" class="more-companies">+ {{ event.companyDetails.length - i }} more </span>
+            <span *ngIf="i === 4" class="more-companies" style="color: #007AFF;">+ {{ event.companyDetails.length - i }} more </span>
           </ng-container>
         </div>
         <div class="course-eligibility" *ngIf="getFilteredEligibleCourses(event).length || event.eligibleCriteria">
