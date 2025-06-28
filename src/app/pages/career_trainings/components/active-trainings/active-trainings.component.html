@@ -1,0 +1,200 @@
+<div class="overall_div">
+  <div class="header_training row mx-0 align-items-center mb-3">
+    <button class="add-cmp col-md-3" (click)="toggleSidebar()">
+      <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
+      Add a New Training
+    </button>
+    <div class="addUpload col-md-4">
+      <span class="or-text" style="margin-top: 5px;">or</span>
+      <a class="upload-link">
+        <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
+        Upload bulk training details
+      </a>
+    </div>
+    <div class="search-sort col-md-4 p-0">
+      <input type="text" class="search-box col-md-4" placeholder="Search" [(ngModel)]="searchTerm" />
+      <div class="icon-button col-md-3 filter">
+        <i class="fa fa-filter"></i> Filter
+      </div>
+      <div class="icon-button col-md-3">
+        <i class="fa fa-sort"></i> Sort
+      </div>
+    </div>
+  </div>
+
+
+  <div class="training-card-grid">
+  <div class="training-card" *ngFor="let training of trainings">
+    <div class="card-menu">
+      <i class="fas fa-ellipsis-v menu-icon"></i>
+    </div>
+    
+    <div class="date-block">
+      <div class="date-circle">
+        {{ training.date | date:'dd' }}
+        <div class="month">{{ training.date | date:'MMM' }}</div>
+      </div>
+      <div class="time">{{ training.startTime }}</div>
+    </div>
+    <div></div>
+    <div class="training-main">
+      <div class="training-type">{{ training.type }}</div>
+      <div class="training-title">{{ training.title }}</div>
+      <div class="training-desc">{{ training.description }}</div>
+      <div class="meta-row">
+        <span [ngClass]="{'on-campus': training.mode === 'On-campus', 'virtual': training.mode === 'Virtual'}" class="mode-badge">
+          {{ training.mode }}
+        </span>
+        <span class="venue"><i class="fa fa-map-marker-alt"></i> {{ training.venue }}</span>
+      </div>
+    </div>
+    <div class="training-info-cols">
+      <div class="info-col">
+        <span class="label">Scheduled Time</span>
+        <span class="value">{{ training.startTime }} AM to {{ training.endTime }} PM <span *ngIf="training.recurring" class="recurring">🔁</span></span>
+      </div>
+      <div class="info-col">
+        <span class="label">Applicable Batches</span>
+        <span class="value">{{ training.batches }}</span>
+      </div>
+    </div>
+    <div class="trainer-col">
+      <span class="label">Trainer Name</span>
+      <span class="value">{{ training.trainer }}</span>
+    </div>
+</div>
+    
+  </div>
+</div>
+
+<!-- Sidebar for Add/Edit Training -->
+<div class="overlay" *ngIf="issidebarvisible" (click)="toggleSidebar()"></div>
+<div class="sidebar" [class.active]="issidebarvisible">
+  <form>
+    <div class="sidebar-header">
+      <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
+      <h6 style="font-size: 17px;">Add a New Training</h6>
+      <p style="font-size: 12px;">Detail out the placement training with the required fields</p>
+    </div>
+    <div class="sidebar-content">
+      <!-- 1. Training Basics -->
+      <div class="container">
+        <div class="step-header">
+          <div class="step-icon">1</div>
+          <h6>Training Basics</h6>
+        </div>
+        <div>
+          <label>Training title*</label>
+          <input type="text" placeholder="Enter a title" />
+        </div>
+        <div>
+          <label>Write about the training</label>
+          <textarea placeholder="Enter a description..."></textarea>
+        </div>
+        <div class="dual-field">
+          <div>
+            <label>Training type</label>
+            <select>
+              <option>Select</option>
+              <option>Soft Skills</option>
+              <option>Technical Skills</option>
+              <option>Group Discussion (GD)</option>
+              <option>Aptitude & Reasoning</option>
+            </select>
+          </div>
+          <div>
+            <label>Mode of training</label>
+            <div class="mode-toggle">
+              <button type="button" class="mode-btn on-campus active">On-campus <span>At your college</span></button>
+              <button type="button" class="mode-btn virtual">Virtual <span>Online process</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 2. Schedule -->
+      <div class="container">
+        <div class="step-header">
+          <div class="step-icon">2</div>
+          <h6>Schedule</h6>
+        </div>
+        <div class="dual-field">
+          <div>
+            <label>Training date</label>
+            <input type="date" />
+          </div>
+          <div>
+            <label>Start time</label>
+            <input type="time" />
+          </div>
+          <div>
+            <label>End time</label>
+            <input type="time" />
+          </div>
+        </div>
+        <div class="dual-field">
+          <div>
+            <label>Venue or platform</label>
+            <input type="text" placeholder="Type a location" />
+          </div>
+          <div>
+            <label>Applicable batches</label>
+            <select multiple>
+              <option>2024</option>
+              <option>2025</option>
+              <option>2026</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Trainer name</label>
+          <input type="text" placeholder="Enter name of the trainer" />
+        </div>
+      </div>
+      <!-- 3. Schedule Timetable -->
+      <div class="container">
+        <div class="step-header">
+          <div class="step-icon">3</div>
+          <h6>Schedule Timetable</h6>
+        </div>
+        <div class="dual-field">
+          <div>
+            <label>Recursive training</label>
+            <label class="switch">
+              <input type="checkbox" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+        <div class="dual-field">
+          <div>
+            <label>Repeat this training every</label>
+            <select>
+              <option>Week</option>
+              <option>Month</option>
+            </select>
+          </div>
+          <div>
+            <label>Select the day</label>
+            <select>
+              <option>Monday</option>
+              <option>Tuesday</option>
+              <option>Wednesday</option>
+              <option>Thursday</option>
+              <option>Friday</option>
+              <option>Saturday</option>
+              <option>Sunday</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label>Repeat until</label>
+          <input type="date" />
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
+      <button class="submit_btn" type="submit" disabled>Save Event Details</button>
+    </div>
+  </form>
+</div>

@@ -378,7 +378,17 @@ onCourseCheckboxChange(course: string, event: Event) {
   }
 
   toggleSidebar(): void {
-    this.issidebarvisible = !this.issidebarvisible;
+    this.issidebarvisible = true;
+  this.isUpdateMode = false;
+  this.eventToUpdate = null;
+  this.addEventForm.reset();
+  this.submitted = false;
+  this.selectedEvent = null;
+  this.selectedCompanies = [];
+  this.selectedCourses = [];
+  this.showCompanyDropdown = false;
+  this.showCourseDropdown = false;
+  this.dropdownOpen = false;
   }
 
   cancel(): void {
