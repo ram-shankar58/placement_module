@@ -25,6 +25,10 @@ const routes: Routes = [
         path: 'placementEvents',
         loadChildren: () => import('./pages/placement_events/placement-events.module').then(m => m.PlacementEventsModule)
       },
+      { 
+        path: 'careerTrainings',
+        loadChildren: () => import('./pages/career_trainings/career-trainings.module').then(m=> m.CareerTrainingsModule)
+      },
       {
         path: 'companies',
         loadChildren: () => import('./pages/companies/companies.module').then(m => m.CompaniesModule)

@@ -18,6 +18,7 @@ export class CommonheaderComponent {
   navItems = [
       { label: 'Home', icon: 'assets/icons/home.svg', route: '/dashboard' },
       { label: 'Placement Events', icon: 'assets/icons/events.svg', route: '/placementEvents' },
+      { label: 'Career Trainings', icon: 'assets/icons/career-trainings.png', route: '/careerTrainings' },
       { label: 'Students', icon: 'assets/icons/university-students.svg', route: '/students' },
       { label: 'Company', icon: 'assets/icons/companies.svg', route: '/companies' },
       { label: 'Reports', icon: 'assets/icons/reports.svg', route: '/reports' }
