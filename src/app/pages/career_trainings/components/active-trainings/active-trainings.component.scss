@@ -356,27 +356,24 @@
 
 .mode-toggle {
   display: flex;
-  gap: 10px;
+  gap: 16px;
+  margin-top: 4px;
   .mode-btn {
-    border: 1px solid #d1d5db;
+    flex: 1;
+    border: 1.5px solid #d1d5db;
     background: #fff;
     color: #333;
-    border-radius: 8px;
-    padding: 6px 16px;
-    font-size: 14px;
-    font-weight: 500;
+    border-radius: 10px;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    &.active, &:hover {
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    &.active, &:active {
       background: #4f46e5;
       color: #fff;
       border-color: #4f46e5;
-    }
-    span {
-      display: block;
-      font-size: 11px;
-      color: #757575;
-      font-weight: 400;
     }
   }
 }
@@ -444,6 +441,46 @@
   &:disabled {
     background-color: #a5b4fc;
     cursor: not-allowed;
+  }
+}
+
+.mode-toggle-row {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.mode-toggle-box {
+  flex: 1;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  padding: 16px 0 10px 0;
+  cursor: pointer;
+  text-align: center;
+  transition: border 0.2s, background 0.2s, color 0.2s;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  .mode-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 2px;
+  }
+  .mode-desc {
+    font-size: 13px;
+    color: #6b7280;
+  }
+  &.on-campus.selected {
+    border-color: #facc15;
+    background: #fef9c3;
+    color: #b45309;
+  }
+  &.virtual.selected {
+    border-color: #a78bfa;
+    background: #f5f3ff;
+    color: #6d28d9;
+  }
+  &.selected {
+    box-shadow: 0 2px 8px rgba(80,80,80,0.07);
   }
 }
 
@@ -938,3 +975,163 @@
   }
 }
 
+.custom-dropdown-list {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 220px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 10;
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.batches-multiselect {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  position: relative;
+  padding: 0;
+  min-height: 48px;
+  cursor: pointer;
+  transition: border 0.2s;
+  &:focus-within, &:hover {
+    border-color: #6366f1;
+  }
+}
+
+.chips-input-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 48px;
+  padding: 4px 12px;
+  gap: 6px;
+}
+
+.batch-chip {
+  background: #f3f4f6;
+  border-radius: 16px;
+  padding: 3px 12px 3px 10px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  .fa-times {
+    margin-left: 6px;
+    font-size: 13px;
+    color: #6b7280;
+    cursor: pointer;
+  }
+}
+
+.batch-input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 2px 0;
+  min-width: 80px;
+  background: transparent;
+  flex: 1;
+}
+
+.dropdown-arrow {
+  margin-left: auto;
+  color: #9ca3af;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.dropdown-list {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 100%;
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.dropdown-option {
+  padding: 8px 14px;
+  cursor: pointer;
+  font-size: 15px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  &:hover, &.selected {
+    background: #f3f4f6;
+    color: #4f46e5;
+  }
+  .checkmark {
+    margin-left: auto;
+    color: #4f46e5;
+    font-size: 16px;
+  }
+}
+
+.mode-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: space-between;
+  padding-left: 10px;
+}
+
+.mode-box {
+  flex: 1 1 45%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 3px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  strong {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-left: 10px;
+  }
+
+  .description {
+    font-size: 16px;
+    color: #555;
+  }
+
+  &.yellow {
+    border-color: #f4c542;
+    &.selected {
+      background-color: #f4c542;
+      color: #000;
+      .description { color: #000; }
+    }
+  }
+
+  &.purple {
+    border-color: #6f42c1;
+    &.selected {
+      background-color: #6f42c1;
+      color: #fff;
+      .description { color: #fff; }
+    }
+  }
+
+  .radioinput {
+    position: relative;
+    margin-top: 5px;
+    margin-left: 3px;
+  }
+}

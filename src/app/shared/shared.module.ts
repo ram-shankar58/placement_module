@@ -8,12 +8,17 @@ import { RouterModule } from '@angular/router';
 import { AddPlacementEventComponent } from './popup/add-placement-event/add-placement-event.component';
 import { SkeletonloaderComponent } from './components/skeletonloader/skeletonloader.component';
 import { GlobalFilterPipe } from './components/searchfilter/global-filter.pipe';
-
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+// import { CustomTimepickerComponent} from './components/timepicker/custom-timepicker.component';
 
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+
     ],
   exports: [
     SidebarComponent,
@@ -22,7 +27,8 @@ import { GlobalFilterPipe } from './components/searchfilter/global-filter.pipe';
     BreadcrumbsComponent,
     SkeletonloaderComponent,
     RouterModule,
-    GlobalFilterPipe
+    GlobalFilterPipe,
+    // CustomTimepickerComponent
   ],
   declarations: [
      SidebarComponent,
@@ -31,7 +37,8 @@ import { GlobalFilterPipe } from './components/searchfilter/global-filter.pipe';
      BreadcrumbsComponent,
      AddPlacementEventComponent,
      SkeletonloaderComponent,
-     GlobalFilterPipe
+     GlobalFilterPipe,
+    //  CustomTimepickerComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
