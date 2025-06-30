@@ -73,10 +73,11 @@
   <form [formGroup]="addTrainingForm">
     <div class="sidebar-header">
       <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
-      <h6 style="font-size: 17px;">Add a New Training</h6>
+      <h6 style="font-size: 17px; padding-bottom:10px">Add a New Training</h6>
       <p style="font-size: 12px;">Detail out the placement training with the required fields</p>
     </div>
     <div class="sidebar-content">
+
       <!-- 1. Training Basics -->
       <div class="container">
         <div class="step-header">
@@ -85,51 +86,64 @@
         </div>
         <div>
           <label>Training title*</label>
-          <input type="text" placeholder="Enter a title" />
+          <input type="text" placeholder="Enter a title" formControlName="trainingTitle" />
         </div>
         <div>
           <label>Write about the training</label>
-          <textarea placeholder="Enter a description..."></textarea>
+          <textarea placeholder="Enter a description..." formControlName="trainingDescription"></textarea>
         </div>
-        <div class="mode-options">
-          <label 
-            class="mode-box yellow" 
-            [class.selected]="addTrainingForm.get('modeOfTraining')?.value === 'On-campus'"
-            (click)="addTrainingForm.get('modeOfTraining')?.setValue('On-campus')"
-          >
-            <span>
-              <input
-                type="radio"
-                name="modeOfTraining"
-                value="On-campus"
-                class="radioinput"
-                [checked]="addTrainingForm.get('modeOfTraining')?.value === 'On-campus'"
-                (change)="addTrainingForm.get('modeOfTraining')?.setValue('On-campus')"
-              />
-              <strong>On-campus</strong>
-              <div class="description">At your college</div>
-            </span>
-          </label>
-          <label 
-            class="mode-box purple" 
-            [class.selected]="addTrainingForm.get('modeOfTraining')?.value === 'Virtual'"
-            (click)="addTrainingForm.get('modeOfTraining')?.setValue('Virtual')"
-          >
-            <span>
-              <input
-                type="radio"
-                name="modeOfTraining"
-                value="Virtual"
-                class="radioinput"
-                [checked]="addTrainingForm.get('modeOfTraining')?.value === 'Virtual'"
-                (change)="addTrainingForm.get('modeOfTraining')?.setValue('Virtual')"
-              />
-              <strong>Virtual</strong>
-              <div class="description">Online process</div>
-            </span>
-          </label>
+        <div class="dual-field">
+          <div style="height: 65px;">
+            <label>Training type</label>
+            <select formControlName="trainingType">
+              <option value="" disabled selected>Select</option>
+              <option *ngFor="let type of trainingTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+          <div>
+            <label>Mode of training</label>
+            <div class="mode-options">
+              <label 
+                class="mode-box yellow" 
+                [class.selected]="addTrainingForm.get('modeOfTraining')?.value === 'On-campus'"
+                (click)="addTrainingForm.get('modeOfTraining')?.setValue('On-campus')"
+              >
+                <span>
+                  <input
+                    type="radio"
+                    name="modeOfTraining"
+                    value="On-campus"
+                    class="radioinput"
+                    [checked]="addTrainingForm.get('modeOfTraining')?.value === 'On-campus'"
+                    (change)="addTrainingForm.get('modeOfTraining')?.setValue('On-campus')"
+                  />
+                  <strong>On-campus</strong>
+                  <div class="description">At your college</div>
+                </span>
+              </label>
+              <label 
+                class="mode-box purple" 
+                [class.selected]="addTrainingForm.get('modeOfTraining')?.value === 'Virtual'"
+                (click)="addTrainingForm.get('modeOfTraining')?.setValue('Virtual')"
+              >
+                <span>
+                  <input
+                    type="radio"
+                    name="modeOfTraining"
+                    value="Virtual"
+                    class="radioinput"
+                    [checked]="addTrainingForm.get('modeOfTraining')?.value === 'Virtual'"
+                    (change)="addTrainingForm.get('modeOfTraining')?.setValue('Virtual')"
+                  />
+                  <strong>Virtual</strong>
+                  <div class="description">Online process</div>
+                </span>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
+
       <!-- 2. Schedule -->
       <div class="container">
         <div class="step-header">
@@ -141,7 +155,7 @@
             <label>Training date</label>
             <input
               class="form-control"
-              placeholder=""
+              placeholder="Select"
               name="trainingDate"
               ngbDatepicker
               formControlName="trainingDate"
@@ -157,6 +171,7 @@
                 type="text"
                 formControlName="startTime"
                 readonly
+                placeholder="Select"
                 (click)="showStartClock = !showStartClock"
                 style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px; cursor:pointer;"
               />
@@ -172,6 +187,7 @@
                 type="text"
                 formControlName="endTime"
                 readonly
+                placeholder="Select"
                 (click)="showEndClock = !showEndClock"
                 style="background: url('assets/icons/clock.png') no-repeat right 10px center/20px 20px; padding-right: 36px; cursor:pointer;"
               />
@@ -181,39 +197,41 @@
             </div>
           </div>
         </div>
-        <div>
-          <label>Venue or platform</label>
-          <input type="text" placeholder="Type a location" />
-        </div>
-        <div class="form-group">
-          <label>Applicable batches</label>
-          <div class="batches-multiselect" tabindex="0" (click)="toggleBatchDropdown()">
-            <div class="chips-input-row">
-              <span *ngFor="let batch of selectedBatches" class="batch-chip">
-                {{ batch }}
-                <i class="fa fa-times" (click)="removeBatch(batch, $event)"></i>
-              </span>
-              <i class="fa fa-caret-down dropdown-arrow"></i>
-            </div>
-            <!-- Dropdown: only the list, no input -->
-            <div class="dropdown-list" *ngIf="batchDropdownOpen" (click)="$event.stopPropagation()">
-              <div
-                *ngFor="let batch of batchesList"
-                class="dropdown-option"
-                [class.selected]="selectedBatches.includes(batch)"
-                (click)="toggleBatch(batch, $event)"
-              >
-                {{ batch }}
-                <span *ngIf="selectedBatches.includes(batch)" class="checkmark">&#10003;</span>
+        <div class="dual-field">
+          <div>
+            <label>Venue or platform</label>
+            <input type="text" placeholder="Type a location" formControlName="venue" />
+          </div>
+          <div>
+            <label>Applicable batches</label>
+            <div class="batches-multiselect" tabindex="0" (click)="toggleBatchDropdown()">
+              <div class="chips-input-row">
+                <span *ngFor="let batch of selectedBatches" class="batch-chip">
+                  {{ batch }}
+                  <i class="fa fa-times" (click)="removeBatch(batch, $event)"></i>
+                </span>
+                <i class="fa fa-caret-down dropdown-arrow"></i>
+              </div>
+              <div class="dropdown-list" *ngIf="batchDropdownOpen" (click)="$event.stopPropagation()">
+                <div
+                  *ngFor="let batch of batchesList"
+                  class="dropdown-option"
+                  [class.selected]="selectedBatches.includes(batch)"
+                  (click)="toggleBatch(batch, $event)"
+                >
+                  {{ batch }}
+                  <span *ngIf="selectedBatches.includes(batch)" class="checkmark">&#10003;</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
         <div>
           <label>Trainer name</label>
-          <input type="text" placeholder="Enter name of the trainer" />
+          <input type="text" placeholder="Enter name of the trainer" formControlName="trainerName" />
         </div>
       </div>
+
       <!-- 3. Schedule Timetable -->
       <div class="container">
         <div class="step-header">
@@ -224,7 +242,7 @@
           <div>
             <label>Recursive training</label>
             <label class="switch">
-              <input type="checkbox" />
+              <input type="checkbox" formControlName="recurring" />
               <span class="slider"></span>
             </label>
           </div>
@@ -232,14 +250,14 @@
         <div class="dual-field">
           <div>
             <label>Repeat this training every</label>
-            <select>
-              <option>Week</option>
-              <option>Month</option>
+            <select formControlName="repeatEvery">
+              <option value="Week">Week</option>
+              <option value="Month">Month</option>
             </select>
           </div>
           <div>
             <label>Select the day</label>
-            <select>
+            <select formControlName="repeatDay">
               <option>Monday</option>
               <option>Tuesday</option>
               <option>Wednesday</option>
@@ -250,15 +268,27 @@
             </select>
           </div>
         </div>
-        <div>
-          <label>Repeat until</label>
-          <input type="date" />
+        <div class="dual-field">
+          <div>
+            <label>Repeat until</label>
+            <input
+              class="form-control"
+              placeholder="Select"
+              name="repeatUntil"
+              ngbDatepicker
+              formControlName="repeatUntil"
+              #repeatUntilPicker="ngbDatepicker"
+              (click)="repeatUntilPicker.toggle()"
+              style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px; cursor:pointer;"
+            />
+          </div>
+          <div></div>
         </div>
       </div>
     </div>
     <div class="sidebar-footer">
       <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
-      <button class="submit_btn" type="submit" disabled>Save Event Details</button>
+      <button class="submit_btn" type="submit" [disabled]="addTrainingForm.invalid">Save Event Details</button>
     </div>
   </form>
 </div>

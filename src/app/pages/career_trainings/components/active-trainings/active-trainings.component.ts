@@ -58,13 +58,18 @@ export class ActiveTrainingsComponent implements OnInit {
     this.addTrainingForm = this.fb.group({
       trainingTitle: ['', Validators.required],
       trainingDescription: [''],
-      modeOfTraining: [this.modeOfTraining, Validators.required],
+      trainingType: ['', Validators.required], // <-- Add this line
+      modeOfTraining: ['On-campus', Validators.required],
       trainingDate: [null, Validators.required],
       startTime: ['', Validators.required],
       endTime: ['', Validators.required],
       venue: [''],
       batches: [[]],
-      trainerName: ['']
+      trainerName: [''],
+      recurring: [false],
+      repeatEvery: ['Week'],
+      repeatDay: ['Monday'],
+      repeatUntil: ['']
     });
     const currentYear=new Date().getFullYear();
     this.batchesList= [
