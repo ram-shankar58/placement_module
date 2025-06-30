@@ -19,7 +19,12 @@ export class ActiveTrainingsComponent implements OnInit {
   selectedBatches: string[] = [];
   batchesList: string[] = [];
   batchInput: string = '';
-  trainingTypes: string[] = ['Technical', 'Soft Skills', 'Aptitude', 'HR', 'Other'];
+  trainingTypes: string[] =  [
+  'Soft Skills',
+  'Group Discussion',
+  'Aptitude & Reasoning',
+  'Technical Skills'
+];
 
   modeOfTraining = 'On-campus';
 
@@ -96,7 +101,8 @@ export class ActiveTrainingsComponent implements OnInit {
     if (this.issidebarvisible) {
       this.addTrainingForm.reset({
         modeOfTraining: this.modeOfTraining,
-        batches: []
+        batches: [],
+        recursiveTraining: false
       });
       this.selectedBatches = [];
     }
@@ -158,6 +164,13 @@ export class ActiveTrainingsComponent implements OnInit {
     this.addTrainingForm.get('modeOfTraining')?.setValue(mode);
   }
 
+  ngbDateToISO(dateObj: any): string | null{
+    if(!dateObj) return null;
+    const day=String(dateObj.day).padStart(2, '0');
+    const month=String(dateObj.month).padStart(2,'0');
+    const year = dateObj.year;
+    return new Date(`${year}-${month}-${day}`).toISOString();
+  }
   // Form submission
   onSubmit() {
     if (this.addTrainingForm.invalid) {
@@ -168,21 +181,30 @@ export class ActiveTrainingsComponent implements OnInit {
       trainingTitle: formValue.trainingTitle,
       trainingAbout: formValue.trainingAbout,
       trainingType: formValue.trainingType,
-      modeOfTraining: formValue.modeOfTraining,
-      trainingDate: formValue.trainingDate,
+      modeTraining: formValue.modeOfTraining,
+      trainingDate: this.ngbDateToISO(formValue.trainingDate),
       startTime: formValue.startTime,
       endTime: formValue.endTime,
       venue: formValue.venue,
       trainerName: formValue.trainerName,
-      applicableBatches: formValue.applicableBatches,
+      applicableBatches: Array.isArray(formValue.applicableBatches) ? formValue.applicableBatches : (this.selectedBatches || []),
       recursiveTraining: formValue.recursiveTraining,
       repeatTraining: formValue.repeatTraining,
       selectDay: formValue.selectDay,
-      repeatUntill: formValue.repeatUntill
+      repeatUntill: this.ngbDateToISO(formValue.repeatUntill)
     };
     this.careerTrainingsSandbox.addCareerTraining(payload);
     this.issidebarvisible = false;
     // Optionally, refresh the list after add
     setTimeout(() => this.careerTrainingsSandbox.careerTrainingList(), 500);
   }
+    // Add this helper in your component:
+  private ngbDateToString(dateObj: any): string | null {
+    if (!dateObj) return null;
+    const day = String(dateObj.day).padStart(2, '0');
+    const month = String(dateObj.month).padStart(2, '0');
+    const year = dateObj.year;
+    return `${day}/${month}/${year}`;
+  }
+
 }
