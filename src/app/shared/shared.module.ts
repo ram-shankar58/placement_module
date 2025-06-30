@@ -10,7 +10,7 @@ import { SkeletonloaderComponent } from './components/skeletonloader/skeletonloa
 import { GlobalFilterPipe } from './components/searchfilter/global-filter.pipe';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-// import { CustomTimepickerComponent} from './components/timepicker/custom-timepicker.component';
+import { TimeAmPmPipe } from './components/timeconverter/time-am-pm.pipe';
 
 
 @NgModule({
@@ -28,6 +28,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     SkeletonloaderComponent,
     RouterModule,
     GlobalFilterPipe,
+    TimeAmPmPipe
     // CustomTimepickerComponent
   ],
   declarations: [
@@ -38,6 +39,7 @@ import { ReactiveFormsModule } from '@angular/forms';
      AddPlacementEventComponent,
      SkeletonloaderComponent,
      GlobalFilterPipe,
+     TimeAmPmPipe
     //  CustomTimepickerComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]

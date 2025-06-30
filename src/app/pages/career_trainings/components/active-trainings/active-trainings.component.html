@@ -51,7 +51,10 @@
     <div class="training-info-cols">
       <div class="info-col">
         <span class="label">Scheduled Time</span>
-        <span class="value">{{ training.startTime }} AM to {{ training.endTime }} PM <span *ngIf="training.recurring" class="recurring">🔁</span></span>
+        <span class="value">
+          {{ training.startTime | timeAmPm }} to {{ training.endTime | timeAmPm }}
+          <span *ngIf="training.recurring" class="recurring">🔁</span>
+        </span>
       </div>
       <div class="info-col">
         <span class="label">Applicable Batches</span>
@@ -70,7 +73,7 @@
 <!-- Sidebar for Add/Edit Training -->
 <div class="overlay" *ngIf="issidebarvisible" (click)="toggleSidebar()"></div>
 <div class="sidebar" [class.active]="issidebarvisible">
-  <form [formGroup]="addTrainingForm">
+  <form [formGroup]="addTrainingForm" (ngSubmit)="onSubmit()">
     <div class="sidebar-header">
       <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
       <h6 style="font-size: 17px; padding-bottom:10px">Add a New Training</h6>
@@ -90,7 +93,7 @@
         </div>
         <div>
           <label>Write about the training</label>
-          <textarea placeholder="Enter a description..." formControlName="trainingDescription"></textarea>
+          <textarea placeholder="Enter a description..." formControlName="trainingAbout"></textarea>
         </div>
         <div class="dual-field">
           <div style="height: 65px;">
@@ -204,7 +207,7 @@
           </div>
           <div>
             <label>Applicable batches</label>
-            <div class="batches-multiselect" tabindex="0" (click)="toggleBatchDropdown()">
+            <div class="batches-multiselect" tabindex="0" (click)="toggleBatchDropdown()" formControlName="applicableBatches">
               <div class="chips-input-row">
                 <span *ngFor="let batch of selectedBatches" class="batch-chip">
                   {{ batch }}
@@ -242,7 +245,7 @@
           <div>
             <label>Recursive training</label>
             <label class="switch">
-              <input type="checkbox" formControlName="recurring" />
+              <input type="checkbox" formControlName="recursiveTraining" />
               <span class="slider"></span>
             </label>
           </div>
@@ -250,14 +253,14 @@
         <div class="dual-field">
           <div>
             <label>Repeat this training every</label>
-            <select formControlName="repeatEvery">
+            <select formControlName="repeatTraining">
               <option value="Week">Week</option>
               <option value="Month">Month</option>
             </select>
           </div>
           <div>
             <label>Select the day</label>
-            <select formControlName="repeatDay">
+            <select formControlName="selectDay">
               <option>Monday</option>
               <option>Tuesday</option>
               <option>Wednesday</option>
@@ -274,9 +277,9 @@
             <input
               class="form-control"
               placeholder="Select"
-              name="repeatUntil"
+              name="repeatUntill"
               ngbDatepicker
-              formControlName="repeatUntil"
+              formControlName="repeatUntill"
               #repeatUntilPicker="ngbDatepicker"
               (click)="repeatUntilPicker.toggle()"
               style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px; cursor:pointer;"

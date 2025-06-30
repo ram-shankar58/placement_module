@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { careerTrainingsSandbox } from '../../career_trainings.sandbox';
 @Component({
-  standalone:false,
+  standalone: false,
   selector: 'app-active-trainings',
   templateUrl: './active-trainings.component.html',
   styleUrls: ['./active-trainings.component.scss']
@@ -23,61 +23,62 @@ export class ActiveTrainingsComponent implements OnInit {
 
   modeOfTraining = 'On-campus';
 
-  trainings = [
-    {
-      date: new Date(2024, 4, 12),
-      type: 'Soft Skills',
-      title: 'Resume Building Workshop',
-      description: 'Learn to craft ATS-friendly resumes tailored for top companies.',
-      mode: 'On-campus',
-      venue: 'Seminar Hall, ABC Engineering College',
-      startTime: '10:00',
-      endTime: '12:00',
-      batches: '2024, 2025',
-      trainer: 'Arvind Kumar',
-      recurring: true
-    },
-    {
-      date: new Date(2024, 4, 16),
-      type: 'Group Discussion (GD)',
-      title: 'Inceptos',
-      description: 'Maui he tatai hei whakamanaahia i na oke pukenga...',
-      mode: 'Virtual',
-      venue: 'Lacinia aliquam convallis',
-      startTime: '10:00',
-      endTime: '12:00',
-      batches: '2024, 2025',
-      trainer: 'Arvind Kumar',
-      recurring: false
-    },
-  ];
+  trainings: any[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    public careerTrainingsSandbox: careerTrainingsSandbox
+  ) {}
 
   ngOnInit(): void {
     this.addTrainingForm = this.fb.group({
       trainingTitle: ['', Validators.required],
-      trainingDescription: [''],
-      trainingType: ['', Validators.required], // <-- Add this line
-      modeOfTraining: ['On-campus', Validators.required],
-      trainingDate: [null, Validators.required],
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      trainingAbout: [''],
+      trainingType: [''],
+      modeOfTraining: ['On-campus'],
+      trainingDate: [null],
+      startTime: [''],
+      endTime: [''],
       venue: [''],
-      batches: [[]],
       trainerName: [''],
-      recurring: [false],
-      repeatEvery: ['Week'],
-      repeatDay: ['Monday'],
-      repeatUntil: ['']
+      applicableBatches: [[]],
+      recursiveTraining: [false],
+      repeatTraining: ['Week'],
+      selectDay: ['Monday'],
+      repeatUntill: ['']
     });
-    const currentYear=new Date().getFullYear();
-    this.batchesList= [
-      (currentYear-1).toString(),
-      (currentYear).toString(),
-      (currentYear+1).toString(),
-      (currentYear+2).toString()
-    ]
+
+    const currentYear = new Date().getFullYear();
+    this.batchesList = [
+      (currentYear - 1).toString(),
+      currentYear.toString(),
+      (currentYear + 1).toString(),
+      (currentYear + 2).toString()
+    ];
+
+    // Fetch from backend
+    this.careerTrainingsSandbox.careerTrainingList();
+    this.careerTrainingsSandbox.careerTrainingList$.subscribe(data => {
+      if (data && data.status === true && Array.isArray(data.data)) {
+        this.trainings = data.data.map((item: any) => ({
+          id: item.careerId,
+          title: item.trainingTitle,
+          description: item.trainingAbout,
+          type: item.trainingType,
+          date: this.parseDDMMYYYY(item.trainingDate),
+          mode: item.modeTraining,
+          startTime: item.startTime,
+          endTime: item.endTime,
+          venue: item.venue,
+          trainer: item.trainerName,
+          batches: Array.isArray(item.applicableBatches) ? item.applicableBatches.map((b: string) => b.replace(/^Batch\s*/i, '').trim()).join(', ') : '',
+          recurring: item.recursiveTraining,
+          repeat: item.repeatTraining,
+          day: item.selectDay,
+          repeatUntil: item.repeatUntill
+        }));
+      }
+    });
   }
 
   onBatchCheckboxChange(batch : string, event: Event){
@@ -99,6 +100,13 @@ export class ActiveTrainingsComponent implements OnInit {
       });
       this.selectedBatches = [];
     }
+  }
+
+  // Add this helper method in your component
+  parseDDMMYYYY(dateStr: string): Date | null {
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split('/').map(Number);
+    return new Date(year, month - 1, day);
   }
 
   // Time picker handlers
@@ -153,12 +161,28 @@ export class ActiveTrainingsComponent implements OnInit {
   // Form submission
   onSubmit() {
     if (this.addTrainingForm.invalid) {
-      // Show error or toast
       return;
     }
     const formValue = this.addTrainingForm.value;
-    // Handle form submission logic here
-    // For example, add to trainings array or send to API
+    const payload = {
+      trainingTitle: formValue.trainingTitle,
+      trainingAbout: formValue.trainingAbout,
+      trainingType: formValue.trainingType,
+      modeOfTraining: formValue.modeOfTraining,
+      trainingDate: formValue.trainingDate,
+      startTime: formValue.startTime,
+      endTime: formValue.endTime,
+      venue: formValue.venue,
+      trainerName: formValue.trainerName,
+      applicableBatches: formValue.applicableBatches,
+      recursiveTraining: formValue.recursiveTraining,
+      repeatTraining: formValue.repeatTraining,
+      selectDay: formValue.selectDay,
+      repeatUntill: formValue.repeatUntill
+    };
+    this.careerTrainingsSandbox.addCareerTraining(payload);
     this.issidebarvisible = false;
+    // Optionally, refresh the list after add
+    setTimeout(() => this.careerTrainingsSandbox.careerTrainingList(), 500);
   }
 }

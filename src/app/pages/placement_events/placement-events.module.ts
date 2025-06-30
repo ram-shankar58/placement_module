@@ -22,7 +22,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { CompaniesService } from '../companies/companies.service';
 import { GlobalFilterPipe } from '../../shared/components/searchfilter/global-filter.pipe';
 import { ClickOutsideDirective } from './components/upcoming-events/click-outside-directive';
-import { TimeAmPmPipe } from '../../shared/components/timeconverter/time-am-pm.pipe';
+
 export const routes: any = [
   {
     path: '',
@@ -60,7 +60,6 @@ export const routes: any = [
     LayoutComponent,
     CustomTimepickerComponent,
     ClickOutsideDirective,
-    TimeAmPmPipe
     
   ],
   imports: [

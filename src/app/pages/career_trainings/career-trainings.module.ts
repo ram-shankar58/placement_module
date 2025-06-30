@@ -9,6 +9,10 @@ import { LayoutComponent } from './layout/layout/layout.component';
 import { HistoricalTrainingsComponent } from './components/historical-trainings/historical-trainings.component';
 import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgTimepickModule} from 'ng-timepick';
+import { careerTrainingsSandbox } from './career_trainings.sandbox';
+import { CareerTrainingsService } from './career_trainings.service';
+import { CareerTrainingsEffect } from './effects/career-trainings.effects';
+
 const routes: any = [
   { path: '', component: LayoutComponent,
     children: [
@@ -40,7 +44,7 @@ const routes: any = [
     ActiveTrainingsComponent,
     LayoutComponent,
     HistoricalTrainingsComponent,
-],
+  ],
 
   imports: [
     CommonModule,
@@ -49,13 +53,17 @@ const routes: any = [
     SharedModule,
     ReactiveFormsModule,
     NgbDatepickerModule,
-    NgTimepickModule //The same custom-timepicker module has been imported here after publishing. //
+    NgTimepickModule, //The same custom-timepicker module has been imported here after publishing. //
     // This is because, importing the same component already imported elsewhere is not allowed.
+    EffectsModule.forFeature([CareerTrainingsEffect]),
+    
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [
+    careerTrainingsSandbox,
+    CareerTrainingsService
 
   ]
 })
