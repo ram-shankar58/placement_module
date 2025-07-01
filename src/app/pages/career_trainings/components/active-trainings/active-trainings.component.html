@@ -24,7 +24,7 @@
 
 
   <div class="training-card-grid">
-  <div class="training-card" *ngFor="let training of trainings">
+  <div class="training-card" *ngFor="let training of trainings | globalFilter : searchTerm">
     <div class="card-menu" (click)="toggleSettings(training, $event)">
       <i class="fas fa-ellipsis-v menu-icon"></i>
       <div class="settings-dropdown" *ngIf="training.showMenu" (click)="$event.stopPropagation()">
