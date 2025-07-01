@@ -1427,3 +1427,83 @@ select {
   margin-top:0px;
   padding-top:0px;
 }
+
+.event-card.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  padding: 32px 24px;
+  margin: 32px auto;
+  max-width: 400px;
+  .icon-wrapper {
+    margin-bottom: 16px;
+    .box-icon {
+      width: 64px;
+      height: 64px;
+    }
+  }
+  .title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #222;
+    text-align: center;
+  }
+  .description {
+    color: #757575;
+    font-size: 15px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    .btn-primary {
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      &:hover {
+        background: #005bb5;
+      }
+      .btn-icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .or-text {
+      color: #888;
+      font-size: 14px;
+      margin: 0 6px;
+    }
+    .upload-link {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #007aff;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      .btn-icon {
+        width: 20px;
+        height: 20px;
+      }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

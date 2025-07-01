@@ -5,33 +5,29 @@
 </div>
 
 <!-- no-placement-events.component.html -->
-<div class="event-card" *ngIf="EventsList.length === 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
-
-    <div class="icon-wrapper">
-        <img src="assets/icons/archive.svg" alt="Box Icon" class="box-icon" />
-    </div>
-
-    <h2 class="title">No eVENT Created</h2>
-
-    <p class="description">You haven’t added any event yet. Start by creating one to notify students.</p>
-
-    <div class="actions">
-        <button class="btn-primary" (click)="toggleSidebar()">
-            <svg class="btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Add a New Evemt
-        </button>
-        <span class="or-text">or</span>
-        <a class="upload-link"><!-- (click)="uploadBulkEventDetails()" -->
-            <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
-            Upload bulk Event details
-        </a>
-    </div>
+<div class="event-card empty-state" *ngIf="EventsList.length === 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
+  <div class="icon-wrapper">
+    <img src="assets/icons/archive.svg" alt="No Events" class="box-icon" />
+  </div>
+  <h2 class="title">No Event Created</h2>
+  <p class="description">You haven’t added any event yet. Start by creating one to notify students.</p>
+  <div class="actions">
+    <button class="btn-primary" (click)="toggleSidebar()">
+      <svg class="btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      Add a New Event
+    </button>
+    <span class="or-text">or</span>
+    <a class="upload-link">
+      <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
+      Upload bulk Event details
+    </a>
+  </div>
 </div>
 
 
-<div class="overall_div">
+<div class="overall_div" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
   <div class="add_n_sort_event row align-items-center mb-3" style="margin-bottom: 0; padding-bottom: 0">
     <div class="col-auto">
       <button class="add-btn" (click)="toggleSidebar()">
