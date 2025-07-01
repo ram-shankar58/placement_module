@@ -39,7 +39,9 @@
     <div></div>
     <div class="training-main">
       <div class="training-type">{{ training.type }}</div>
-      <div class="training-title">{{ training.title }}</div>
+      <div class="training-title" (click)="openTrainingDetails(training)" style="cursor:pointer;">
+        {{ training.title }}
+      </div>
       <div class="training-desc">{{ training.description }}</div>
       <div class="meta-row">
         <span [ngClass]="{'on-campus': training.mode === 'On-campus', 'virtual': training.mode === 'Virtual'}" class="mode-badge">
@@ -294,4 +296,62 @@
       <button class="submit_btn" type="submit" [disabled]="addTrainingForm.invalid">Save Event Details</button>
     </div>
   </form>
+</div>
+<!-- Training Details Modal -->
+<div *ngIf="isTrainingDetailPopupVisible" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header d-flex px-4 py-3">
+      <h3>Training Details</h3>
+      <button class="close-btn" (click)="closeTrainingDetails()">&times;</button>
+    </div>
+
+    <div class="modal-section event-title px-4 pt-3 pb-2">
+      <div style="font-size: 18px; font-weight: 700; color: #22223b;">
+        {{ selectedTraining?.title }}
+      </div>
+      <div class="meta mt-1">
+        <span>
+          {{ selectedTraining?.date | date:'dd MMM yyyy' }},
+          {{ selectedTraining?.startTime | timeAmPm }} to {{ selectedTraining?.endTime | timeAmPm }}
+        </span>
+        <span
+          class="badge"
+          [ngClass]="{
+            'on-campus': selectedTraining?.mode === 'On-campus',
+            'virtual': selectedTraining?.mode === 'Virtual'
+          }"
+        >
+          {{ selectedTraining?.mode }}
+        </span>
+        <span class="venue" *ngIf="selectedTraining?.venue">
+          <i class="fa fa-map-marker-alt"></i> {{ selectedTraining?.venue }}
+        </span>
+      </div>
+      <div *ngIf="selectedTraining?.recurring" style="color: #ff9800; margin-top: 6px;">
+        <i class="fa fa-sync-alt"></i>
+        Recursive training (Every {{selectedTraining?.repeat}} {{selectedTraining?.day}} until
+        {{selectedTraining?.repeatUntil | date:'dd MMM yyyy'}})
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <label>Event Description</label>
+      <div class="popup-value">{{ selectedTraining?.description }}</div>
+    </div>
+    <div class="modal-section">
+      <label>Applicable batches</label>
+      <div class="badges">
+        {{ selectedTraining?.batches }}
+      </div>
+    </div>
+    <div class="modal-section">
+      <label>Trainer Name</label>
+      <div class="popup-value">{{ selectedTraining?.trainer }}</div>
+    </div>
+
+    <div class="modal-footer mt-3">
+      <button class="update-btn" (click)="editTraining(selectedTraining)">Update Training Details</button>
+      <button class="close-btn-plain" (click)="closeTrainingDetails()">Close</button>
+    </div>
+  </div>
 </div>

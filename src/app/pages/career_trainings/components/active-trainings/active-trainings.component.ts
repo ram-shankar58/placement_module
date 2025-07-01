@@ -35,6 +35,8 @@ export class ActiveTrainingsComponent implements OnInit {
     public careerTrainingsSandbox: careerTrainingsSandbox
   ) {}
 
+  
+
   ngOnInit(): void {
     this.addTrainingForm = this.fb.group({
       trainingTitle: ['', Validators.required],
@@ -66,15 +68,13 @@ export class ActiveTrainingsComponent implements OnInit {
     this.careerTrainingsSandbox.careerTrainingList$.subscribe(data => {
       if (data && data.status === true && Array.isArray(data.data)) {
         this.trainings = data.data.map((item: any) => ({
+          ...item, // <-- this keeps all backend fields for modal use
           id: item.careerId,
           title: item.trainingTitle,
           description: item.trainingAbout,
           type: item.trainingType,
           date: this.parseDDMMYYYY(item.trainingDate),
           mode: item.modeTraining,
-          startTime: item.startTime,
-          endTime: item.endTime,
-          venue: item.venue,
           trainer: item.trainerName,
           batches: Array.isArray(item.applicableBatches) ? item.applicableBatches.map((b: string) => b.replace(/^Batch\s*/i, '').trim()).join(', ') : '',
           recurring: item.recursiveTraining,
@@ -207,4 +207,29 @@ export class ActiveTrainingsComponent implements OnInit {
     return `${day}/${month}/${year}`;
   }
 
+  // In your component class
+selectedTraining: any = null;
+isTrainingDetailPopupVisible = false;
+
+openTrainingDetails(training: any) {
+  this.selectedTraining = training;
+  this.isTrainingDetailPopupVisible = true;
+}
+
+closeTrainingDetails() {
+  this.isTrainingDetailPopupVisible = false;
+  this.selectedTraining = null;
+}
+
+
+
+// Add this method to your component class
+editTraining(training: any): void {
+  // Implement your logic to edit the training here
+  // For example, open the sidebar in edit mode and populate the form
+  this.selectedTraining = training;
+  this.issidebarvisible = true;
+  // Populate the form with the selected training details if needed
+
+}
 }
