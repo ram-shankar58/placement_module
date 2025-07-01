@@ -34,11 +34,15 @@
       </div>
     </div>
     <div class="filter-dropdown" *ngIf="isFilterVisible" clickOutside>
+      <div class="filter-popup">
+       
       <div class="filter-header">
         <span>Filter Events</span>
-        <button class="close-btn" (click)="closeFilterPopup()">×</button>
+        <span> <button class="close-btn" style="float:right;  right:0; padding:0; margin:0; background-color: transparent;" (click)="closeFilterPopup()"><img src='/assets/icons/x.png'style="background-color: transparent;"></button></span>
+        
       </div>
       <!-- Event Type -->
+      <div class="filter-main">
       <div class="filter-section">
         <label>Event Type</label>
         <div class="event-type-options">
@@ -131,10 +135,13 @@
           
         </div>
       </div>
+    
+    </div>
       <!-- Footer -->
       <div class="filter-footer">
         <a class="clear-btn" (click)="resetFilters()">Clear</a>
         <button class="apply-btn" (click)="applyFilters()">Apply</button>
+      </div>
       </div>
     </div>
   </div>
