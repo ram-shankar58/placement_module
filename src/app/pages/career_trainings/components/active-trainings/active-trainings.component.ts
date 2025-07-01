@@ -38,6 +38,10 @@ export class ActiveTrainingsComponent implements OnInit {
   filterRecursive = false;
   filteredTrainings: any[] = []; // This will hold the filtered trainings
 
+  // Sort properties
+  isSortDropdownVisible = false;
+  sortBy: 'recent' | 'name' | 'date' | 'type' = 'recent';
+
   constructor(
     private fb: FormBuilder,
     public careerTrainingsSandbox: careerTrainingsSandbox
@@ -371,5 +375,33 @@ applyFilters() {
     return matchesMode && matchesDate && matchesRecursive;
   });
   this.isFilterVisible = false;
+}
+
+// Sort methods
+toggleSortDropdown() {
+  this.isSortDropdownVisible = !this.isSortDropdownVisible;
+}
+
+setSort(type: 'recent' | 'name' | 'date' | 'type') {
+  this.sortBy = type;
+  this.isSortDropdownVisible = false;
+  this.applySort();
+}
+
+applySort() {
+  switch (this.sortBy) {
+    case 'recent':
+      this.filteredTrainings.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      break;
+    case 'name':
+      this.filteredTrainings.sort((a, b) => a.title.localeCompare(b.title));
+      break;
+    case 'date':
+      this.filteredTrainings.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+      break;
+    case 'type':
+      this.filteredTrainings.sort((a, b) => a.mode.localeCompare(b.mode));
+      break;
+  }
 }
 }

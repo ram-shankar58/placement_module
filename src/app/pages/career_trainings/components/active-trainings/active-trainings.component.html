@@ -16,8 +16,44 @@
       <div class="icon-button col-md-3 filter" (click)="toggleFilterPopup()">
         <i class="fa fa-filter"></i> Filter
       </div>
-      <div class="icon-button col-md-3">
-        <i class="fa fa-sort"></i> Sort
+      <div class="icon-button-wrapper">
+        <div class="icon-button" (click)="toggleSortDropdown()">
+          <i class="fa fa-sort"></i> Sort
+        </div>
+        <div class="sort-dropdown" *ngIf="isSortDropdownVisible">
+          <div 
+            class="sort-option" 
+            [class.selected]="sortBy === 'recent'"
+            (click)="setSort('recent')"
+          >
+            Recently added
+            <span *ngIf="sortBy === 'recent'" class="checkmark">&#10003;</span>
+          </div>
+          <div 
+            class="sort-option" 
+            [class.selected]="sortBy === 'name'"
+            (click)="setSort('name')"
+          >
+            Event name
+            <span *ngIf="sortBy === 'name'" class="checkmark">&#10003;</span>
+          </div>
+          <div 
+            class="sort-option" 
+            [class.selected]="sortBy === 'date'"
+            (click)="setSort('date')"
+          >
+            Date
+            <span *ngIf="sortBy === 'date'" class="checkmark">&#10003;</span>
+          </div>
+          <div 
+            class="sort-option" 
+            [class.selected]="sortBy === 'type'"
+            (click)="setSort('type')"
+          >
+            Event type
+            <span *ngIf="sortBy === 'type'" class="checkmark">&#10003;</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
