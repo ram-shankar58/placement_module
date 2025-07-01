@@ -409,10 +409,12 @@
 <div class="filter-popup" *ngIf="isFilterVisible">
   <div class="filter-header">
     <span>Filter Trainings</span>
-    <button class="close-btn" (click)="closeFilterPopup()">×</button>
+    <button class="close-btn" (click)="closeFilterPopup()">
+      <img src="assets/icons/x.png" style="width: 22px; height: 22px;" alt="Close" />
+    </button>
   </div>
   <div class="filter-section">
-    <label>Training type</label>
+    <label style="padding-top:10px;">Training type</label>
     <div class="filter-type-options">
       <label>
         <input type="checkbox" value="On-campus" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('On-campus')" /> On-campus
