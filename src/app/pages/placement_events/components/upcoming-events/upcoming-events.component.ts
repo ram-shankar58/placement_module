@@ -18,6 +18,7 @@ import { ViewEncapsulation } from '@angular/core';
 export class UpcomingEventsComponent implements OnInit, OnDestroy {
   issidebarvisible = false;
   submitted = false;
+  skeletonCount: number[] = Array(5).fill(0);
   addEventForm!: FormGroup;
   EventsList: any[] = [];
   selectedEvent: any = null;
