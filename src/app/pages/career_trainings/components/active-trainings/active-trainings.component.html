@@ -25,8 +25,13 @@
 
   <div class="training-card-grid">
   <div class="training-card" *ngFor="let training of trainings">
-    <div class="card-menu">
+    <div class="card-menu" (click)="toggleSettings(training, $event)">
       <i class="fas fa-ellipsis-v menu-icon"></i>
+      <div class="settings-dropdown" *ngIf="training.showMenu" (click)="$event.stopPropagation()">
+        <div class="settings-option blue" (click)="onUpdateTraining(training)">Update training details</div>
+        <div class="settings-option blue" (click)="onCopyTraining(training)">Copy as new training</div>
+        <div class="settings-option red" (click)="onDeleteTraining(training)">Delete training</div>
+      </div>
     </div>
     
     <div class="date-block">
@@ -78,8 +83,12 @@
   <form [formGroup]="addTrainingForm" (ngSubmit)="onSubmit()">
     <div class="sidebar-header">
       <button class="close-btn" type="button" (click)="toggleSidebar()">&#10005;</button>
-      <h6 style="font-size: 17px; padding-bottom:10px">Add a New Training</h6>
-      <p style="font-size: 12px;">Detail out the placement training with the required fields</p>
+      <h6 style="font-size: 17px; padding-bottom:10px">
+        {{ isEditMode ? 'Update Training' : 'Add a New Training' }}
+      </h6>
+      <p style="font-size: 12px;">
+        {{ isEditMode ? 'Update the details of the training below.' : 'Detail out the placement training with the required fields' }}
+      </p>
     </div>
     <div class="sidebar-content">
 
@@ -293,7 +302,9 @@
     </div>
     <div class="sidebar-footer">
       <button class="cancel_btn" type="button" (click)="toggleSidebar()">Cancel</button>
-      <button class="submit_btn" type="submit" [disabled]="addTrainingForm.invalid">Save Event Details</button>
+      <button class="submit_btn" type="submit" [disabled]="addTrainingForm.invalid">
+        {{ isEditMode ? 'Update Event Details' : 'Save Event Details' }}
+      </button>
     </div>
   </form>
 </div>

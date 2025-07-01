@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { careerTrainingsSandbox } from '../../career_trainings.sandbox';
 @Component({
@@ -11,10 +11,10 @@ export class ActiveTrainingsComponent implements OnInit {
   issidebarvisible = false;
   searchTerm = '';
   addTrainingForm!: FormGroup;
-
+  isEditMode = false;
   showStartClock = false;
   showEndClock = false;
-
+  editingTrainingId: string | null = null;
   batchDropdownOpen = false;
   selectedBatches: string[] = [];
   batchesList: string[] = [];
@@ -99,6 +99,8 @@ export class ActiveTrainingsComponent implements OnInit {
   toggleSidebar(): void {
     this.issidebarvisible = !this.issidebarvisible;
     if (this.issidebarvisible) {
+      this.isEditMode = false;
+      this.editingTrainingId = null;
       this.addTrainingForm.reset({
         modeOfTraining: this.modeOfTraining,
         batches: [],
@@ -193,9 +195,18 @@ export class ActiveTrainingsComponent implements OnInit {
       selectDay: formValue.selectDay,
       repeatUntill: this.ngbDateToISO(formValue.repeatUntill)
     };
-    this.careerTrainingsSandbox.addCareerTraining(payload);
+
+    if (this.isEditMode && this.editingTrainingId) {
+      // Update logic
+      this.careerTrainingsSandbox.updateCareerTraining({ id: this.editingTrainingId, ...payload });
+    } else {
+      // Add logic
+      this.careerTrainingsSandbox.addCareerTraining(payload);
+    }
+
     this.issidebarvisible = false;
-    // Optionally, refresh the list after add
+    this.isEditMode = false;
+    this.editingTrainingId = null;
     setTimeout(() => this.careerTrainingsSandbox.careerTrainingList(), 500);
   }
     // Add this helper in your component:
@@ -225,11 +236,81 @@ closeTrainingDetails() {
 
 // Add this method to your component class
 editTraining(training: any): void {
-  // Implement your logic to edit the training here
-  // For example, open the sidebar in edit mode and populate the form
   this.selectedTraining = training;
+  this.isEditMode = true;
   this.issidebarvisible = true;
-  // Populate the form with the selected training details if needed
+  this.editingTrainingId = training.id; // Store the id for update
 
+  this.addTrainingForm.patchValue({
+    trainingTitle: training.title,
+    trainingAbout: training.description,
+    trainingType: training.type,
+    modeOfTraining: training.mode,
+    trainingDate: training.date,
+    startTime: training.startTime,
+    endTime: training.endTime,
+    venue: training.venue,
+    trainerName: training.trainer,
+    applicableBatches: training.batches ? training.batches.split(',').map((b: string) => b.trim()) : [],
+    recursiveTraining: training.recurring,
+    repeatTraining: training.repeat,
+    selectDay: training.day,
+    repeatUntill: training.repeatUntil
+  });
+
+  this.selectedBatches = training.batches ? training.batches.split(',').map((b: string) => b.trim()) : [];
+}
+
+toggleSettings(training: any, event: MouseEvent) {
+  event.stopPropagation();
+  this.trainings.forEach((t: any) => {
+    if (t !== training) t.showMenu = false;
+  });
+  training.showMenu = !training.showMenu;
+}
+
+// Optional: close dropdown on outside click
+@HostListener('document:click')
+closeAllDropdowns() {
+  this.trainings.forEach((t: any) => t.showMenu = false);
+}
+
+onUpdateTraining(training: any) {
+  training.showMenu = false;
+  this.editTraining(training);
+}
+
+onCopyTraining(training: any) {
+  training.showMenu = false;
+  this.isEditMode = false;
+  this.issidebarvisible = true;
+  this.editingTrainingId = null;
+
+  this.addTrainingForm.patchValue({
+    trainingTitle: training.title + ' (Copy)',
+    trainingAbout: training.description,
+    trainingType: training.type,
+    modeOfTraining: training.mode,
+    trainingDate: training.date,
+    startTime: training.startTime,
+    endTime: training.endTime,
+    venue: training.venue,
+    trainerName: training.trainer,
+    applicableBatches: training.batches ? training.batches.split(',').map((b: string) => b.trim()) : [],
+    recursiveTraining: training.recurring,
+    repeatTraining: training.repeat,
+    selectDay: training.day,
+    repeatUntill: training.repeatUntil
+  });
+
+  this.selectedBatches = training.batches ? training.batches.split(',').map((b: string) => b.trim()) : [];
+}
+
+onDeleteTraining(training: any) {
+  training.showMenu = false;
+  if (confirm('Are you sure you want to delete this training?')) {
+    this.careerTrainingsSandbox.deleteCareerTraining({ id: training.id });
+    setTimeout(() => this.careerTrainingsSandbox.careerTrainingList(), 500);
+  }
 }
 }
