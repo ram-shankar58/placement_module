@@ -30,6 +30,14 @@ export class ActiveTrainingsComponent implements OnInit {
 
   trainings: any[] = [];
 
+  // Filter properties
+  isFilterVisible = false;
+  filterModes: string[] = [];
+  filterFromDate: any = null;
+  filterToDate: any = null;
+  filterRecursive = false;
+  filteredTrainings: any[] = []; // This will hold the filtered trainings
+
   constructor(
     private fb: FormBuilder,
     public careerTrainingsSandbox: careerTrainingsSandbox
@@ -82,6 +90,8 @@ export class ActiveTrainingsComponent implements OnInit {
           day: item.selectDay,
           repeatUntil: item.repeatUntill
         }));
+        // Initialize filtered trainings
+        this.filteredTrainings = this.trainings;
       }
     });
   }
@@ -312,5 +322,54 @@ onDeleteTraining(training: any) {
     this.careerTrainingsSandbox.deleteCareerTraining({ id: training.id });
     setTimeout(() => this.careerTrainingsSandbox.careerTrainingList(), 500);
   }
+}
+
+toggleFilterPopup() {
+  this.isFilterVisible = !this.isFilterVisible;
+}
+closeFilterPopup() {
+  this.isFilterVisible = false;
+}
+onFilterModeChange(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const value = target.value;
+  if (target.checked) {
+    if (!this.filterModes.includes(value)) this.filterModes.push(value);
+  } else {
+    this.filterModes = this.filterModes.filter(mode => mode !== value);
+  }
+}
+resetFilters() {
+  this.filterModes = [];
+  this.filterFromDate = null;
+  this.filterToDate = null;
+  this.filterRecursive = false;
+  this.applyFilters();
+  this.isFilterVisible = false;
+}
+applyFilters() {
+  this.filteredTrainings = this.trainings.filter(training => {
+    // Mode filter
+    const matchesMode = this.filterModes.length === 0 || this.filterModes.includes(training.mode);
+
+    // Date filter
+    let matchesDate = true;
+    if (this.filterFromDate) {
+      const from = new Date(this.filterFromDate.year, this.filterFromDate.month - 1, this.filterFromDate.day);
+      const trainingDate = new Date(training.date);
+      matchesDate = trainingDate >= from;
+    }
+    if (matchesDate && this.filterToDate) {
+      const to = new Date(this.filterToDate.year, this.filterToDate.month - 1, this.filterToDate.day, 23, 59, 59);
+      const trainingDate = new Date(training.date);
+      matchesDate = trainingDate <= to;
+    }
+
+    // Recursive filter
+    const matchesRecursive = !this.filterRecursive || training.recursiveTraining;
+
+    return matchesMode && matchesDate && matchesRecursive;
+  });
+  this.isFilterVisible = false;
 }
 }

@@ -13,7 +13,7 @@
     </div>
     <div class="search-sort col-md-4 p-0">
       <input type="text" class="search-box col-md-4" placeholder="Search" [(ngModel)]="searchTerm" />
-      <div class="icon-button col-md-3 filter">
+      <div class="icon-button col-md-3 filter" (click)="toggleFilterPopup()">
         <i class="fa fa-filter"></i> Filter
       </div>
       <div class="icon-button col-md-3">
@@ -24,7 +24,7 @@
 
 
   <div class="training-card-grid">
-  <div class="training-card" *ngFor="let training of trainings | globalFilter : searchTerm">
+  <div class="training-card" *ngFor="let training of filteredTrainings | globalFilter : searchTerm">
     <div class="card-menu" (click)="toggleSettings(training, $event)">
       <i class="fas fa-ellipsis-v menu-icon"></i>
       <div class="settings-dropdown" *ngIf="training.showMenu" (click)="$event.stopPropagation()">
@@ -364,5 +364,64 @@
       <button class="update-btn" (click)="editTraining(selectedTraining)">Update Training Details</button>
       <button class="close-btn-plain" (click)="closeTrainingDetails()">Close</button>
     </div>
+  </div>
+</div>
+
+<!-- Filter Popup -->
+<div class="filter-popup-overlay" *ngIf="isFilterVisible" (click)="closeFilterPopup()"></div>
+<div class="filter-popup" *ngIf="isFilterVisible">
+  <div class="filter-header">
+    <span>Filter Trainings</span>
+    <button class="close-btn" (click)="closeFilterPopup()">×</button>
+  </div>
+  <div class="filter-section">
+    <label>Training type</label>
+    <div class="filter-type-options">
+      <label>
+        <input type="checkbox" value="On-campus" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('On-campus')" /> On-campus
+      </label>
+      <label>
+        <input type="checkbox" value="Virtual" (change)="onFilterModeChange($event)" [checked]="filterModes.includes('Virtual')" /> Virtual
+      </label>
+    </div>
+  </div>
+  <div class="filter-section dual-field">
+    <div>
+      <label>From</label>
+      <input
+        ngbDatepicker
+        placeholder="Select"
+        [(ngModel)]="filterFromDate"
+        #fromDatePicker="ngbDatepicker"
+        (click)="fromDatePicker.toggle()"
+        class="form-control"
+        style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+      />
+    </div>
+    <div>
+      <label>To</label>
+      <input
+        ngbDatepicker
+        placeholder="Select"
+        [(ngModel)]="filterToDate"
+        #toDatePicker="ngbDatepicker"
+        (click)="toDatePicker.toggle()"
+        class="form-control"
+        style="background: url('assets/icons/calendar.png') no-repeat right 10px center/20px 20px; padding-right: 36px;"
+      />
+    </div>
+  </div>
+  <div class="filter-section">
+    <label class="switch-label">
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="filterRecursive" />
+        <span class="slider"></span>
+      </label>
+      Show recursive trainings
+    </label>
+  </div>
+  <div class="filter-footer">
+    <a class="clear-btn" (click)="resetFilters()">Clear filter</a>
+    <button class="apply-btn" (click)="applyFilters()">Apply</button>
   </div>
 </div>
