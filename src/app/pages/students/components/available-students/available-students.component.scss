@@ -1,0 +1,112 @@
+.students-container {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.students-toolbar {
+  display: flex;
+  align-items: center;
+  padding: 16px 16px 8px 16px;
+  gap: 12px;
+}
+
+.toolbar-btn {
+  background: #f5f6fa;
+  border: 1px solid #e3e6ef;
+  border-radius: 6px;
+  padding: 6px 18px;
+  font-size: 15px;
+  color: #444;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  margin-left: 6px;
+}
+
+.students-search {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.students-search input {
+  border: 1px solid #e3e6ef;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 15px;
+  background: #f5f6fa;
+  outline: none;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-top: 8px;
+}
+
+.students-table th,
+.students-table td {
+  padding: 12px 10px;
+  text-align: left;
+  font-size: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  vertical-align: middle;
+}
+
+.students-table th {
+  background: #f8f9fb;
+  font-weight: 500;
+}
+
+.students-table tr:last-child td {
+  border-bottom: none;
+}
+
+.student-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.students-table td a {
+  color: #2d5be3;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 2px;
+}
+
+.status.available {
+  background: #e6f7ec;
+  color: #1e9c4b;
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.arrears {
+  color: #e53935;
+  font-weight: 600;
+}
+
+.table-menu {
+  font-size: 20px;
+  color: #bdbdbd;
+  cursor: pointer;
+  padding: 0 8px;
+  user-select: none;
+}

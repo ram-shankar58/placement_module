@@ -1,0 +1,43 @@
+<div class="students-container">
+  <div class="students-toolbar">
+    <button class="toolbar-btn">Actions</button>
+    <button class="toolbar-btn">Department <span class="dropdown-arrow">&#9662;</span></button>
+    <button class="toolbar-btn">Semester <span class="dropdown-arrow">&#9662;</span></button>
+    <div class="students-search">
+      <input [formControl]="searchControl" type="text" placeholder="Search" />
+    </div>
+  </div>
+
+  <table class="students-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" /></th>
+        <th>Student</th>
+        <th>Department</th>
+        <th>Yr. of Study (Sem)</th>
+        <th>Num. of Arrears</th>
+        <th>Placement Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td><input type="checkbox" /></td>
+        <td>
+          <img class="student-avatar" [src]="student.avatar" [alt]="student.name" />
+          <a href="#">{{ student.name }}</a>
+        </td>
+        <td>{{ student.department }}</td>
+        <td>{{ student.year }}</td>
+        <td>
+          <span *ngIf="student.arrears > 0" class="arrears">{{ student.arrears }}</span>
+          <span *ngIf="student.arrears === 0">{{ student.arrears }}</span>
+        </td>
+        <td>
+          <span class="status available">{{ student.status }}</span>
+        </td>
+        <td><span class="table-menu">&#8942;</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
