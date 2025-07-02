@@ -67,7 +67,6 @@ closeFilterPopup() {
   this.isFilterVisible = false;
 }
 
-
 // Filtering-related fields
 filterCompanySearch = '';
 filteredFilterCompanies: { companyName: string; logo: string }[] = [];
