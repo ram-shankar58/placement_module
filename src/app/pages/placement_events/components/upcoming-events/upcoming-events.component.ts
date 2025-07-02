@@ -361,6 +361,8 @@ onCourseCheckboxChange(course: string, event: Event) {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
+    if (this.addEventSub) this.addEventSub.unsubscribe();
+  if (this.updateEventSub) this.updateEventSub.unsubscribe();
   }
 
   initAddEventForm(): void {
@@ -448,48 +450,54 @@ onCourseCheckboxChange(course: string, event: Event) {
       return;
     }
     const formValue = this.addEventForm.value;
-    // Format eventDate if needed
     let formattedDate = formValue.eventDate;
     if (formValue.eventDate && formValue.eventDate.year) {
       const { year, month, day } = formValue.eventDate;
       formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     }
-    const param = {
+    const param: any = {
       ...formValue,
       eventDate: formattedDate,
       companyDetails: Array.isArray(formValue.companyDetails) ? formValue.companyDetails : [],
-  eligibleCourses: Array.isArray(formValue.eligibleCourses) ? formValue.eligibleCourses : [],
-  selectionProcess: Array.isArray(formValue.selectionProcess) ? formValue.selectionProcess : []
+      eligibleCourses: Array.isArray(formValue.eligibleCourses) ? formValue.eligibleCourses : [],
+      selectionProcess: Array.isArray(formValue.selectionProcess) ? formValue.selectionProcess : []
     };
-    if(this.isUpdateMode && this.eventToUpdate){
-      param.id=this.eventToUpdate.id;
+
+    // If updating, include the event id
+    if (this.isUpdateMode && this.eventToUpdate && this.eventToUpdate.id) {
+      param.id = this.eventToUpdate.id;
       this.eventsSandbox.updatePlacementEvent(param);
-      this.subscriptions.push(this.eventsSandbox.updatePlacementEvent$.subscribe(data =>{
-        if(data?.status==='true'){
-          this.toastr.success('Event updated successfully');
-            this.addEventForm.reset();
-            this.submitted = false;
-            this.issidebarvisible = false;
-            this.isUpdateMode = false;
-            this.eventToUpdate = null;
-            this.eventsSandbox.placementEventsList();
-        }
-      }))
-    } else{
-    this.eventsSandbox.addPlacementEvents(param);
-    // Listen for add event response and refresh list on success
-    this.subscriptions.push(
-      this.eventsSandbox.addPlacementEvents$.subscribe(data => {
-        if (data?.status === 'true') {
-          this.toastr.success('Event added successfully');
-          this.addEventForm.reset();
-          this.submitted = false;
-          this.issidebarvisible = false;
-          this.eventsSandbox.placementEventsList(); // Refresh list after add
-        }
-      })
-    );
+    } else {
+      this.eventsSandbox.addPlacementEvents(param);
+    }
+
+    // Immediately close sidebar and reset form
+    this.issidebarvisible = false;
+    this.addEventForm.reset();
+    this.submitted = false;
+    this.isUpdateMode = false;
+    this.eventToUpdate = null;
+    this.selectedCompanies = [];
+    this.selectedCourses = [];
+
+    // Refresh the list after a short delay
+    setTimeout(() => this.eventsSandbox.placementEventsList(), 500);
   }
+
+  // Add these properties to your component:
+  addEventSub?: Subscription;
+  updateEventSub?: Subscription;
+
+  // And add this helper:
+  resetSidebarAndRefresh() {
+    this.addEventForm.reset();
+    this.submitted = false;
+    this.issidebarvisible = false;
+    this.isUpdateMode = false;
+    this.eventToUpdate = null;
+    this.selectedCompanies = [];
+    this.selectedCourses = [];
+    this.eventsSandbox.placementEventsList(); // Fetch updated list
   }
 
   openEventDetails(event: any): void {
@@ -626,17 +634,16 @@ onCopyEvent(event: any) {
 onDeleteEvent(event: any) {
   event.showSettings = false;
   // Confirm before deleting
-  if (confirm(`Are you sure you want to delete "${event.eventTitle}"?`)) {
-    this.eventsSandbox.deletePlacementEvent({ id: event.id});
-    this.subscriptions.push(
-      this.eventsSandbox.deletePlacementEvent$.subscribe(data => {
-        if(data?.status === 'true'){
-          this.toastr.success('Event deleted successfully');
-          this.eventsSandbox.placementEventsList();
-        }
-      })
-    )
-  }
+    // Immediately close sidebar if open
+    this.issidebarvisible = false;
+    this.selectedEvent = null;
+
+    // Call API to delete
+    this.eventsSandbox.deletePlacementEvent({ id: event.id });
+
+    // Refresh the list after a short delay (optimistic UI)
+    setTimeout(() => this.eventsSandbox.placementEventsList(), 500);
+  
 }
 
 filterCourseDropdownOpen = false;

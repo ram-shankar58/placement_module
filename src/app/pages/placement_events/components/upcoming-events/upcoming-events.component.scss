@@ -449,6 +449,7 @@ select {
       .title {
         font-size: 18px;
         font-weight: 600;
+        color: #007AFF;
       }
 
       .meta {
@@ -592,11 +593,13 @@ select {
   
 
   .modal {
-    width: 80vw;           // Make modal wider (adjust as needed)
+  // width: 80vw;           // Make modal wider (adjust as needed)
+  width: 550px;
   max-width: 900px;      // Or 1000px, as you prefer
   min-width: 400px;
-  max-height: 90vh;      // Allow a lot of vertical space
+  // max-height: 90vh;      // Allow a lot of vertical space
   min-height: 400px;
+  height: auto;
     background: white;
     border-radius: 10px;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);

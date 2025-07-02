@@ -4,7 +4,7 @@
     </div>
 </div>
 <div class="overall_div" *ngIf="CompaniesList && CompaniesList.length > 0">
-    <div class="header_company row mx-0">
+    <div class="header_company row mx-0" style="padding-right:40px">
         <button class="add-cmp col-md-3" (click)="addCompanyOpen()">
             <i class="fa fa-plus-circle" style="margin-right: 6px;"></i>
             Add a New Company
@@ -21,11 +21,11 @@
             <input type="text" class="search-box col-md-2" placeholder="Search" [(ngModel)]="searchTerm" />
 
             <div class="icon-button  filter" (click)="filtertoggle()">
-                <i class="fa fa-filter"></i> Filter
+                <img src="assets/icons/filter-icon.png" /> Filter
             </div>
 
             <div class="icon-button " (click)="sort()">
-                <i class="fa fa-sort"></i> Sort
+                <img src="assets/icons/sort-icon.png" /> Sort
             </div>
         </div>
     </div>

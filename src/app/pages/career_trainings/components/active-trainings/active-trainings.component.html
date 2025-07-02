@@ -28,7 +28,7 @@
 
 
 <div class="overall_div" style="margin-top: 9px; padding-top:0;" *ngIf="trainings.length !== 0 && !(careerTrainingsSandbox.careerTrainingListLoading$ | async)">
-  <div class="header_training" style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-bottom: 10px; margin-bottom:0">
+  <div class="header_training" style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-bottom: 10px; margin-bottom:0; padding-right:18px;">
     
       <button class="add-cmp" (click)="toggleSidebar()">
         <i class="fa fa-plus-circle" ></i>
@@ -44,11 +44,11 @@
     <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px; margin-left: auto;">
       <input type="text" class="search-box event-search-input" placeholder="Search" [(ngModel)]="searchTerm" />
       <button class="icon-button " (click)="toggleFilterPopup()">
-        <i class="fa fa-filter"></i> Filter
+        <img src="assets/icons/filter-icon.png"> Filter
       </button>
       <div class="sort-dropdown-wrapper" style="position: relative; display: inline-block;">
         <button class="icon-button" (click)="toggleSortDropdown()">
-          <i class="fa fa-sort"></i> Sort
+          <img src="assets/icons/sort-icon.png"> Sort
         </button>
         <div class="sort-dropdown" *ngIf="isSortDropdownVisible">
           <div 
@@ -89,7 +89,7 @@
   </div>
 
 
-  <div class="training-card-grid" style="margin-top:9px; padding-top:0">
+  <div class="training-card-grid" style="margin-top:9px; padding-top:0; padding-right: 18px">
   <div class="training-card" *ngFor="let training of filteredTrainings | globalFilter : searchTerm">
     <div class="card-menu" (click)="toggleSettings(training, $event)">
       <i class="fas fa-ellipsis-v menu-icon"></i>
@@ -379,7 +379,7 @@
   <div class="modal">
     <div class="modal-header d-flex px-4 py-3">
       <h3>Training Details</h3>
-      <button class="close-btn" (click)="closeTrainingDetails()">&times;</button>
+      <button class="close-btn" (click)="closeTrainingDetails()"><img src="assets/icons/x.png" style="width: 22px; height:22px; padding: 0; margin:0; float: right;" /></button>
     </div>
 
     <div class="modal-section event-title px-4 pt-3 pb-2">
