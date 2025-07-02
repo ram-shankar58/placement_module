@@ -31,7 +31,7 @@
   <div class="header_training" style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-bottom: 10px; margin-bottom:0; padding-right:18px;">
     
       <button class="add-cmp" (click)="toggleSidebar()">
-        <i class="fa fa-plus-circle" ></i>
+        <img src="assets/icons/add-icon.png">
         Add a New Training
       </button>
     <div class="addUpload" style="display: flex; align-items: center; gap: 8px;">
@@ -42,7 +42,11 @@
       </a>
     </div>
     <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px; margin-left: auto;">
-      <input type="text" class="search-box event-search-input" placeholder="Search" [(ngModel)]="searchTerm" />
+      
+      <div class="search-input-wrapper">
+          <img src="assets/icons/search-icon.png" alt="Search" class="search-input-icon" />
+          <input type="text" class="search-box event-search-input" [(ngModel)]="searchTerm" placeholder="Search" />
+        </div>
       <button class="icon-button " (click)="toggleFilterPopup()">
         <img src="assets/icons/filter-icon.png"> Filter
       </button>
@@ -175,10 +179,13 @@
         <div class="dual-field">
           <div style="height: 65px;">
             <label>Training type</label>
-            <select formControlName="trainingType">
-              <option value="" disabled selected>Select</option>
-              <option *ngFor="let type of trainingTypes" [value]="type">{{ type }}</option>
-            </select>
+            <div class="custom-select-wrapper">
+              <select formControlName="trainingType">
+                <option value="" disabled selected>Select</option>
+                <option *ngFor="let type of trainingTypes" [value]="type">{{ type }}</option>
+              </select>
+              <img src="assets/icons/chevron-icon.png" class="dropdown-arrow" />
+            </div>
           </div>
           <div>
             <label>Mode of training</label>
@@ -290,7 +297,7 @@
                   {{ batch }}
                   <i class="fa fa-times" (click)="removeBatch(batch, $event)"></i>
                 </span>
-                <i class="fa fa-caret-down dropdown-arrow"></i>
+                <img src="assets/icons/chevron-icon.png" class="dropdown-arrow" />
               </div>
               <div class="dropdown-list" *ngIf="batchDropdownOpen" (click)="$event.stopPropagation()">
                 <div
@@ -330,22 +337,28 @@
         <div class="dual-field">
           <div>
             <label>Repeat this training every</label>
-            <select formControlName="repeatTraining">
-              <option value="Week">Week</option>
-              <option value="Month">Month</option>
-            </select>
+            <div class="custom-select-wrapper">
+              <select formControlName="repeatTraining">
+                <option value="Week">Week</option>
+                <option value="Month">Month</option>
+              </select>
+              <img src="assets/icons/chevron-icon.png" class="dropdown-arrow" />
+            </div>
           </div>
           <div>
             <label>Select the day</label>
-            <select formControlName="selectDay">
-              <option>Monday</option>
-              <option>Tuesday</option>
-              <option>Wednesday</option>
-              <option>Thursday</option>
-              <option>Friday</option>
-              <option>Saturday</option>
-              <option>Sunday</option>
-            </select>
+            <div class="custom-select-wrapper">
+              <select formControlName="selectDay">
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+                <option>Saturday</option>
+                <option>Sunday</option>
+              </select>
+              <img src="assets/icons/chevron-icon.png" class="dropdown-arrow" />
+            </div>
           </div>
         </div>
         <div class="dual-field">

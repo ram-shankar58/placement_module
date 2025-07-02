@@ -31,7 +31,7 @@
   <div class="add_n_sort_event row align-items-center mb-3" style="margin-bottom: 0; padding-bottom: 0" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
     <div class="col-auto">
       <button class="add-btn" (click)="toggleSidebar()">
-        <i class="fa fa-plus-circle"></i> Add a New Event
+        <img src="assets/icons/add-icon.png"> Add a New Event
       </button>
     </div>
     <div class="addUpload col-md-4">
@@ -44,7 +44,10 @@
     </div>
     <div class="col-auto">
       <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px;">
-        <input type="text" class="search-box event-search-input" [(ngModel)]="eventSearch" placeholder="Search" />
+        <div class="search-input-wrapper">
+          <img src="assets/icons/search-icon.png" alt="Search" class="search-input-icon" />
+          <input type="text" class="search-box event-search-input" [(ngModel)]="eventSearch" placeholder="Search" />
+        </div>
         <button class="icon-button" (click)="toggleFilterPopup()">
           <img src="assets/icons/filter-icon.png"> Filter
         </button>
