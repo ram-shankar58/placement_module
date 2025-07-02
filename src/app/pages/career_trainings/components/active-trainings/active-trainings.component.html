@@ -1,4 +1,33 @@
-<div class="overall_div" style="margin-top: 9px; padding-top:0;">
+<div *ngIf="careerTrainingsSandbox.careerTrainingListLoading$ | async as isLoading">
+    <div class="overall_div" *ngIf="isLoading">
+        <app-skeletonloader *ngFor="let n of skeletonCount"></app-skeletonloader>
+    </div>
+</div>
+
+<!-- no-placement-events.component.html -->
+<div class="event-card empty-state" *ngIf="trainings.length === 0 && !(careerTrainingsSandbox.careerTrainingListLoading$ | async)">
+  <div class="icon-wrapper">
+    <img src="assets/icons/archive.svg" alt="No Events" class="box-icon" />
+  </div>
+  <h2 class="title">No Training Created</h2>
+  <p class="description">You haven’t added any training yet. Start by creating one to notify students.</p>
+  <div class="actions">
+    <button class="btn-primary" (click)="toggleSidebar()">
+      <svg class="btn-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+      </svg>
+      Add a New Training
+    </button>
+    <span class="or-text">or</span>
+    <a class="upload-link">
+      <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
+      Upload bulk Training details
+    </a>
+  </div>
+</div>
+
+
+<div class="overall_div" style="margin-top: 9px; padding-top:0;" *ngIf="trainings.length !== 0 && !(careerTrainingsSandbox.careerTrainingListLoading$ | async)">
   <div class="header_training" style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-bottom: 10px; margin-bottom:0">
     
       <button class="add-cmp" (click)="toggleSidebar()">

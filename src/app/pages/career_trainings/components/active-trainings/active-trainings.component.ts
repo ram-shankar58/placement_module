@@ -29,6 +29,7 @@ export class ActiveTrainingsComponent implements OnInit {
   modeOfTraining = 'On-campus';
 
   trainings: any[] = [];
+  skeletonCount = Array(5);
 
   // Filter properties
   isFilterVisible = false;

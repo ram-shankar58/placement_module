@@ -48,7 +48,7 @@ export class UpcomingEventsComponent implements OnInit, OnDestroy {
 
   coursesList = [
   'Mechanical',
-  'CIVIL',
+  'Civil',
   'EEE',
   'ECE',
   'CSE',

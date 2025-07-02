@@ -27,8 +27,8 @@
 </div>
 
 
-<div class="overall_div" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
-  <div class="add_n_sort_event row align-items-center mb-3" style="margin-bottom: 0; padding-bottom: 0">
+<div class="overall_div" >
+  <div class="add_n_sort_event row align-items-center mb-3" style="margin-bottom: 0; padding-bottom: 0" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
     <div class="col-auto">
       <button class="add-btn" (click)="toggleSidebar()">
         <i class="fa fa-plus-circle"></i> Add a New Event
@@ -388,7 +388,7 @@
     </form>
   </div>
   <!-- upcoming events table -->
-  <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px; margin-top:0; padding-top:0">
+  <div class="events-grid" style="display: flex; flex-wrap: wrap; gap: 24px; margin-top:0; padding-top:0" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
     <div class="events-card" style="flex: 1 1 45%; max-width: 48%;" *ngFor="let event of displayedEvents">
       <div class="event-card">
         <!-- Settings Dropdown -->
