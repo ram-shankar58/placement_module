@@ -28,22 +28,22 @@
 
 
 <div class="overall_div" >
-  <div class="add_n_sort_event row align-items-center mb-3" style="margin-bottom: 0; padding-bottom: 0" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
-    <div class="col-auto">
+  <div class="add_n_sort_event" style="margin-left: 8px; margin-right: 8px; padding-bottom: 0" *ngIf="EventsList.length !== 0 && !(eventsSandbox.placementEventsListLoading$ | async)">
+    <div>
       <button class="add-btn" (click)="toggleSidebar()">
         <img src="assets/icons/add-icon.png"> Add a New Event
       </button>
     </div>
-    <div class="addUpload col-md-4">
-      <span class="or-text" style="margin-top: 5px; margin-left:0px">or</span>
+    <div class="addUpload">
+      <span class="or-text" style="margin-top: 5px; margin-left:0px">Or</span>
       <a class="upload-link">
         <!-- (click)="uploadBulkEventDetails()" -->
         <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
         Upload bulk Company details
       </a>
     </div>
-    <div class="col-auto">
-      <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px;">
+    <div style="flex:1;">
+      <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px; justify-content: flex-end;">
         <div class="search-input-wrapper">
           <img src="assets/icons/search-icon.png" alt="Search" class="search-input-icon" />
           <input type="text" class="search-box event-search-input" [(ngModel)]="eventSearch" placeholder="Search" />
@@ -397,7 +397,7 @@
         <!-- Settings Dropdown -->
         <div class="event-settings">
           <button class="settings-btn" (click)="toggleSettings(event)">
-            <i class="fa fa-ellipsis-v"></i>
+            <img src="assets/icons/settings-icon.png">
           </button>
           <div class="settings-dropdown" *ngIf="event.showSettings">
             <div class="settings-option" (click)="onUpdateEvent(event)" >Update Event Details</div>

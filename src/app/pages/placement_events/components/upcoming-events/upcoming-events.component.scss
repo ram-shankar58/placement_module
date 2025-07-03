@@ -590,11 +590,12 @@ select {
 }
 .events-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); // 2 columns
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
-  width: 100%;
-  margin-top: 0;
-  padding-top:0;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-top: 24px;
+  align-items: stretch;
 }
 
 .event-card:hover {
@@ -1327,6 +1328,7 @@ select {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     min-width: 180px;
     padding: 8px 0;
+    color:#007AFF;
 
     .settings-option {
       padding: 10px 16px;
@@ -1480,6 +1482,7 @@ select {
 .overall-div{
   margin-top:0px;
   padding-top:0px;
+  background-color: #F2F2F7;
 }
 
 .event-card.empty-state {
@@ -1571,5 +1574,37 @@ select {
   .btn-icon {
     width: 1rem;
     height: 1rem;
+  }
+}
+
+.events-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 0;
+  transition: box-shadow 0.2s;
+  min-width: 0;
+  min-height: 180px;
+  overflow: hidden;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.events-card:nth-child(2n+1) {
+  margin-left: 8px;
+  margin-right: 0px;
+}
+
+.events-card:nth-child(2n) {
+  margin-right: 8px;
+  margin-left: 0px;
+}
+
+@media (max-width: 900px) {
+  .events-card {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
   }
 }
