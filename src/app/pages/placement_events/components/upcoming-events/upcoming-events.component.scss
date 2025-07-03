@@ -1608,3 +1608,28 @@ select {
     margin-right: 0px !important;
   }
 }
+.event-card .header {
+    // ...existing code...
+    .meta-row {
+      margin-bottom: 18px;
+    }
+  }
+
+// If not using a class, target the flex row directly:
+.event-card > .header > div:last-child > div:last-child {
+  margin-bottom: 18px;
+}
+
+.event-card .header > div {
+  align-items: flex-start !important;
+}
+.event-card .header .badge.eventviewbadge,
+.event-card .header .venue {
+  margin-left: 0 !important;
+}
+
+.event-card .header .meta-row,
+.event-card > .header > div:last-child > div:last-child,
+.event-card .header > .event-details > div:last-child {
+  margin-bottom: 10px !important;
+}

@@ -406,37 +406,42 @@
           </div>
         </div>
         <div class="header" (click)="openEventDetails(event)" style="cursor: pointer;">
-          <div>
-            <div class="step-header-events">
-              <div class="step-icon-events">
-                <div class="date" style="align-items: center; text-align: center;">
-                  {{ event.eventDate | date: 'dd' }}
-                  <div class="month" style="align-items: center; text-align: center;">
-                    {{ event.eventDate | date: 'MMM' }}
-                  </div>
-                </div>
+          <div style="display: flex; align-items: flex-start;">
+            <div style="display: flex; flex-direction: column; align-items: center; min-width: 48px;">
+              <div style="width: 38px; height: 38px; border-radius: 50%; background: #2FA8FF; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 0.92em; margin-bottom: 2px;">
+                <div style="font-size: 0.98em; line-height: 1; font-weight: 400;">{{ event.eventDate | date: 'dd' }}</div>
+                <div style="font-size: 0.78em; line-height: 1; font-weight: 400;">{{ event.eventDate | date: 'MMM' }}</div>
               </div>
-            </div>
-          </div>
-          <div class="event-details">
-            <div class="event-id">EVNT{{ event.id }}</div>
-            <div class="title">{{ event.eventTitle }}</div>
-            <div class="meta">
-              <span class="time" *ngIf="event.eventTime?.length">{{ event.eventTime | timeAmPm }}</span>
-              <span
-                class="badge eventviewbadge"
-                [ngClass]="{
-                  'on-campus': event.modeOfEvent === 'On-campus',
-                  'off-campus': event.modeOfEvent === 'Off-campus',
-                  'pool': event.modeOfEvent === 'Pool',
-                  'virtual': event.modeOfEvent === 'Virtual'
-                }"
-                *ngIf="event.modeOfEvent?.length"
-              >
-                {{ event.modeOfEvent }}
+              <span style="margin-top: 4px; font-size: 10px; color: #333; font-weight: 500; text-align: center; line-height: 1; letter-spacing: 0.2px;">
+                {{ (event.eventTime | timeAmPm).slice(0, -2).trim() }}
+                <span style="display: block; font-size: 10px; color: #666; font-weight: 500; text-align: center; line-height: 1; margin-top: 0; letter-spacing: 0.2px; padding: 0;">
+                  {{ (event.eventTime | timeAmPm).slice(-2) }}
+                </span>
               </span>
-              <img src="assets/icons/location_on.png"  *ngIf="event.venue?.length">
-              <span class="venue" *ngIf="event.venue?.length">{{ event.venue }}</span>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; margin-left: 12px; margin-top: 2px;">
+              <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 0;">
+                <div style="color: #A0A0A0; font-size: 10px; letter-spacing: 0.5px; line-height: 1; margin-top:2px; font-weight: 400;">EVT{{ event.id }}</div>
+                <div style="font-size: 16px; font-weight: 700; color: #127AFF; line-height: 1.13; margin-top: 2px;">{{ event.eventTitle }}</div>
+              </div>
+              <div style="height: 10px;"></div>
+              <div style="display: flex; align-items: flex-end; gap: 6px; min-height: 18px; margin-top: 0px;">
+                <span
+                  class="badge eventviewbadge"
+                  [ngClass]="{
+                    'on-campus': event.modeOfEvent === 'On-campus',
+                    'off-campus': event.modeOfEvent === 'Off-campus',
+                    'pool': event.modeOfEvent === 'Pool',
+                    'virtual': event.modeOfEvent === 'Virtual'
+                  }"
+                  *ngIf="event.modeOfEvent?.length"
+                  style="font-size: 10px; font-weight: 600; padding: 2px 9px; border-radius: 12px;"
+                >
+                  {{ event.modeOfEvent }}
+                </span>
+                <img src="assets/icons/location_on.png" *ngIf="event.venue?.length" style="width: 10px; height: 12px; vertical-align: middle;">
+                <span class="venue" *ngIf="event.venue?.length" style="font-size: 10px; color: #222;">{{ event.venue }}</span>
+              </div>
             </div>
           </div>
         </div>
