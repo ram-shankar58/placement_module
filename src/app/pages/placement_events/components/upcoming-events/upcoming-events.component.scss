@@ -5,6 +5,7 @@
   margin-bottom: 24px;
   flex-wrap: wrap;
   padding: 8px 14px 8px 14px;
+  background: #f2f2f7 !important;
 }
 
 .add-cmp, .add-btn {
@@ -521,6 +522,7 @@ select {
     padding-top: 8px;
     display: flex;
     gap: 8px;
+    font-size: 12px;
     flex-wrap: wrap;
 
     .company-icon {
@@ -536,22 +538,41 @@ select {
 
   .course-eligibility {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    align-items: flex-end;
     border-top-color: #D9D9D9;
     border-top-style: solid;
     border-top-width: 1px;
     padding-top: 8px;
+    min-height: 48px;
+    gap: 12px;
 
+    > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    > div:last-child {
+      align-items: flex-end;
+      text-align: right;
+    }
     label {
       font-weight: 600;
       display: block;
       font-size: 13px;
       color: #555;
+      margin-bottom: 2px;
     }
-
     div {
       font-size: 14px;
       font-weight: bolder;
+      width: 100%;
+    }
+    > div:last-child div {
+      text-align: right;
+      width: 100%;
     }
   }
 
@@ -587,6 +608,7 @@ select {
   align-items: center;
   margin-bottom: 24px;
   flex-wrap: wrap;
+  background: #f2f2f7 !important;
 }
 .events-grid {
   display: grid;
@@ -596,6 +618,7 @@ select {
   margin-right: 16px;
   margin-top: 24px;
   align-items: stretch;
+  background: #f2f2f7 !important;
 }
 
 .event-card:hover {
@@ -1180,7 +1203,7 @@ select {
 .filter-dropdown {
   position: absolute;
   top: 100%; // Just below the filter button
-  right: 60px; // Adjust depending on button position
+  right: 113px; // Adjust depending on button position
   margin-top: 8px;
   width: 400px;
   border-radius: 10px;
@@ -1482,7 +1505,7 @@ select {
 .overall-div{
   margin-top:0px;
   padding-top:0px;
-  background-color: #F2F2F7;
+  background-color: #f2f2f7;
 }
 
 .event-card.empty-state {
@@ -1632,4 +1655,87 @@ select {
 .event-card > .header > div:last-child > div:last-child,
 .event-card .header > .event-details > div:last-child {
   margin-bottom: 10px !important;
+}
+
+.overall_div {
+  background: #f2f2f7 !important;
+}
+
+/* Chip-style multi-select for Eligible Courses (Filter) */
+.custom-chip-dropdown-wrapper {
+  position: relative;
+  min-width: 220px;
+}
+.chip-input-area {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 38px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 4px 12px 4px 8px;
+  cursor: pointer;
+  gap: 4px;
+  transition: border 0.2s;
+}
+.chip-input-area:focus-within, .chip-input-area:hover {
+  border: 1.5px solid #4F46E5;
+}
+.chip {
+  display: flex;
+  align-items: center;
+  background: #f2f2f7;
+  color: #333;
+  border-radius: 16px;
+  padding: 2px 10px 2px 8px;
+  font-size: 13px;
+  margin: 2px 4px 2px 0;
+  border: 1px solid #e0e0e0;
+}
+.chip-remove {
+  margin-left: 6px;
+  color: #888;
+  font-size: 15px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.chip-remove:hover {
+  color: #e74c3c;
+}
+.chip-placeholder {
+  color: #aaa;
+  font-size: 13px;
+  margin-left: 2px;
+}
+.dropdown-arrow {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.custom-dropdown-list {
+  position: absolute;
+  top: 110%;
+  left: 0;
+  z-index: 20;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  min-width: 220px;
+  padding: 8px 0;
+  animation: fadeIn 0.2s;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.dropdown-option:hover {
+  background: #f2f2f7;
 }

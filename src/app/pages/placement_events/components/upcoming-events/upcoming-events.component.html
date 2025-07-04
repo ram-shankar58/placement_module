@@ -119,12 +119,24 @@
       </div>
       <!-- Eligible Courses -->
       <div class="filter-section">
-        <label>Eligible Courses</label>
-        <div class="dropdown-wrapper" (clickOutside)="closeFilterCourseDropdown()">
-          <button type="button" class="custom-dropdown-btn" (click)="toggleFilterCourseDropdown()">
-            {{ filterCourses.length ? filterCourses.join(', ') : 'Select eligible courses' }}
-            <i class="fa fa-caret-down" style="position: relative; float:right;"></i>
-          </button>
+        <label>Eligible courses</label>
+        <div class="custom-chip-dropdown-wrapper">
+          <div class="chip-input-area" (click)="toggleFilterCourseDropdown()">
+            <ng-container *ngIf="filterCourses.length; else placeholder">
+              <span class="chip" *ngFor="let course of filterCourses">
+                {{ course }}
+                <span class="chip-remove" (click)="removeFilterCourse(course); $event.stopPropagation()">&#10005;</span>
+              </span>
+            </ng-container>
+            <ng-template #placeholder>
+              <span class="chip-placeholder">Select eligible courses</span>
+            </ng-template>
+            <span class="dropdown-arrow">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 8L10 12L14 8" stroke="#222" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </div>
           <div class="custom-dropdown-list" *ngIf="filterCourseDropdownOpen">
             <label *ngFor="let course of coursesList" class="dropdown-option">
               <input
@@ -422,7 +434,7 @@
             <div style="flex: 1; display: flex; flex-direction: column; justify-content: flex-start; margin-left: 12px; margin-top: 2px;">
               <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 0;">
                 <div style="color: #A0A0A0; font-size: 10px; letter-spacing: 0.5px; line-height: 1; margin-top:2px; font-weight: 400;">EVT{{ event.id }}</div>
-                <div style="font-size: 16px; font-weight: 700; color: #127AFF; line-height: 1.13; margin-top: 2px;">{{ event.eventTitle }}</div>
+                <div style="font-size: 18px; font-weight: 700; color: #127AFF; line-height: 1.13; margin-top: 2px;">{{ event.eventTitle }}</div>
               </div>
               <div style="height: 10px;"></div>
               <div style="display: flex; align-items: flex-end; gap: 6px; min-height: 18px; margin-top: 0px;">

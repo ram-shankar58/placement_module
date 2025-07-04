@@ -2,8 +2,9 @@
   padding: 0 32px;
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: #f2f2f7 !important;
   border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 0 !important;
 
   a {
     position: relative;
@@ -34,6 +35,13 @@
       }
     }
   }
+}
+
+.content-wrapper.main-wrapper.content-mtop {
+  background: #f2f2f7 !important;
+  min-height: 100vh;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 @media(max-width: 768px){

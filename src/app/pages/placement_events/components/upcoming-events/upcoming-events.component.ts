@@ -216,9 +216,11 @@ getFilteredSelectionProcess(event: any): string[] {
 onDocumentClick(event: MouseEvent) {
   const target = event.target as HTMLElement;
   const clickedInsideFilter = !!target.closest('.filter-dropdown');
+  const clickedInsideDropdown = !!target.closest('.custom-chip-dropdown-wrapper');
   const clickedInsideDatepicker = !!target.closest('ngb-datepicker') || !!target.closest('.ngb-dp-container');
-  if (!clickedInsideFilter && !clickedInsideDatepicker && this.isFilterVisible) {
+  if (!clickedInsideFilter && !clickedInsideDropdown && !clickedInsideDatepicker && this.isFilterVisible) {
     this.closeFilterPopup();
+    this.filterCourseDropdownOpen = false;
   }
 }
 
@@ -645,14 +647,19 @@ onDeleteEvent(event: any) {
   
 }
 
+// --- Chip-style multi-select for Eligible Courses (Filter) ---
 filterCourseDropdownOpen = false;
 
+// Open/close the dropdown
 toggleFilterCourseDropdown() {
   this.filterCourseDropdownOpen = !this.filterCourseDropdownOpen;
 }
 
-closeFilterCourseDropdown() {
-  this.filterCourseDropdownOpen = false;
+removeFilterCourse(course: string) {
+  this.filterCourses = this.filterCourses.filter(c => c !== course);
 }
+
+// Close dropdown on outside click
+
 
 }

@@ -28,64 +28,37 @@
 
 
 <div class="overall_div" style="margin-top: 9px; padding-top:0;" *ngIf="trainings.length !== 0 && !(careerTrainingsSandbox.careerTrainingListLoading$ | async)">
-  <div class="header_training" style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap; padding-bottom: 10px; margin-bottom:0; padding-right:18px;">
-    
-      <button class="add-cmp" (click)="toggleSidebar()">
-        <img src="assets/icons/add-icon.png">
-        Add a New Training
+  <div class="add_n_sort_event" style="margin-left: 27px; margin-right: 20px; padding-bottom: 0; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+    <div>
+      <button class="add-btn" (click)="toggleSidebar()" style="background: linear-gradient(90deg, #7B61FF 0%, #5A43F1 100%); color: #fff; border-radius: 8px; padding: 8px 18px; font-weight: 600; font-size: 15px; border: none; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(123,97,255,0.08);">
+        <img src="assets/icons/add-icon.png"> Add a New Training
       </button>
-    <div class="addUpload" style="display: flex; align-items: center; gap: 8px;">
-      <span class="or-text" style="margin-top: 5px; margin-left:0px;">or</span>
+    </div>
+    <div class="addUpload">
+      <span class="or-text" style="margin-top: 5px; margin-left:0px">Or</span>
       <a class="upload-link">
         <img src="assets/icons/Upload.svg" alt="Upload Icon" class="btn-icon" />
         Upload bulk training details
       </a>
     </div>
-    <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px; margin-left: auto;">
-      
-      <div class="search-input-wrapper">
+    <div style="flex:1;">
+      <div class="search-filter-sort-group" style="display: flex; align-items: center; gap: 16px; justify-content: flex-end;">
+        <div class="search-input-wrapper">
           <img src="assets/icons/search-icon.png" alt="Search" class="search-input-icon" />
           <input type="text" class="search-box event-search-input" [(ngModel)]="searchTerm" placeholder="Search" />
         </div>
-      <button class="icon-button " (click)="toggleFilterPopup()">
-        <img src="assets/icons/filter-icon.png"> Filter
-      </button>
-      <div class="sort-dropdown-wrapper" style="position: relative; display: inline-block;">
-        <button class="icon-button" (click)="toggleSortDropdown()">
-          <img src="assets/icons/sort-icon.png"> Sort
+        <button class="icon-button" (click)="toggleFilterPopup()">
+          <img src="assets/icons/filter-icon.png"> Filter
         </button>
-        <div class="sort-dropdown" *ngIf="isSortDropdownVisible">
-          <div 
-            class="sort-option" 
-            [class.selected]="sortBy === 'recent'"
-            (click)="setSort('recent')"
-          >
-            Recently added
-            <span *ngIf="sortBy === 'recent'" class="checkmark">&#10003;</span>
-          </div>
-          <div 
-            class="sort-option" 
-            [class.selected]="sortBy === 'name'"
-            (click)="setSort('name')"
-          >
-            Event name
-            <span *ngIf="sortBy === 'name'" class="checkmark">&#10003;</span>
-          </div>
-          <div 
-            class="sort-option" 
-            [class.selected]="sortBy === 'date'"
-            (click)="setSort('date')"
-          >
-            Date
-            <span *ngIf="sortBy === 'date'" class="checkmark">&#10003;</span>
-          </div>
-          <div 
-            class="sort-option" 
-            [class.selected]="sortBy === 'type'"
-            (click)="setSort('type')"
-          >
-            Event type
-            <span *ngIf="sortBy === 'type'" class="checkmark">&#10003;</span>
+        <div class="sort-dropdown-wrapper" style="position: relative; display: inline-block;">
+          <button class="icon-button" (click)="toggleSortDropdown()">
+            <img src="assets/icons/sort-icon.png"> Sort
+          </button>
+          <div class="sort-dropdown" *ngIf="isSortDropdownVisible" style="position: absolute; z-index: 10; background: #fff; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); min-width: 160px;">
+            <div class="sort-option" [class.selected]="sortBy === 'recent'" (click)="setSort('recent')">Recently added</div>
+            <div class="sort-option" [class.selected]="sortBy === 'name'" (click)="setSort('name')">Training Name</div>
+            <div class="sort-option" [class.selected]="sortBy === 'date'" (click)="setSort('date')">Training Date</div>
+            <div class="sort-option" [class.selected]="sortBy === 'type'" (click)="setSort('type')">Training Type</div>
           </div>
         </div>
       </div>
