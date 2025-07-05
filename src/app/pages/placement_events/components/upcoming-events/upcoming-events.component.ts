@@ -231,26 +231,40 @@ onDocumentClick(event: MouseEvent) {
   this.subscriptions.push(
     this.eventsSandbox.placementEventsList$.subscribe(data => {
       if (data && data.status === true && Array.isArray(data.data)) {
-        this.EventsList = data.data.map((event: any) => ({
-          id: event.eventId,
-          eventTitle: event.eventTitle,
-          aboutEvent: event.eventAbout,
-          modeOfEvent: event.eventMode,
-          eventDate: event.eventDate
-            ? event.eventDate.split('/').reverse().join('-')
-            : '',
-          eventTime: event.eventTime ? event.eventTime.substring(0, 5) : '',
-          venue: event.eventVenue,
-          companyDetails: event.eventCompanyDetails || [],
-          eligibleCourses: event.eventEligibleCourse
-            ? event.eventEligibleCourse.replace(/[{}]/g, '').split(',').map((c: string) => c.trim())
-            : [],
-          eligibleCriteria: event.eventEligibleCriteria,
-          selectionProcess: event.eventSelectionProcess
-            ? event.eventSelectionProcess.replace(/[{}"]/g, '').split(',').map((s: string) => s.trim())
-            : [],
-          status: 'sent'
-        }));
+        this.EventsList = data.data.map((event: any) => {
+          let eligibleCoursesDisplay = '';
+          try {
+            if (typeof event.eventEligibleCourse === 'string' && event.eventEligibleCourse.trim().startsWith('[')) {
+              const arr = JSON.parse(event.eventEligibleCourse);
+              eligibleCoursesDisplay = Array.isArray(arr) ? arr.join(', ') : String(event.eventEligibleCourse);
+            } else if (Array.isArray(event.eventEligibleCourse)) {
+              eligibleCoursesDisplay = event.eventEligibleCourse.join(', ');
+            } else {
+              eligibleCoursesDisplay = String(event.eventEligibleCourse || '');
+            }
+          } catch {
+            eligibleCoursesDisplay = String(event.eventEligibleCourse || '');
+          }
+          return {
+            id: event.eventId,
+            eventTitle: event.eventTitle,
+            aboutEvent: event.eventAbout,
+            modeOfEvent: event.eventMode,
+            eventDate: event.eventDate ? event.eventDate.split('/').reverse().join('-') : '',
+            eventTime: event.eventTime ? event.eventTime.substring(0, 5) : '',
+            venue: event.eventVenue,
+            companyDetails: event.eventCompanyDetails || [],
+            eligibleCourses: event.eventEligibleCourse
+              ? event.eventEligibleCourse.replace(/[{}]/g, '').split(',').map((c: string) => c.trim())
+              : [],
+            eligibleCoursesDisplay,
+            eligibleCriteria: event.eventEligibleCriteria,
+            selectionProcess: event.eventSelectionProcess
+              ? event.eventSelectionProcess.replace(/[{}"]/g, '').split(',').map((s: string) => s.trim())
+              : [],
+            status: 'sent'
+          };
+        });
         this.filteredEvents = [... this.EventsList];
       } else {
         this.EventsList = [];

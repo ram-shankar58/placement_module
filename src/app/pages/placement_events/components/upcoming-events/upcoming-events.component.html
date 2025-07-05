@@ -529,10 +529,10 @@
           <img *ngFor="let comp of selectedEvent.companyDetails" [src]="comp.logo" [alt]="comp.companyName" style="height: 24px; width: 24px; border-radius: 4px;" />
         </div>
       </div>
-      <div class="modal-section" *ngIf="getFilteredEligibleCourses(selectedEvent).length" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
+      <div class="modal-section" *ngIf="selectedEvent.eligibleCoursesDisplay" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
         <label style="color: #757575; font-size: 12px; font-weight: 400;">Eligible Courses</label>
         <p style="font-size: 12px; color: #222; font-weight: 700; margin: 0;">
-          {{ getEligibleCoursesDisplay(selectedEvent.eligibleCourses).join(', ') }}
+          {{ selectedEvent.eligibleCoursesDisplay }}
         </p>
       </div>
       <div class="modal-section" *ngIf="selectedEvent.eligibleCriteria" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
