@@ -491,7 +491,7 @@
     </div>
   </div>
   <div class="modal-overlay" *ngIf="selectedEvent" (click)="closeEventDetails()">
-    <div class="modal" style="width: 480px; max-width: 95vw; height:auto; max-height: 420px; min-width: 320px; padding: 0 0 0 0; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.18); overflow-y: auto;" (click)="$event.stopPropagation()">
+    <div class="modal" style="width: 700px; min-width: 520px; min-height: 420px; max-width: 98vw; max-height: none; height: auto; padding: 0; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.18); overflow: visible;" (click)="$event.stopPropagation()">
       <div class="modal-header" style="padding: 10px 18px 10px 18px; min-height: 38px; max-height: 38px; background: #F2F2F7; display: flex; align-items: center; justify-content: space-between;">
         <h3 style="font-size: 16px; font-weight: 600; margin: 0; line-height: 1.2;">Event Details</h3>
         <button class="close-btn" (click)="closeEventDetails()" style="background: none; border: none; font-size: 20px; cursor: pointer; height: 28px; width: 28px; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center;"><img src="assets/icons/x.png" style="width: 22px; height: 22px;" /> </button>
@@ -525,8 +525,11 @@
       </div>
       <div class="modal-section" *ngIf="selectedEvent.companyDetails?.length" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
         <label style="color: #757575; font-size: 12px; font-weight: 400;">Associated Companies</label>
-        <div class="companies" style="display: flex; flex-wrap: wrap; gap: 8px;">
-          <img *ngFor="let comp of selectedEvent.companyDetails" [src]="comp.logo" [alt]="comp.companyName" style="height: 24px; width: 24px; border-radius: 4px;" />
+        <div class="companies" style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+          <ng-container *ngFor="let comp of selectedEvent.companyDetails">
+            <img [src]="comp.logo" [alt]="comp.companyName" style="height: 24px; width: 24px; border-radius: 50%; object-fit: cover; margin-right: 6px; vertical-align: middle; background: #fff; border: 1px solid #f2f2f7;" />
+            <span style="font-size: 13px; color: #007AFF; margin-right: 12px;">{{ comp.companyName }}</span>
+          </ng-container>
         </div>
       </div>
       <div class="modal-section" *ngIf="selectedEvent.eligibleCoursesDisplay" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
