@@ -98,16 +98,16 @@
                 &::before {
                     content: "";
                     position: absolute;
-                    top: -30px;
-                    left: 55%;
+                    top: -40px;
+                    left: 60%;
                     transform: translateX(-50%);
-                    width: 240px;
-                    height: 35px;
-                    background:
-                        radial-gradient(circle at 50% 10%,
-                            rgba(255, 255, 255, 0.5) 0%,
-                            rgba(255, 255, 255, 0.5) 45%,
-                            rgba(255, 255, 255, 0) 45%);
+                    width: 130px;
+                    height: 65px;
+                    background: linear-gradient(180deg, #FFFFFF 0%, #E43128 86.04%);
+                    border-bottom-left-radius: 70px;
+                    border-bottom-right-radius: 70px;
+                    border-top-left-radius: 30px;
+                    border-top-right-radius: 30px;
                     pointer-events: none;
                     z-index: -1;
                 }
