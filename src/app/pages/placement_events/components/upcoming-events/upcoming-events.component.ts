@@ -337,7 +337,7 @@ onCourseCheckboxChange(course: string, event: Event) {
 }
 
   selectCompany(company: any){
-    this.selectedCompanies.push({ companyName: company.companyName, logo: company.logo});
+    this.selectedCompanies.push({ companyName: company.companyName, logo: company.logo, id: company.id});
     this.companySearch = '';
     this.filteredCompanies = [];
     this.showCompanyDropdown = false;
@@ -352,7 +352,7 @@ onCourseCheckboxChange(course: string, event: Event) {
   }
   addCompanyFromInput(){
     if(this.companySearch && !this.selectedCompanies.some( c=> c.companyName === this.companySearch)){
-      this.selectedCompanies.push({ companyName: this.companySearch, logo: ' '});
+      this.selectedCompanies.push({ companyName: this.companySearch, logo: ' ', id: null});
       this.companySearch = '';
       this.filteredCompanies = [];
       this.showCompanyDropdown = false;
@@ -659,7 +659,18 @@ removeFilterCourse(course: string) {
   this.filterCourses = this.filterCourses.filter(c => c !== course);
 }
 
-// Close dropdown on outside click
+getEligibleCoursesDisplay(courses: any): string[] {
+  this.EventsList = this.EventsList.map(event => {
+  try {
+    const parsed = JSON.parse(event.eligibleCourses);
+    event.eligibleCoursesDisplay = Array.isArray(parsed) ? parsed.join(', ') : event.eligibleCourses;
+  } catch {
+    event.eligibleCoursesDisplay = event.eligibleCourses; // fallback if not JSON parsable
+  }
+  return event;
+});
+return [];
+}
 
 
 }
