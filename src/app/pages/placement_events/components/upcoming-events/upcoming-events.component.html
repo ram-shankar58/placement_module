@@ -491,16 +491,16 @@
     </div>
   </div>
   <div class="modal-overlay" *ngIf="selectedEvent" (click)="closeEventDetails()">
-    <div class="modal" style="width: 600px; height:auto; max-height: 550px;" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Event Details</h3>
-        <button class="close-btn" (click)="closeEventDetails()"><img src="assets/icons/x.png" /> </button>
+    <div class="modal" style="width: 480px; max-width: 95vw; height:auto; max-height: 420px; min-width: 320px; padding: 0 0 0 0; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.18); overflow-y: auto;" (click)="$event.stopPropagation()">
+      <div class="modal-header" style="padding: 10px 18px 10px 18px; min-height: 38px; max-height: 38px; background: #F2F2F7; display: flex; align-items: center; justify-content: space-between;">
+        <h3 style="font-size: 16px; font-weight: 600; margin: 0; line-height: 1.2;">Event Details</h3>
+        <button class="close-btn" (click)="closeEventDetails()" style="background: none; border: none; font-size: 20px; cursor: pointer; height: 28px; width: 28px; padding: 0; margin: 0; display: flex; align-items: center; justify-content: center;"><img src="assets/icons/x.png" style="width: 22px; height: 22px;" /> </button>
       </div>
-      <div class="modal-section">
-        <label>Event Title</label>
-        <div class="event-title">
-          <strong>{{ selectedEvent.eventTitle }}</strong>
-          <div class="meta">
+      <div class="modal-section" style="padding: 10px 18px 6px 18px; margin-bottom: 2px;">
+        <label style="color: #757575; font-size: 12px; font-weight: 400;">Event Title</label>
+        <div class="event-title" style="font-size: 12px; font-weight: 700; color: #22223b;">
+          {{ selectedEvent.eventTitle }}
+          <div class="meta" style="font-size: 10px; font-weight: 400; color: #222; margin-top: 2px;">
             {{ selectedEvent.eventDate | date: 'dd MMM yyyy' }} {{ selectedEvent.eventTime | timeAmPm}}
             <span
               class="badge eventviewbadge" *ngIf="selectedEvent.modeOfEvent?.length"
@@ -510,47 +510,49 @@
                 'pool': selectedEvent.modeOfEvent?.toLowerCase() === 'pool',
                 'virtual': selectedEvent.modeOfEvent?.toLowerCase() === 'virtual'
               }"
+              style="font-size: 10px; font-weight: 400; color: #222; margin-left: 8px; padding: 2px 6px; border-radius: 6px;"
             >
               {{ selectedEvent.modeOfEvent }}
             </span>
-            <img src="assets/icons/location_on.png" *ngIf="selectedEvent.venue?.length"> {{ selectedEvent.venue }}
+            <img src="assets/icons/location_on.png" *ngIf="selectedEvent.venue?.length" style="width: 10px; height: 12px; vertical-align: middle; margin-left: 6px;">
+            <span *ngIf="selectedEvent.venue?.length" style="font-size: 10px; color: #222; margin-left: 2px;">{{ selectedEvent.venue }}</span>
           </div>
         </div>
       </div>
-      <div class="modal-section" *ngIf="selectedEvent.aboutEvent">
-        <label>Event Description</label>
-        <p>{{ selectedEvent.aboutEvent }}</p>
+      <div class="modal-section" *ngIf="selectedEvent.aboutEvent" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
+        <label style="color: #757575; font-size: 12px; font-weight: 400;">Event Description</label>
+        <p style="font-size: 12px; color: #222; font-weight: 700; margin: 0;">{{ selectedEvent.aboutEvent }}</p>
       </div>
-      <div class="modal-section" *ngIf="selectedEvent.companyDetails?.length">
-        <label>Associated Companies</label>
-        <div class="companies">
-          <img *ngFor="let comp of selectedEvent.companyDetails" [src]="comp.logo" [alt]="comp.companyName" />
+      <div class="modal-section" *ngIf="selectedEvent.companyDetails?.length" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
+        <label style="color: #757575; font-size: 12px; font-weight: 400;">Associated Companies</label>
+        <div class="companies" style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <img *ngFor="let comp of selectedEvent.companyDetails" [src]="comp.logo" [alt]="comp.companyName" style="height: 24px; width: 24px; border-radius: 4px;" />
         </div>
       </div>
-      <div class="modal-section" *ngIf="getFilteredEligibleCourses(selectedEvent).length">
-        <label>Eligible Courses</label>
-        <p>{{ getFilteredEligibleCourses(selectedEvent).join(', ') }}</p>
+      <div class="modal-section" *ngIf="getFilteredEligibleCourses(selectedEvent).length" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
+        <label style="color: #757575; font-size: 12px; font-weight: 400;">Eligible Courses</label>
+        <p style="font-size: 12px; color: #222; font-weight: 700; margin: 0;">{{ getFilteredEligibleCourses(selectedEvent).join(', ') }}</p>
       </div>
-      <div class="modal-section" *ngIf="selectedEvent.eligibleCriteria">
-        <label>Eligibility Criteria</label>
-        <p><strong>{{ selectedEvent.eligibleCriteria }}</strong></p>
+      <div class="modal-section" *ngIf="selectedEvent.eligibleCriteria" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
+        <label style="color: #757575; font-size: 12px; font-weight: 400;">Eligibility Criteria</label>
+        <p style="font-size: 12px; color: #222; font-weight: 700; margin: 0;">{{ selectedEvent.eligibleCriteria }}</p>
       </div>
-      <div class="modal-section" *ngIf="getFilteredSelectionProcess(selectedEvent)?.length">
-        <label>Selection Process</label>
-        <div class="badges">
-          <span *ngFor="let round of selectedEvent.selectionProcess" class="badge">
+      <div class="modal-section" *ngIf="getFilteredSelectionProcess(selectedEvent)?.length" style="padding: 8px 18px 4px 18px; margin-bottom: 2px;">
+        <label style="color: #757575; font-size: 12px; font-weight: 400;">Selection Process</label>
+        <div class="badges" style="display: flex; flex-wrap: wrap; gap: 6px;">
+          <span *ngFor="let round of selectedEvent.selectionProcess" class="badge" style="font-size: 11px; padding: 2px 8px; border-radius: 8px; background: #f3f4f6; color: #222;">
             <ng-container [ngSwitch]="round">
-              <img *ngSwitchCase="'Aptitude test'" src="assets/icons/selection-icon.png" alt="Aptitude" />
-              <img *ngSwitchCase="'Technical interview'" src="assets/icons/selection-icon.jpg" alt="Technical" />
-              <img *ngSwitchCase="'HR interview'" src="assets/icons/selection-icon.jpg" alt="HR" />
+              <img *ngSwitchCase="'Aptitude test'" src="assets/icons/selection-icon.png" alt="Aptitude" style="height: 14px; width: 14px; margin-right: 2px;" />
+              <img *ngSwitchCase="'Technical interview'" src="assets/icons/selection-icon.jpg" alt="Technical" style="height: 14px; width: 14px; margin-right: 2px;" />
+              <img *ngSwitchCase="'HR interview'" src="assets/icons/selection-icon.jpg" alt="HR" style="height: 14px; width: 14px; margin-right: 2px;" />
             </ng-container>
             {{ round }}
           </span>
         </div>
       </div>
-      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button class="update-btn" (click)="onUpdateEvent(selectedEvent)">Update Event Details</button>
-        <button class="close-btn-plain" (click)="closeEventDetails()">Close</button>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 10px; padding: 8px 18px 8px 18px; margin-top: 6px;">
+        <button class="update-btn" (click)="onUpdateEvent(selectedEvent)" style="height: 36px; width: 176px; font-size: 14px; font-weight: 400; padding: 8px 14px; border-radius: 8px;">Update Event Details</button>
+        <button class="close-btn-plain" (click)="closeEventDetails()" style="height: 36px; width: 68px; font-size: 14px; font-weight: 400; padding: 0 12px; border-radius: 8px; border: 1px solid #D1D1D6; background: #fff;">Close</button>
       </div>
     </div>
   </div>

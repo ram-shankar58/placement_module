@@ -27,8 +27,8 @@
 </div>
 
 
-<div class="overall_div" style="margin-top: 9px; padding-top:0;" *ngIf="trainings.length !== 0 && !(careerTrainingsSandbox.careerTrainingListLoading$ | async)">
-  <div class="add_n_sort_event" style="margin-left: 27px; margin-right: 20px; padding-bottom: 0; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+<div class="overall_div" style="margin-top: 9px; padding-top:0; background: #F2F2F7; min-height: 100vh;">
+  <div class="add_n_sort_event" style="margin-left: 32px; margin-right: 32px; padding-bottom: 0; display: flex; align-items: center; gap: 24px; flex-wrap: wrap; background: #F2F2F7;">
     <div>
       <button class="add-btn" (click)="toggleSidebar()" style="background: linear-gradient(90deg, #7B61FF 0%, #5A43F1 100%); color: #fff; border-radius: 8px; padding: 8px 18px; font-weight: 600; font-size: 15px; border: none; display: flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(123,97,255,0.08);">
         <img src="assets/icons/add-icon.png"> Add a New Training
@@ -66,10 +66,10 @@
   </div>
 
 
-  <div class="training-card-grid" style="margin-top:9px; padding-top:0; padding-right: 18px">
+  <div class="training-card-grid" style="margin-top:24px; padding-top:0; padding-right: 0; margin-left: 32px; margin-right: 32px; background: #F2F2F7;">
   <div class="training-card" *ngFor="let training of filteredTrainings | globalFilter : searchTerm">
     <div class="card-menu" (click)="toggleSettings(training, $event)">
-      <i class="fas fa-ellipsis-v menu-icon"></i>
+      <img src="assets/icons/settings-icon.png">
       <div class="settings-dropdown" *ngIf="training.showMenu" (click)="$event.stopPropagation()">
         <div class="settings-option blue" (click)="onUpdateTraining(training)">Update training details</div>
         <div class="settings-option blue" (click)="onCopyTraining(training)">Copy as new training</div>
@@ -82,12 +82,17 @@
         {{ training.date | date:'dd' }}
         <div class="month">{{ training.date | date:'MMM' }}</div>
       </div>
-      <div class="time">{{ training.startTime }}</div>
+      <div class="time-block">
+        <ng-container *ngIf="(training.startTime | timeAmPm) as formattedTime">
+          <div class="main-time">{{ formattedTime.split(' ')[0] }}</div>
+          <div class="am-pm-align">{{ formattedTime.split(' ')[1] }}</div>
+        </ng-container>
+      </div>
     </div>
     <div></div>
     <div class="training-main">
       <div class="training-type">{{ training.type }}</div>
-      <div class="training-title" (click)="openTrainingDetails(training)" style="cursor:pointer;">
+      <div class="training-title" (click)="openTrainingDetails(training)" style="cursor:pointer; color: #007AFF; font-family: 'Poppins', sans-serif; text-decoration: none;">
         {{ training.title }}
       </div>
       <div class="training-desc">{{ training.description }}</div>
@@ -95,25 +100,25 @@
         <span [ngClass]="{'on-campus': training.mode === 'On-campus', 'virtual': training.mode === 'Virtual'}" class="mode-badge">
           {{ training.mode }}
         </span>
-        <span class="venue"><i class="fa fa-map-marker-alt"></i> {{ training.venue }}</span>
+        <span class="venue"><img src="assets/icons/location-icon.png"> {{ training.venue }}</span>
       </div>
     </div>
-    <div class="training-info-cols">
-      <div class="info-col">
-        <span class="label">Scheduled Time</span>
-        <span class="value">
+    <div class="training-info-cols" style="display: flex; gap: 24px; flex-wrap: nowrap;">
+      <div class="info-col" style="min-width: 0; flex: 1.5 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <span class="label" style="font-family: 'Poppins', sans-serif; font-size: 12px;">Scheduled Time</span>
+        <span class="value" style="font-family: 'Poppins', sans-serif; font-size: 12px;">
           {{ training.startTime | timeAmPm }} to {{ training.endTime | timeAmPm }}
-          <span *ngIf="training.recurring" class="recurring">🔁</span>
+          <span *ngIf="training.recurring" class="recurring"><img src="assets/icons/recursive-icon.png" style="margin-bottom:4px; margin-left: 2px;"></span>
         </span>
       </div>
-      <div class="info-col">
-        <span class="label">Applicable Batches</span>
-        <span class="value">{{ training.batches }}</span>
+      <div class="info-col" style="min-width: 0; flex: 1 1 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+        <span class="label" style="font-family: 'Poppins', sans-serif; font-size: 12px; white-space: nowrap;">Applicable Batches</span>
+        <span class="value" style="font-family: 'Poppins', sans-serif; font-size: 12px; white-space: nowrap;">{{ training.batches }}</span>
       </div>
     </div>
-    <div class="trainer-col">
-      <span class="label">Trainer Name</span>
-      <span class="value">{{ training.trainer }}</span>
+    <div class="trainer-col" style="text-align: right;">
+      <span class="label" style="font-family: 'Poppins', sans-serif; font-size: 12px;">Trainer Name</span>
+      <span class="value" style="font-family: 'Poppins', sans-serif; font-size: 12px;">{{ training.trainer }}</span>
     </div>
 </div>
     
@@ -388,8 +393,8 @@
         >
           {{ selectedTraining?.mode }}
         </span>
-        <span class="venue" *ngIf="selectedTraining?.venue" style="font-size: 10px; font-family: 'Poppins', sans-serif; font-weight: 400; color: #222;">
-          <i class="fa fa-map-marker-alt"></i> {{ selectedTraining?.venue }}
+        <span class="venue" *ngIf="selectedTraining?.venue" style="font-size: 10px; font-family: 'Poppins', sans-serif; font-weight: 400; color: #222; margin-left:5px;">
+          <img src="assets/icons/location-icon.png"> {{ selectedTraining?.venue }}
         </span>
       </div>
       <div *ngIf="selectedTraining?.recurring" style="color: #ff9800; margin-top: 6px; font-size: 10px; font-family: 'Poppins', sans-serif; font-weight: 400;">
@@ -467,13 +472,13 @@
       />
     </div>
   </div>
-  <div class="filter-section">
-    <label class="switch-label">
-      <label class="switch">
+  <div class="filter-section" style="padding: 0px 24px; margin-bottom: 18px; display: flex; align-items: center; justify-content: flex-start;">
+    <label class="switch-label" style="display: flex; align-items: center; gap: 10px; margin-bottom: 0; white-space: nowrap;">
+      <label class="switch" style="margin-bottom: 0;">
         <input type="checkbox" [(ngModel)]="filterRecursive" />
         <span class="slider"></span>
       </label>
-      Show recursive trainings
+      <span style="margin-left: 8px;">Show recursive trainings</span>
     </label>
   </div>
   <div class="filter-footer">

@@ -1237,22 +1237,54 @@ select {
 .filter-header {
   display: flex;
   justify-content: space-between;
-  align-items: right;
+  align-items: center;
   font-weight: 600;
-  margin-bottom: 12px;
-  padding: 0px 5px;
-  background-color:#F2F2F7;
-
+  background-color: #f2f2f7;
+  color: #22223b;
+  padding: 12px 18px 12px 18px !important;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  font-size: 16px !important;
+  margin-bottom: 0 !important;
+  min-height: 48px;
+  box-sizing: border-box;
+  
+  span {
+    font-size: 16px !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    color: #22223b;
+    letter-spacing: 0.1px;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+  }
   .close-btn {
     background: transparent;
     border: none;
-    font-size: 18px;
+    font-size: 16px;
     cursor: pointer;
+    margin-left: 12px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    img {
+      width: 16px !important;
+      height: 16px !important;
+      min-width: 14px !important;
+      min-height: 14px !important;
+      max-width: 14px !important;
+      max-height: 14px !important;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
   }
 }
 
 .filter-section {
   margin-bottom: 14px;
+  margin-top: 5px;
 
   label {
     display: block;
